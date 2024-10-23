@@ -1,61 +1,33 @@
-name: Main workflow
+name: Deploy to Netlify
 
 on:
   push:
     branches:
-      - master
-      - main
-    types: [opened, synchronize, reopened]
+      - main  # Change this to your default branch if it's not "main"
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Cache node modules and next folder
-      - name: 📬 Caching
-        uses: actions/cache@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
-          path: |
-            **/node_modules
-            ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: '18'  # Change to your required Node.js version
 
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 18.x
+      - name: Install dependencies
+        run: npm install
 
-      - name: 🧰 Install dependencies
-        run: npm ci
+      - name: Build Next.js project
+        run: npm run build
 
-      - name: 📦 Build project
-        run: npm run build --if-present
-
-      # - name: 🧹 Run lint
-      #   run: npm run lint
-
-      # - name: 🐛 Run tests
-      #   run: npm run test
-
-      # Deploy to Netlify with a personalized message
-      - name: 🚀 Deploy to Netlify
-        id: deploy-netlify
-        uses: netlify/actions/cli@master
+      - name: Deploy to Netlify
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: deploy -m 'v${{ steps.package-version.outputs.current-version}} ・ ${{ github.head_ref }}'
-
-      # Publish the inspect and preview link to the PR
-      - name: 👓 Netlify Preview URL
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OUTPUT: "This pull request is being automatically deployed to Netlify.\n\n🔍 Inspect: ${{ steps.deploy-netlify.outputs.NETLIFY_LOGS_URL }}\n✅ Preview: ${{ steps.deploy-netlify.outputs.NETLIFY_URL }}"
-        with:
-          msg: ${{ env.OUTPUT }}
-          check_for_duplicate_msg: false
+          NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npm install -g netlify-cli
+          netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_ACCESS_TOKEN
