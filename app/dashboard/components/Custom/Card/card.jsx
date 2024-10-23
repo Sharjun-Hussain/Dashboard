@@ -10,14 +10,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 
-const CustomCard = ({ title, className, children }) => {
+const CustomCard = ({ title, description, className, children }) => {
   return (
     <div className={`${className}`}>
       <Card
         className={`m-0 md:my-3 my-3 w-full shadow-sm bg-card dark:bg-accent  border-secondary  `}
       >
         <div className="mt-6 ms-6 me-4 flex">
-          <div className="font-bold text-lg">{title}</div>
+         <div className="flex flex-col">
+         <div className="font-bold text-lg">{title}</div>
+         <div className="font-medium  text-gray-600 dark:text-gray-400 text-sm">{description}</div>
+         </div>
           <div className="ms-auto">
             <MoreVertical className="h-4 w-4" />
           </div>

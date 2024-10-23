@@ -28,7 +28,7 @@ import {
 import DialogDemo from "@/app/dashboard/offices/components/addbranchmodal";
 
 
-export function DataTable({ columns, data, width }) {
+export function DataTable({ columns, data, width  }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -64,9 +64,7 @@ export function DataTable({ columns, data, width }) {
               className="max-w-sm"
             />
           </div>
-          <div className="ms-auto">
-            <DialogDemo />
-          </div>
+          
         </div>
         <div className="">
           <Table>

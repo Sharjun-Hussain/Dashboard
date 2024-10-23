@@ -37,8 +37,8 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "id",
+    header: "ID",
   },
   {
     accessorKey: "email",
@@ -56,8 +56,12 @@ export const columns = [
     header: "Email",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "permissions",
+    header: "Permissions",
   },
   {
     id: "actions",
@@ -82,8 +86,8 @@ export const columns = [
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
+            <DropdownMenuItem>Delete User</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

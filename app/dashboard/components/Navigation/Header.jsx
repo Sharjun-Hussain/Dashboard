@@ -19,7 +19,7 @@ const Header = () => {
     // Prevents mismatching during SSR and hydration
     return (
       <div>
-        <div className=" w-full  py-8 bg-gray-500 h-[50px]  flex items-center">
+        <div className=" w-full  py-8 bg-[#F8D7DA] h-[50px]  flex items-center">
           <div className="ms-3">
             <Skeleton className="h-12 bg-secondary w-12 rounded-full" />
           </div>
@@ -47,7 +47,7 @@ const Header = () => {
   }
 
   return (
-    <div className=" w-full  py-8  bg-gray-400 h-[50px]  flex items-center">
+    <div className=" w-full  py-8 dark:bg-[#1E1E1E]  bg-[#FDF2F4] h-[50px]  flex items-center">
       <div className="ms-3">Logo</div>
       <div className="ms-auto flex items-center">
         <div className="mx-3">

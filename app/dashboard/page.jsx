@@ -12,9 +12,9 @@ const DashboardPage = () => {
     <div className="">
       <div className="flex ">
         {" "}
-        <h1>Dashboard</h1>
+        <Breadcrumbs />
         <div className="ms-auto">
-          <Breadcrumbs />
+        
         </div>
       </div>
 
