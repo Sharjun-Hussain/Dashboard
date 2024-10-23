@@ -33,5 +33,6 @@ jobs:
       with:
         publish-dir: './build'  # Change if your output directory is different (e.g., 'dist')
         production-deploy: true
+      env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
