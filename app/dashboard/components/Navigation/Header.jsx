@@ -48,7 +48,7 @@ const Header = () => {
 
   return (
     <div className=" w-full  py-8 dark:bg-[#1E1E1E]  bg-[#FDF2F4] h-[50px]  flex items-center">
-      <div className="ms-3">Log</div>
+      <div className="ms-3">Lgg</div>
       <div className="ms-auto flex items-center">
         <div className="mx-3">
           <Input
