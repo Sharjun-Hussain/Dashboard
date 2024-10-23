@@ -22,7 +22,7 @@ export default function Navbar() {
                 return (
                   <div
                     key={item.Path}
-                    className="flex mx-1 hover:text-pink-600"
+                    className="flex mx-1 hover:text-red-600"
                   >
                     <Link
                       href={item.Path}
