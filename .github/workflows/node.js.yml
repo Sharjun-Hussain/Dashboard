@@ -28,11 +28,17 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
+
     - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.2.3
+      uses: nwtgck/actions-netlify@v1.1
       with:
-        publish-dir: './build'  # Change if your output directory is different (e.g., 'dist')
-        production-deploy: true
+         publish-dir: './next'
+         production-branch: master
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         deploy-message: "Deploy from GitHub Actions"
+         enable-pull-request-comment: false
+         enable-commit-comment: true
+         overwrites-pull-request-comment: true
       env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
