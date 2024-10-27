@@ -5,9 +5,10 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Login() {
-  const session = useSession()
+  const { data: userSession } = useSession();
   const router = useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -22,9 +23,15 @@ export default function Login() {
     });
 
     if (data.ok) {
-      router.push("/dashboard");
-      console.log( data);
-      
+      toast(userSession.user.message, {
+        duration: 500,
+      });
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 400);
+
+      localStorage.setItem("token", userSession.user.token);
+      console.log(userSession.user);
     }
   };
 

@@ -29,15 +29,17 @@ export const authOptions = {
             password: credentials.password,
           }),
           credentials: "include",
-        });
+        })
 
+        const data = await res.json();
+          
         // Check if the response is okay and return user
-        if (res.ok) {
-          console.log(res.json);
-
-          return res.json; // Return user object
+        if (res.ok && data) {
+          // Log and return the user object
+          console.log("User data:", data);
+          return data; // Return the user object received from API
         } else {
-          throw new Error(user.message || "Invalid credentials");
+          throw new Error(data.message || "Invalid credentials");
         }
       },
     }),

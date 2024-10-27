@@ -11,14 +11,14 @@ import { useSession } from "next-auth/react";
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const {data:session} = useSession()
+  const {data:userSession} = useSession()
 
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  console.log(session);
+
   
 
   if (!mounted) {
@@ -53,15 +53,12 @@ const Header = () => {
   }
 
 
-  if(!session){
-    <p>yor are safa</p>
-  }
 
   return (
-  session && 
+  userSession && 
       <div className=" w-full  py-8 dark:bg-[#1E1E1E]  bg-[#FDF2F4] h-[50px]  flex items-center">
       <div className="ms-3">Lgg</div>
-      <div className="mx-auto"><p>Railway Department - Colombo  {session?.user?.name}</p></div>
+      <div className="mx-auto"><p>Railway Department - Colombo </p></div>
       <div className="ms-auto flex items-center">
         <div className="mx-3">
           <Input
@@ -84,8 +81,8 @@ const Header = () => {
             <AvatarFallback>C</AvatarFallback>
           </Avatar>
           <div>
-            <p className="text-[12px] font-bold mx-1">Sharjun Hussain</p>
-            <p className="text-[11px] -mt-1 mx-1">info@gmail.com</p>
+            <p className="text-[12px] font-bold mx-1">{userSession.user.data.name}</p>
+            <p className="text-[11px] -mt-1 mx-1">{userSession.user.data.email}</p>
           </div>
         </div>
       </div>
