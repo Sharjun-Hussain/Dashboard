@@ -55,6 +55,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+import AddOfficeModal from "../addbranchmodal";
 
 
 
@@ -134,11 +135,11 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Actions",
       cell: ({ row }) => {
         const office = row.original;
-        const [open, setOpen] = React.useState(false); // State for dialog visibility
+        const [open, setOpen] = React.useState(false); 
+        const [OpenModal, setOpenModal] = React.useState(false)
+        const [officeData, setOfficeData] = React.useState(null);
   
         const handleDelete = async () => {
-      
-          
           try {
             await axios.delete(
               `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
@@ -155,6 +156,14 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
           }
           setOpen(false); // Close dialog after action
         };
+
+        const handleUpdate = () => {
+          // Pass the entire office object to the modal
+          setOpenModal(true);
+          // Set the office data that you want to update
+          setOfficeData(office); // Create a state variable to hold the office data
+        };
+        
   
         return (
           <>
@@ -172,7 +181,7 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
   
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
@@ -198,6 +207,10 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+
+
+
+            <AddOfficeModal existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },

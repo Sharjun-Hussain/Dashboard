@@ -5,19 +5,19 @@ import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { CheckCheck, PenOff, Send, ToggleRight } from "lucide-react";
+import { CheckCheck, PenOff, Plus, Send, ToggleRight } from "lucide-react";
 import AddOfficeModal from "./components/addbranchmodal";
 import { OfficeTable } from "./components/DataTable/officeTable";
 axios.defaults.withCredentials = true;
 
-
 export default function DemoPage() {
   const [Offices, setOffices] = useState([]);
   const [loading, setloading] = useState(false);
+  const [OpenModal, setOpenModal] = useState(false)
 
-  const handleChildData = (office) =>{
-    setOffices((prev)=>[...prev,office])
-  }
+  const handleChildData = (office) => {
+    setOffices((prev) => [...prev, office]);
+  };
 
   const handleDelete = (officeId) => {
     setOffices((prev) => prev.filter((office) => office.id !== officeId));
@@ -25,8 +25,8 @@ export default function DemoPage() {
 
   useEffect(() => {
     const fetchOffice = async () => {
-      setloading(true)
-      const res = await axios.get("http://128.199.31.7/api/admin/office", {
+      setloading(true);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/office`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -36,17 +36,12 @@ export default function DemoPage() {
 
       if (res.status == 200) {
         console.log(res.data);
-        setOffices(res.data.data)
-        setloading(false)
+        setOffices(res.data.data);
+        setloading(false);
       }
     };
     fetchOffice();
   }, []);
-
-  console.log("office data " + Offices);
-  
-
-  // const data = await getData()
 
   return (
     <div>
@@ -78,14 +73,25 @@ export default function DemoPage() {
                 </Button>
               </div>
               <div className="ms-auto">
-                <AddOfficeModal sendDatatoParent={handleChildData} />
+              <Button className="pe-2 ps-1" onClick={() => setOpenModal(true)} variant="outline">
+
+                  {" "}
+                  <Plus size={15} className="me-1" />
+                  Add Branch Office
+                </Button>
+                {/* <AddOfficeModal sendDatatoParent={handleChildData} /> */}
               </div>
               {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
             </div>
             <div>
-              <OfficeTable onDelete={handleDelete} data={Offices} loading={loading}  />
+              <OfficeTable
+                onDelete={handleDelete}
+                data={Offices}
+                loading={loading}
+              />
             </div>
           </div>
+          <AddOfficeModal sendDatatoParent={handleChildData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
         </CustomCard>
         {/* <DataTable columns={columns} data={data} /> */}
       </div>
