@@ -90,7 +90,7 @@ export function DataTable({ columns, data, width, loading }) {
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="text-center h-24"
+                    className="text-center h-12"
                   >
                     Loading...
                   </TableCell>
@@ -116,7 +116,7 @@ export function DataTable({ columns, data, width, loading }) {
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-12 text-center"
                   >
                     No results.
                   </TableCell>

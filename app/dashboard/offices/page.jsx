@@ -35,7 +35,7 @@ export default function DemoPage() {
       }
     };
     fetchOffice();
-  }, []);
+  }, [loading]);
 
   console.log("office data " + Offices);
   

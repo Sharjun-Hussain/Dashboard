@@ -13,14 +13,17 @@ export default function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState("");
+  const [loading, setloading] = useState(false)
 
   const handleSubmit = async (e) => {
+    setloading(true)
     e.preventDefault();
     const data = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
+    setloading(false)
 
     if (data.ok) {
       toast(userSession.user.message, {
@@ -64,11 +67,11 @@ export default function Login() {
             Forgot Password?
           </Link>
         </div>
-        <Button type="submit" variant="outline" className="w-full ">
-          Sign In
+        <Button disabled={loading}  type="submit" variant="outline" className="w-full ">
+          {loading ? "Sign-in Please Wait" : "Sign In" }
         </Button>
       </form>
-      <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
+      {/* <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
         Don&lsquo;t have an account?{" "}
         <Link
           href="/signup"
@@ -76,7 +79,7 @@ export default function Login() {
         >
           Sign Up
         </Link>
-      </p>
+      </p> */}
     </div>
   );
 }
