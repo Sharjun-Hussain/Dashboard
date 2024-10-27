@@ -37,8 +37,31 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "code",
+    header: "Code",
+  },
+  {
+    accessorKey: "office_name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Branch Office
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    header: " Branch Office",
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
+  },
+  {
+    accessorKey: "phone_number",
+    header: "Phone Number",
   },
   {
     accessorKey: "email",
@@ -54,10 +77,6 @@ export const columns = [
       );
     },
     header: "Email",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
   },
   {
     id: "actions",
