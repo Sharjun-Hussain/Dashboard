@@ -2,7 +2,7 @@ import React from "react";
 import Breadcrumbs from "./components/Custom/Breadcrumb/Breadcrumbs";
 import CustomCard from "./components/Custom/Card/card";
 import { DataTable } from "./components/Custom/DataTable/data-table";
-import { columns } from "./offices/components/DataTable/columns";
+
 import { Offices } from "@/lib/DemoData/TableData/Offices";
 
 
@@ -26,7 +26,7 @@ const DashboardPage = () => {
       </div>
       <div className=" flex  gap-4  flex-col md:flex-row">
         <CustomCard className="w-full md:w-2/3" title="Stats">
-        <DataTable columns={columns}  data={Offices}  />
+        {/* <DataTable columns={columns}  data={Offices}  /> */}
         </CustomCard>
       </div>
     </div>

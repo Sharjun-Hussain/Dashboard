@@ -1,21 +1,27 @@
 "use client";
-import { Offices } from "@/lib/DemoData/TableData/Offices";
-import { DataTable } from "../components/Custom/DataTable/data-table";
-import { columns } from "./components/DataTable/columns";
+
 import CustomCard from "../components/Custom/Card/card";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
-import UsersModal from "../roles/Add-Edit-Users";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { CheckCheck, PenOff, Send, ToggleRight } from "lucide-react";
 import AddOfficeModal from "./components/addbranchmodal";
+import { OfficeTable } from "./components/DataTable/officeTable";
 axios.defaults.withCredentials = true;
-// import { DataTable } from "./components/DataTable/data-table"
+
 
 export default function DemoPage() {
   const [Offices, setOffices] = useState([]);
   const [loading, setloading] = useState(false);
+
+  const handleChildData = (office) =>{
+    setOffices((prev)=>[...prev,office])
+  }
+
+  const handleDelete = (officeId) => {
+    setOffices((prev) => prev.filter((office) => office.id !== officeId));
+  };
 
   useEffect(() => {
     const fetchOffice = async () => {
@@ -72,12 +78,12 @@ export default function DemoPage() {
                 </Button>
               </div>
               <div className="ms-auto">
-                <AddOfficeModal />
+                <AddOfficeModal sendDatatoParent={handleChildData} />
               </div>
               {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
             </div>
             <div>
-              <DataTable  columns={columns} data={Offices} loading={loading} />
+              <OfficeTable onDelete={handleDelete} data={Offices} loading={loading}  />
             </div>
           </div>
         </CustomCard>

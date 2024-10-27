@@ -14,18 +14,21 @@ import useMediaQuery from "@/Hooks/useMediaQuery";
 import axios from "axios";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-export default function AddOfficeModal() {
+export default function AddOfficeModal({ sendDatatoParent }) {
   const [code, setcode] = useState(null);
   const [office_name, setoffice_name] = useState(null);
   const [address, setaddress] = useState(null);
   const [phone_number, setphone_number] = useState(null);
   const [email, setemail] = useState(null);
-  const [error, seterror] = useState(null)
+  const [error, seterror] = useState(null);
+  const [loading, setloading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
+      setloading(true);
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office`,
         {
@@ -41,11 +44,16 @@ export default function AddOfficeModal() {
           },
         }
       );
-    }catch(err){
-      seterror(err.message)
-    }
 
-    console.log(res);
+      if (res.status == 201) {
+        toast("Office Branch Added Succefully");
+        sendDatatoParent(res.data.data);
+        setloading(false);
+      }
+    } catch (err) {
+      seterror(err.message);
+      setloading(false);
+    }
   };
   const isMobile = useMediaQuery("(max-width: 768px)");
   return (
@@ -62,7 +70,7 @@ export default function AddOfficeModal() {
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[455px] w-full  bg-card dark:bg-accent">
-        {error && <p>{error}</p> }
+        {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Add Branch Office</DialogTitle>
@@ -132,8 +140,8 @@ export default function AddOfficeModal() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" type="submit">
-              Add Branch
+            <Button className="mt-4" disabled={loading} variant="outline" type="submit">
+            {loading ? "Loading.. " : "Add Branch" }  
             </Button>
           </DialogFooter>
         </form>
