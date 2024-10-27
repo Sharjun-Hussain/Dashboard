@@ -5,15 +5,21 @@ import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSession } from "next-auth/react";
+
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const {data:session} = useSession()
 
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  console.log(session);
+  
 
   if (!mounted) {
     // Prevents mismatching during SSR and hydration
@@ -46,9 +52,16 @@ const Header = () => {
     );
   }
 
+
+  if(!session){
+    <p>yor are safa</p>
+  }
+
   return (
-    <div className=" w-full  py-8 dark:bg-[#1E1E1E]  bg-[#FDF2F4] h-[50px]  flex items-center">
+  session && 
+      <div className=" w-full  py-8 dark:bg-[#1E1E1E]  bg-[#FDF2F4] h-[50px]  flex items-center">
       <div className="ms-3">Lgg</div>
+      <div className="mx-auto"><p>Railway Department - Colombo  {session?.user?.name}</p></div>
       <div className="ms-auto flex items-center">
         <div className="mx-3">
           <Input
@@ -77,6 +90,8 @@ const Header = () => {
         </div>
       </div>
     </div>
+    
+   
   );
 };
 

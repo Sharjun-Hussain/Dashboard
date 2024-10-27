@@ -5,6 +5,8 @@ import {  columns } from "./components/DataTable/columns"
 import CustomCard from "../components/Custom/Card/card"
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs"
 import UsersModal from "../roles/Add-Edit-Users"
+import { useEffect, useState } from "react"
+import axios from "axios"
 // import { DataTable } from "./components/DataTable/data-table"
 
 
@@ -25,7 +27,16 @@ import UsersModal from "../roles/Add-Edit-Users"
 // }
 
 // eslint-disable-next-line @next/next/no-async-client-component
-export default async function DemoPage() {
+export default function DemoPage() {
+
+  const [Offices, setOffices] = useState([]);
+  useEffect(() => {
+    
+    const fetchOffice = async () =>{
+      await axios.get("http://128.199.31.7/api/admin/office")
+    }
+  }, [])
+  
   // const data = await getData()
 
   return (

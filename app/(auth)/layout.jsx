@@ -9,6 +9,7 @@ const layout = ({ children }) => {
         backgroundImage: `url(${loginbg.src})`, // Use loginbg.src to get the image URL
         backgroundSize: "cover", // Ensure the background image covers the entire div
         backgroundRepeat: "no-repeat",
+      
         // Prevent the image from repeating
       }}
       className="flex h-dvh bg items-center justify-center  px-4 sm:px-6 lg:px-8"
