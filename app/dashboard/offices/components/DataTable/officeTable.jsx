@@ -59,10 +59,13 @@ import AddOfficeModal from "../addbranchmodal";
 
 
 
+
 export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
+
+
 
   const columns = [
     {
@@ -210,7 +213,7 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
 
 
 
-            <AddOfficeModal existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },

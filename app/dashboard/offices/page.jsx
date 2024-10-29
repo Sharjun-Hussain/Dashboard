@@ -16,8 +16,20 @@ export default function DemoPage() {
   const [OpenModal, setOpenModal] = useState(false)
 
   const handleChildData = (office) => {
-    setOffices((prev) => [...prev, office]);
+    setOffices((prevOffices) => {
+      const officeIndex = prevOffices.findIndex((o) => o.id === office.id);
+      if (officeIndex >= 0) {
+        // Update existing office
+        const updatedOffices = [...prevOffices];
+        updatedOffices[officeIndex] = office;
+        return updatedOffices;
+      } else {
+        // Add new office
+        return [...prevOffices, office];
+      }
+    });
   };
+
 
   const handleDelete = (officeId) => {
     setOffices((prev) => prev.filter((office) => office.id !== officeId));
@@ -88,10 +100,11 @@ export default function DemoPage() {
                 onDelete={handleDelete}
                 data={Offices}
                 loading={loading}
+                onUpdate={handleChildData}
               />
             </div>
           </div>
-          <AddOfficeModal sendDatatoParent={handleChildData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+          <AddOfficeModal  OpenModal={OpenModal} setOpenModal={setOpenModal} />
         </CustomCard>
         {/* <DataTable columns={columns} data={data} /> */}
       </div>

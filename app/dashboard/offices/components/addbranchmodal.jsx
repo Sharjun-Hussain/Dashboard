@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,19 +10,24 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useMediaQuery from "@/Hooks/useMediaQuery";
 import axios from "axios";
-import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenModal, existingOffice }) {
-  console.log(existingOffice); // Check the output here
-
+export default function AddOfficeModal({
+  onUpdate,
+  OpenModal,
+  setOpenModal,
+  existingOffice,
+}) {
   const [code, setCode] = useState(existingOffice?.code || "");
-  const [office_name, setOfficeName] = useState(existingOffice?.office_name || "");
+  const [office_name, setOfficeName] = useState(
+    existingOffice?.office_name || ""
+  );
   const [address, setAddress] = useState(existingOffice?.address || "");
-  const [phone_number, setPhoneNumber] = useState(existingOffice?.phone_number || "");
+  const [phone_number, setPhoneNumber] = useState(
+    existingOffice?.phone_number || ""
+  );
   const [email, setEmail] = useState(existingOffice?.email || "");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -31,28 +37,30 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office${isEditing ? `/${existingOffice.id}` : ''}`;
-      const method = isEditing ? 'post' : 'post';
-
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office${
+        isEditing ? `/${existingOffice.id}` : ""
+      }`;
+      const method = isEditing ? "put" : "post";
       const res = await axios({
         method,
         url,
-        data: {
-          code,
-          office_name,
-          address,
-          phone_number,
-          email,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        data: { code, office_name, address, phone_number, email },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (res.status === 200 || res.status === 201) {
-        toast(`${isEditing ? "Office Branch Updated Successfully" : "Office Branch Added Successfully"}`);
-        sendDatatoParent(res.data.data);
+        toast(
+          `${
+            isEditing
+              ? "Office Branch Updated Successfully"
+              : "Office Branch Added Successfully"
+          }`,{duration:1600,position:"top-right"}
+        );
         setLoading(false);
+
+        onUpdate(res.data.data);
+
+        setOpenModal(false);
       }
     } catch (err) {
       setError(err.message);
@@ -61,7 +69,6 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
   };
 
   useEffect(() => {
-    // Reset form fields when editing
     if (existingOffice) {
       setCode(existingOffice.code);
       setOfficeName(existingOffice.office_name);
@@ -69,7 +76,6 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
       setPhoneNumber(existingOffice.phone_number);
       setEmail(existingOffice.email);
     } else {
-      // Reset to default values if no existing office
       setCode("");
       setOfficeName("");
       setAddress("");
@@ -78,15 +84,17 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
     }
   }, [existingOffice]);
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  
+  if (!OpenModal) return null;
+
   return (
     <Dialog open={OpenModal} onOpenChange={setOpenModal}>
       <DialogContent className="sm:max-w-[455px] w-full bg-card dark:bg-accent">
         {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Edit Branch Office" : "Add Branch Office"}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Edit Branch Office" : "Add Branch Office"}
+            </DialogTitle>
             <DialogDescription className="text-gray-600">
               Make changes to your profile here. Click save when done.
             </DialogDescription>
@@ -94,7 +102,9 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
           <div className="flex flex-row gap-4 pt-4">
             <div className="flex-row">
               <div className="items-center gap-4">
-                <Label htmlFor="name" className="text-right">Branch Name</Label>
+                <Label htmlFor="name" className="text-right">
+                  Branch Name
+                </Label>
                 <Input
                   id="name"
                   value={office_name}
@@ -103,7 +113,9 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
                 />
               </div>
               <div className="items-center gap-4 pt-4">
-                <Label htmlFor="branchcode" className="text-right">Branch Code</Label>
+                <Label htmlFor="branchcode" className="text-right">
+                  Branch Code
+                </Label>
                 <Input
                   id="branchcode"
                   value={code}
@@ -114,7 +126,9 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
             </div>
             <div className="flex-row">
               <div className="items-center gap-4">
-                <Label htmlFor="email" className="text-right">Email</Label>
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
                 <Input
                   id="email"
                   value={email}
@@ -123,7 +137,9 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
                 />
               </div>
               <div className="items-center gap-4 pt-4">
-                <Label htmlFor="phone_number" className="text-right">Phone Number</Label>
+                <Label htmlFor="phone_number" className="text-right">
+                  Phone Number
+                </Label>
                 <Input
                   id="phone_number"
                   value={phone_number}
@@ -135,7 +151,9 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
           </div>
           <div>
             <div className="items-center gap-4">
-              <Label htmlFor="address" className="text-right">Address</Label>
+              <Label htmlFor="address" className="text-right">
+                Address
+              </Label>
               <Input
                 id="address"
                 value={address}
@@ -145,8 +163,17 @@ export default function AddOfficeModal({ sendDatatoParent, OpenModal, setOpenMod
             </div>
           </div>
           <DialogFooter>
-            <Button className="mt-4" disabled={loading} variant="outline" type="submit">
-              {loading ? "Loading..." : (isEditing ? "Update Branch" : "Add Branch")}
+            <Button
+              className="mt-4"
+              disabled={loading}
+              variant="outline"
+              type="submit"
+            >
+              {loading
+                ? "Loading..."
+                : isEditing
+                ? "Update Branch"
+                : "Add Branch"}
             </Button>
           </DialogFooter>
         </form>
