@@ -25,18 +25,22 @@ export default function Login() {
     });
     setloading(false)
 
-    if (data.ok) {
+    if (data.status == 200 ) {
       toast.success("Login Suceesfull", {
         duration: 1200,
-        
-        
       });
       setTimeout(() => {
         router.push("/dashboard");
       }, 400);
 
-      localStorage.setItem("token", userSession.user.token);
-      console.log(userSession.user);
+    
+      console.log(data);
+      
+
+      localStorage.setItem("token", userSession?.user.accessToken);
+      console.log(userSession?.user);
+    } else {
+      toast.error("login Failed , Please Check your Credentials")
     }
   };
 

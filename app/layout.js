@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
         >
           <SessionProvider >
             {children}
-            <Toaster richColors position="top-right" closeButton />
+            <Toaster richColors position="top-right" closeButton expand={true} />
           </SessionProvider>
         </ThemeProvider>
       </body>
