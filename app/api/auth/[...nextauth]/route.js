@@ -4,13 +4,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credential",
+      name: "Credentials",
       credentials: {
-        username: { label: "email", type: "email", placeholder: "username" },
+        email: { label: "Email", type: "email", placeholder: "your-email@example.com" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await fetch("http://128.199.31.7/sanctum/csrf-cookie", {
+        // Step 1: Obtain CSRF Cookie (assuming this is a requirement for the API)
+        const csrfRes = await fetch("http://128.199.31.7/sanctum/csrf-cookie", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -18,9 +19,14 @@ export const authOptions = {
           credentials: "include",
         });
 
-        const res = await fetch("http://128.199.31.7/api/admin/login", {
-          method: "POST",
+        if (!csrfRes.ok) {
+          console.error("Failed to obtain CSRF token");
+          throw new Error("Failed to authenticate");
+        }
 
+        // Step 2: Login request
+        const loginRes = await fetch("http://128.199.31.7/api/admin/login", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -29,40 +35,51 @@ export const authOptions = {
             password: credentials.password,
           }),
           credentials: "include",
-        })
+        });
 
-        const data = await res.json();
-          
-        // Check if the response is okay and return user
-        if (res.ok && data) {
-          // Log and return the user object
-          console.log("User data:", data);
-          return data; // Return the user object received from API
+        const data = await loginRes.json();
+
+        if (loginRes.ok && data?.data) {
+          // Here, return a structured user object with necessary details
+          return {
+            id:data.data.id,
+            name:data.data.name,
+            email:data.data.email,
+            // Include other relevant fields if needed
+            accessToken: data.token // Include token if you want to attach it in JWT
+          };
         } else {
+          console.error("Login failed:", data.message || "Invalid credentials");
           throw new Error(data.message || "Invalid credentials");
         }
       },
     }),
   ],
   pages: {
-    signIn: "/auth/login", // Redirect to your login page
+    signIn: "/login", // Redirect to your custom login page
   },
   session: {
     strategy: "jwt", // Use JWT for sessions
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.user = user; // Attach user object to the token
+        console.log("user:"+ JSON.stringify(user) , "token:"+ JSON.stringify(token));
+        
       }
       return token;
     },
     async session({ session, token }) {
       session.user = token.user; // Attach user object to the session
+      console.log("session:"+JSON.stringify(session));
+      
       return session;
     },
   },
 };
 
+// Export handler for GET and POST requests
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

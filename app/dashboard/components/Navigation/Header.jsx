@@ -81,8 +81,8 @@ const Header = () => {
             <AvatarFallback>C</AvatarFallback>
           </Avatar>
           <div>
-            <p className="text-[12px] font-bold mx-1">{userSession.user.data.name}</p>
-            <p className="text-[11px] -mt-1 mx-1">{userSession.user.data.email}</p>
+            <p className="text-[12px] font-bold mx-1">{userSession?.user?.name}</p>
+            <p className="text-[11px] -mt-1 mx-1">{userSession?.user?.email}</p>
           </div>
         </div>
       </div>

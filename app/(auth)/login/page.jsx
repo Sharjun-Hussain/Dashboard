@@ -26,8 +26,10 @@ export default function Login() {
     setloading(false)
 
     if (data.ok) {
-      toast(userSession.user.message, {
-        duration: 500,
+      toast.success("Login Suceesfull", {
+        duration: 1200,
+        
+        
       });
       setTimeout(() => {
         router.push("/dashboard");

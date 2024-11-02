@@ -1,0 +1,10 @@
+In Inventory Header 
+
+the layout have another child header that contain 
+add products 
+remove products
+report
+
+(feature)another thing is that user can add product so when add product he can choose which warehouse and which branch 
+
+in top of dashboard + button that dropdown add product add branch add warehouse like this 
