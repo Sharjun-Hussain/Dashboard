@@ -40,7 +40,7 @@ export default function DemoPage() {
   useEffect(() => {
     const fetchOffice = async () => {
       setloading(true);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/office`, {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -109,7 +109,7 @@ export default function DemoPage() {
               />
             </div>
           </div>
-          <WarehouseModal  OpenModal={OpenModal} setOpenModal={setOpenModal} />
+          <WarehouseModal onUpdate={handleChildData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
         </CustomCard>
         {/* <DataTable columns={columns} data={data} /> */}
       </div>

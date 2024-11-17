@@ -40,13 +40,14 @@ export const authOptions = {
         const data = await loginRes.json();
 
         if (loginRes.ok && data?.data) {
+          console.log(data);
+          
           // Here, return a structured user object with necessary details
           return {
             id:data.data.id,
             name:data.data.name,
             email:data.data.email,
-            // Include other relevant fields if needed
-            accessToken: data.token // Include token if you want to attach it in JWT
+            token: data.token // Include token if you want to attach it in JWT
           };
         } else {
           console.error("Login failed:", data.message || "Invalid credentials");
@@ -66,7 +67,6 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.user = user; // Attach user object to the token
-        console.log("user:"+ JSON.stringify(user) , "token:"+ JSON.stringify(token));
         
       }
       return token;

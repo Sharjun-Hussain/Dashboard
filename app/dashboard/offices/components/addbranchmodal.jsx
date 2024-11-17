@@ -32,7 +32,6 @@ export default function AddOfficeModal({
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const isEditing = !!existingOffice;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -47,26 +46,56 @@ export default function AddOfficeModal({
         data: { code, office_name, address, phone_number, email },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-
+  
       if (res.status === 200 || res.status === 201) {
-        toast(
+        toast.success(
           `${
             isEditing
               ? "Office Branch Updated Successfully"
               : "Office Branch Added Successfully"
-          }`,{duration:1600,position:"top-right"}
+          }`,
+          { duration: 1600, position: "top-right" }
         );
         setLoading(false);
-
+  
         onUpdate(res.data.data);
-
+        setCode("");
+        setOfficeName("");
+        setAddress("");
+        setPhoneNumber("");
+        setEmail("");
+  
         setOpenModal(false);
       }
     } catch (err) {
-      setError(err.message);
+      if (err.response && err.response.data && err.response.data.errors) {
+        const errorMessages = err.response.data.errors;
+        
+        // Loop through each field in the error object
+        Object.keys(errorMessages).forEach((field) => {
+          const fieldErrors = errorMessages[field];
+          
+          // Show a toast for each error message related to the field
+          fieldErrors.forEach((errorMessage) => {
+            toast.error(`${field}: ${errorMessage}`, {
+              duration: 4000, // Duration for each toast
+              position: "top-right", // Position of the toast
+            });
+          });
+        });
+      } else {
+        setError("An unexpected error occurred.");
+        toast.error("An unexpected error occurred.", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (existingOffice) {

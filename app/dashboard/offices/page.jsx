@@ -104,7 +104,7 @@ export default function DemoPage() {
               />
             </div>
           </div>
-          <AddOfficeModal  OpenModal={OpenModal} setOpenModal={setOpenModal} />
+          <AddOfficeModal onUpdate={handleChildData}  OpenModal={OpenModal} setOpenModal={setOpenModal} />
         </CustomCard>
         {/* <DataTable columns={columns} data={data} /> */}
       </div>

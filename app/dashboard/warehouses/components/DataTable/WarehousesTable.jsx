@@ -86,23 +86,38 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "code",
-      header: "Code",
+      accessorKey: "warehouse_code",
+      header: "Warehouse Code",
     },
     {
-      accessorKey: "office_name",
+      accessorKey: "office_id",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office
+            Branch Office Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office",
+      header: " Branch Office Name",
+    },
+    {
+      accessorKey: "warehouse_name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            WareHouse Name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      header: " WareHouse Name",
     },
     {
       accessorKey: "address",
@@ -132,22 +147,22 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const office = row.original;
+        const warehouse = row.original;
         const [open, setOpen] = React.useState(false);
         const [OpenModal, setOpenModal] = React.useState(false);
-        const [officeData, setOfficeData] = React.useState(null);
+        const [warehouseData, setwarehouseData] = React.useState(null);
 
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse/${warehouse.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(office.id);
+            onDelete(warehouse.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -159,7 +174,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setOfficeData(office); // Create a state variable to hold the office data
+          setwarehouseData(warehouse); // Create a state variable to hold the office data
         };
 
         return (
@@ -190,8 +205,8 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    office from the servers.
+                    This action cannot be undone. This will permanently Remove
+                    Warehouser from the Branch.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -207,7 +222,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
 
             <WarehouseModal
               onUpdate={onUpdate}
-              existingOffice={officeData}
+              existingWareHouse={warehouseData}
               OpenModal={OpenModal}
               setOpenModal={setOpenModal}
             />

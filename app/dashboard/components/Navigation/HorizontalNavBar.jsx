@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <>
       {!isMobile && (
-        <header className="bg-white w-[650px] rounded-full mx-auto mt-3  dark:bg-accent shadow-md">
+        <header className="bg-white w-[700px] rounded-full mx-auto mt-3  dark:bg-accent shadow-md">
           <div className="container  mx-auto flex justify-center h-14 items-center  px-6">
             {/* Navigation Links */}
             <nav className="flex">

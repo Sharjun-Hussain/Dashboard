@@ -3,53 +3,68 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function Login() {
   const { data: userSession } = useSession();
   const router = useRouter();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setloading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log(userSession);
+    localStorage.setItem("token", userSession?.user?.token);
+  }, [userSession]);
 
   const handleSubmit = async (e) => {
-    setloading(true)
     e.preventDefault();
+    setLoading(true);
+    setError(""); // Reset error message
+
+    // Check for empty fields
+    if (!email || !password) {
+      setError("Please enter your email and password.");
+      setLoading(false);
+      return;
+    }
+
     const data = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
-    setloading(false)
 
-    if (data.status == 200 ) {
-      toast.success("Login Suceesfull", {
-        duration: 1200,
-      });
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 400);
+    console.log(data);
 
-    
-      console.log(data);
-      
+    setLoading(false); // Always set loading to false after processing
 
-      localStorage.setItem("token", userSession?.user.accessToken);
-      console.log(userSession?.user);
+    if (data?.error) {
+      // If there's an error returned from signIn, show it
+      setError(data.error);
+      toast.error("Login Failed: " + data.error);
     } else {
-      toast.error("login Failed , Please Check your Credentials")
+      // Assuming login is successful
+
+      toast.success("Login Successful!");
+       // Use accessToken from the signIn response
+      router.push("/dashboard");
     }
   };
+
+
+    
 
   return (
     <div className="">
       <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
         Login
       </h2>
-      {error && <pre>{error}</pre>}
+      {error && <pre className="text-red-500">{error}</pre>}{" "}
+      {/* Display error if any */}
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <Input
           placeholder="Email"
@@ -62,6 +77,7 @@ export default function Login() {
           placeholder="Password"
           type="password"
           className="dark:bg-gray-700 w-full"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
@@ -73,10 +89,16 @@ export default function Login() {
             Forgot Password?
           </Link>
         </div>
-        <Button disabled={loading}  type="submit" variant="outline" className="w-full ">
-          {loading ? "Sign-in Please Wait" : "Sign In" }
+        <Button
+          disabled={loading}
+          type="submit"
+          variant="outline"
+          className="w-full "
+        >
+          {loading ? "Sign-in Please Wait" : "Sign In"}
         </Button>
       </form>
+      {/* Optional Sign Up link */}
       {/* <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
         Don&lsquo;t have an account?{" "}
         <Link

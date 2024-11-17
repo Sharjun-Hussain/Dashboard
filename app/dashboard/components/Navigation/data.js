@@ -7,6 +7,11 @@ export const NavItems = [
     Icon: <LayoutGrid width={17} className="text-pink-600  dark:text-white" />,
   },
   {
+    Name: "Goods & Items",
+    Path: "/dashboard/goods",
+    Icon: <HardDrive width={17} className="text-pink-600  dark:text-white" />,
+  },
+  {
     Name: "Offices",
     Path: "/dashboard/offices",
     Icon: <School width={17} className="text-pink-600  dark:text-white" />,
@@ -16,11 +21,7 @@ export const NavItems = [
     Path: "/dashboard/warehouses",
     Icon: <Factory width={17} className="text-pink-600  dark:text-white" />,
   },
-  {
-    Name: "Goods",
-    Path: "/dashboard/income-goods",
-    Icon: <HardDrive width={17} className="text-pink-600  dark:text-white" />,
-  },{
+ ,{
     Name: "User Roles",
     Path: "/dashboard/roles",
     Icon: <HardDrive width={14} className="text-pink-600  dark:text-white" />,
