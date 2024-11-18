@@ -4,10 +4,10 @@ import CustomCard from "../../components/Custom/Card/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-import { Button } from "@/components/ui/button";
-import { Combobox } from "../add-product/components/ComboBox";
+import { Button } from "@/components/ui/button";;
 import { AddStockTable } from "./components/DataTable/StockTable";
 import AddStockModal from "./components/addstockmodal";
+import { Combobox } from "../Components/ComboBox";
 
 
 

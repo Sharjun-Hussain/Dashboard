@@ -55,13 +55,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import IssueStockModal from "../issuestockmodal";
 
 
 
 
 
-export function StockTable({ data, width, loading, onUpdate, onDelete }) {
+export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -214,7 +213,7 @@ export function StockTable({ data, width, loading, onUpdate, onDelete }) {
 
 
 
-            <IssueStockModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
           </>
         );
       },

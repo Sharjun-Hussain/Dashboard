@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1  rounded-md ${
                         currentpath === "/dashboard/goods/add-stock"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/add-stock"
                     >
@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1 rounded-md ${
                         currentpath === "/dashboard/goods/issue-stock"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/issue-stock"
                     >
@@ -83,7 +83,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1 rounded-md ${
                         currentpath === "/dashboard/goods/add-product"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/add-product"
                     >
@@ -93,7 +93,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1 rounded-md ${
                         currentpath === "/dashboard/goods/main-category"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/main-category"
                     >
@@ -103,7 +103,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1 rounded-md ${
                         currentpath === "/dashboard/goods/sub-category"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/sub-category"
                     >
@@ -113,7 +113,7 @@ const Layout = ({ children }) => {
                       className={`flex text-sm p-1 rounded-md ${
                         currentpath === "/dashboard/goods/unit-type"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                       href="/dashboard/goods/unit-type"
                     >
@@ -127,7 +127,7 @@ const Layout = ({ children }) => {
               <Link
                 className={`font-bold flex py-3 pe-3 ms-2 text-sm ${currentpath === "/dashboard/goods/unit-type"
                           ? "text-pink-600"
-                          : "text-gray-300 hover:text-pink-600"
+                          : "dark:text-gray-300 hover:text-pink-600"
                       } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/goods/add-product"
               >

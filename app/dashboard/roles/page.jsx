@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { UsersTable } from "./components/DataTable/UsersTable";
 import CustomCard from "../components/Custom/Card/card";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
+import { Button } from "@/components/ui/button";
 
 const RoleManagementDashboard = () => {
   const users = [
@@ -40,62 +41,20 @@ const RoleManagementDashboard = () => {
   const roles = ["Super Admin", "Branch Manager", "Warehouse Admin"];
 
   return (
- <Fragment>
-  <Breadcrumbs/>
-  <CustomCard title="Role Management" description=" Manage user roles and permissions effectively.">
-      <div className=" space-y-8">
-     
-      <Tabs defaultValue="users" className="w-full">
-        <TabsList>
-          <TabsTrigger value="users">User List</TabsTrigger>
-          <TabsTrigger value="permissions">Role Permissions</TabsTrigger>
-        </TabsList>
-
-        {/* Tab 1: User List */}
-        <TabsContent value="users">
-          <div className="space-y-4">
-            <UsersTable data={{}} />
+    <Fragment>
+      <CustomCard className="-mt-9 " insideClassName="border-black dark:border-gray-400">
+        <div className="flex -mt-4 items-center ">
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-bold">Users Managements</h1>
+            <h2>Manage users & Roles Here.</h2>
           </div>
-        </TabsContent>
-
-        {/* Tab 2: Role Permissions */}
-        <TabsContent value="permissions">
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-[1fr_repeat(3,_minmax(150px,_1fr))] gap-4">
-              {/* Header Row */}
-              <div className="font-medium dark:text-gray-300">Actions / Roles</div>
-              {roles.map((role, index) => (
-                <div
-                  key={index}
-                  className="font-medium  dark:text-gray-300 text-center"
-                >
-                  {role}
-                </div>
-              ))}
-
-              <Separator className="col-span-full my-2" />
-
-              {/* Action Rows */}
-              {actions.map((action, rowIndex) => (
-                <React.Fragment key={rowIndex}>
-                  <div className="font-medium dark:text-gray-300">{action}</div>
-                  {roles.map((_, colIndex) => (
-                    <div
-                      key={colIndex}
-                      className="flex justify-center items-center"
-                    >
-                      <Checkbox id={`action-${rowIndex}-role-${colIndex}`} />
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
-            </div>
+          <div className="ms-auto">
+            <Button variant="outline">Add Users</Button>
           </div>
-        </TabsContent>
-      </Tabs>
-    </div>
-    </CustomCard>
- </Fragment>
+        </div>
+        <UsersTable data={{}} />
+      </CustomCard>
+    </Fragment>
   );
 };
 

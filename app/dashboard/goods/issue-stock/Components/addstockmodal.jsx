@@ -13,25 +13,54 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"; // ShadCN Dropdown
 
-export default function IssueStockModal({
+export default function AddStockModal({
   onUpdate,
   OpenModal,
   setOpenModal,
   existingOffice,
 }) {
   const [code, setCode] = useState(existingOffice?.code || "");
-  const [office_name, setOfficeName] = useState(
-    existingOffice?.office_name || ""
-  );
+  const [office_name, setOfficeName] = useState(existingOffice?.office_name || "");
   const [address, setAddress] = useState(existingOffice?.address || "");
-  const [phone_number, setPhoneNumber] = useState(
-    existingOffice?.phone_number || ""
-  );
+  const [phone_number, setPhoneNumber] = useState(existingOffice?.phone_number || "");
   const [email, setEmail] = useState(existingOffice?.email || "");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]); // List of products
+  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on search
+  const [searchTerm, setSearchTerm] = useState(""); // For storing search input
+  const [selectedProduct, setSelectedProduct] = useState(null); // Store selected product
   const isEditing = !!existingOffice;
+
+  useEffect(() => {
+    // Fetch product list from API or static data
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/products`)
+      .then((res) => {
+        setProducts(res.data);
+        setFilteredProducts(res.data); // Initially set all products to be available
+      })
+      .catch((err) => setError(err.message));
+  }, []);
+
+  // Handle product selection
+  const handleProductSelect = (product) => {
+    setSelectedProduct(product);
+    setCode(product.code);
+    setEmail(product.weight); // Assuming weight is stored in email field
+  };
+
+  // Filter products based on search term
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,12 +83,11 @@ export default function IssueStockModal({
             isEditing
               ? "Office Branch Updated Successfully"
               : "Office Branch Added Successfully"
-          }`,{duration:1600,position:"top-right"}
+          }`,
+          { duration: 1600, position: "top-right" }
         );
         setLoading(false);
-
         onUpdate(res.data.data);
-
         setOpenModal(false);
       }
     } catch (err) {
@@ -92,76 +120,75 @@ export default function IssueStockModal({
         {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Branch Office" : "Add Branch Office"}
-            </DialogTitle>
+            <DialogTitle>{isEditing ? "Update Stocks" : "Add Stocks"}</DialogTitle>
             <DialogDescription className="text-gray-600">
-              Make changes to your profile here. Click save when done.
+              Make changes here. Click save when done.
             </DialogDescription>
           </DialogHeader>
+
           <div className="flex flex-row gap-4 pt-4">
-            <div className="flex-row">
+            {/* Searchable Dropdown */}
+            <div className="flex-row w-full">
               <div className="items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Branch Name
+                <Label htmlFor="product" className="text-right">
+                  Search Product
                 </Label>
-                <Input
-                  id="name"
-                  value={office_name}
-                  onChange={(e) => setOfficeName(e.target.value)}
-                  className="col-span-3"
-                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Input
+                      id="product"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      placeholder="Search products"
+                      className="w-full"
+                    />
+                  </DropdownMenuTrigger>
+                  {filteredProducts.length > 0 && (
+                    <div className="dropdown-content">
+                      {filteredProducts.map((product) => (
+                        <DropdownMenuItem
+                          key={product.id}
+                          onClick={() => handleProductSelect(product)}
+                          className="cursor-pointer hover:bg-gray-200 p-2"
+                        >
+                          {product.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
+                  )}
+                </DropdownMenu>
               </div>
-              <div className="items-center gap-4 pt-4">
-                <Label htmlFor="branchcode" className="text-right">
-                  Branch Code
+            </div>
+
+            {/* Other Fields for Product */}
+            <div className="flex-row w-full">
+              <div className="items-center gap-4">
+                <Label htmlFor="code" className="text-right">
+                  Product Code
                 </Label>
                 <Input
-                  id="branchcode"
+                  id="code"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   className="col-span-3"
+                  disabled
                 />
               </div>
-            </div>
-            <div className="flex-row">
               <div className="items-center gap-4">
-                <Label htmlFor="email" className="text-right">
-                  Email
+                <Label htmlFor="weight" className="text-right">
+                  Weight (kg)
                 </Label>
                 <Input
-                  id="email"
-                  value={email}
+                  id="weight"
+                  value={email} // Using email state for weight
                   onChange={(e) => setEmail(e.target.value)}
                   className="col-span-3"
-                />
-              </div>
-              <div className="items-center gap-4 pt-4">
-                <Label htmlFor="phone_number" className="text-right">
-                  Phone Number
-                </Label>
-                <Input
-                  id="phone_number"
-                  value={phone_number}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="col-span-3"
+                  disabled
                 />
               </div>
             </div>
           </div>
-          <div>
-            <div className="items-center gap-4">
-              <Label htmlFor="address" className="text-right">
-                Address
-              </Label>
-              <Input
-                id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-          </div>
+
           <DialogFooter>
             <Button
               className="mt-4"
@@ -173,7 +200,7 @@ export default function IssueStockModal({
                 ? "Loading..."
                 : isEditing
                 ? "Update Branch"
-                : "Add Branch"}
+                : "Add Stock"}
             </Button>
           </DialogFooter>
         </form>
