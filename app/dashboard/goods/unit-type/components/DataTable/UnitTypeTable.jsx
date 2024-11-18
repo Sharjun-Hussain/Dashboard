@@ -187,7 +187,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
 
 
 
-            <UnitTypeModal onUpdate={onUpdate}  existingCategory={categorydata} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <UnitTypeModal onUpdate={onUpdate}  existingCategory={{}} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },

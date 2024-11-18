@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { Fragment } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { UsersTable } from "./components/DataTable/UsersTable";
 import CustomCard from "../components/Custom/Card/card";
+import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 
 const RoleManagementDashboard = () => {
   const users = [
@@ -39,7 +40,9 @@ const RoleManagementDashboard = () => {
   const roles = ["Super Admin", "Branch Manager", "Warehouse Admin"];
 
   return (
-    <CustomCard title="Role Management" description=" Manage user roles and permissions effectively.">
+ <Fragment>
+  <Breadcrumbs/>
+  <CustomCard title="Role Management" description=" Manage user roles and permissions effectively.">
       <div className=" space-y-8">
      
       <Tabs defaultValue="users" className="w-full">
@@ -92,6 +95,7 @@ const RoleManagementDashboard = () => {
       </Tabs>
     </div>
     </CustomCard>
+ </Fragment>
   );
 };
 

@@ -15,7 +15,9 @@ export default function DemoPage() {
 
   const handleChildData = (maincategory) => {
     setMainCategory((prevCategory) => {
-      const categoryIndex = prevCategory.findIndex((o) => o.id === maincategory.id);
+      const categoryIndex = prevCategory.findIndex(
+        (o) => o.id === maincategory.id
+      );
       if (categoryIndex >= 0) {
         // Update existing office
         const updatedCategories = [...prevCategory];
@@ -29,7 +31,9 @@ export default function DemoPage() {
   };
 
   const handleDelete = (categoryid) => {
-    setMainCategory((prev) => prev.filter((category) => category.id !== categoryid));
+    setMainCategory((prev) =>
+      prev.filter((category) => category.id !== categoryid)
+    );
   };
 
   useEffect(() => {
@@ -57,24 +61,26 @@ export default function DemoPage() {
 
   return (
     <div className="">
-      <div className="container mx-auto">
+      <div className="">
         <CustomCard className="-mt-9">
           <div className="flex ">
-           <div className="flex flex-col">
-           <h2 className="text-xl font-bold">Main category</h2>
-           <h2 className="text-sm font-semibold text-gray-300">Manage your Main Category Here</h2>
-           </div>
-           <div className="ms-auto">
-           <Button
-              className="pe-2 ps-1"
-              onClick={() => setOpenModal(true)}
-              variant="outline"
-            >
-              {" "}
-              <Plus size={15} className="me-1" />
-              Add Main Category
-            </Button>
-           </div>
+            <div className="flex flex-col">
+              <h2 className="text-xl font-bold">Main category</h2>
+              <h2 className="text-sm font-semibold text-gray-300">
+                Manage your Main Category Here
+              </h2>
+            </div>
+            <div className="ms-auto">
+              <Button
+                className="pe-2 ps-1"
+                onClick={() => setOpenModal(true)}
+                variant="outline"
+              >
+                {" "}
+                <Plus size={15} className="me-1" />
+                Add Main Category
+              </Button>
+            </div>
           </div>
 
           <div>
@@ -93,7 +99,11 @@ export default function DemoPage() {
               />
             </div>
           </div>
-          <MainCategoryModal onUpdate={handleChildData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+          <MainCategoryModal
+            onUpdate={handleChildData}
+            OpenModal={OpenModal}
+            setOpenModal={setOpenModal}
+          />
         </CustomCard>
         {/* <DataTable columns={columns} data={data} /> */}
       </div>
