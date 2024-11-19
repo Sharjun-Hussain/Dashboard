@@ -62,15 +62,15 @@ export default function DemoPage() {
   return (
     <div className="">
       <div className="">
-        <CustomCard className="-mt-9">
-          <div className="flex ">
+        <CustomCard className="-mt-9" insideClassName="border-black m-0 p-0">
+          <div className="flex md:flex-row flex-col -mt-5 ">
             <div className="flex flex-col">
-              <h2 className="text-xl font-bold">Main category</h2>
-              <h2 className="text-sm font-semibold text-gray-300">
+              <h2 className="text-sm md:text-xl font-bold">Main category</h2>
+              <h2 className="text-xs md:text-sm font-semibold text-gray-700">
                 Manage your Main Category Here
               </h2>
             </div>
-            <div className="ms-auto">
+            <div className="md:ms-auto w-full md:w-auto">
               <Button
                 className="pe-2 ps-1"
                 onClick={() => setOpenModal(true)}

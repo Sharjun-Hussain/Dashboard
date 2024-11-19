@@ -55,12 +55,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+import AddUserModal from "../AddPermissionModal";
+import AddPermissionModal from "../AddPermissionModal";
 
 
 
 
 
-export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
+export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -91,68 +93,54 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "code",
-      header: "Code",
+      accessorKey: "id",
+      header: "ID",
     },
     {
-      accessorKey: "office_name",
+      accessorKey: "guard_name",
+      header: "Guard Name",
+    },
+    {
+      accessorKey: "group_name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office
+            Group Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office",
+      header: "Group Name",
     },
     {
-      accessorKey: "address",
-      header: "Address",
+      accessorKey: "name",
+      header: "name",
     },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: "Email",
-    },
+    
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const office = row.original;
+        const permission = row.original;
         const [open, setOpen] = React.useState(false); 
         const [OpenModal, setOpenModal] = React.useState(false)
-        const [officeData, setOfficeData] = React.useState(null);
+        const [permissionData, setpermissionData] = React.useState(null);
   
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/permission/${permission.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(office.id);
+            onDelete(permission.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -164,7 +152,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setOfficeData(office); // Create a state variable to hold the office data
+          setpermissionData(permission); // Create a state variable to hold the office data
         };
         
   
@@ -213,7 +201,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
 
 
 
-            {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
+            <AddPermissionModal onUpdate={onUpdate}  existingPermission={permissionData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },
@@ -243,10 +231,10 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Filter Groups"
+              value={table.getColumn("group_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table.getColumn("group_name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

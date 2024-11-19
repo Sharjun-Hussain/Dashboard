@@ -55,12 +55,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import WarehouseModal from "../WarehousesModal";
+import AddUserModal from "../AddUserModal";
+
+
+
+
 
 export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
+
+
 
   const columns = [
     {
@@ -86,38 +92,23 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "warehouse_code",
-      header: "Warehouse Code",
+      accessorKey: "code",
+      header: "Code",
     },
     {
-      accessorKey: "office_id",
+      accessorKey: "office_name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office Name
+            Branch Office
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office Name",
-    },
-    {
-      accessorKey: "warehouse_name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            WareHouse Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: " WareHouse Name",
+      header: " Branch Office",
     },
     {
       accessorKey: "address",
@@ -147,22 +138,22 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const warehouse = row.original;
-        const [open, setOpen] = React.useState(false);
-        const [OpenModal, setOpenModal] = React.useState(false);
-        const [warehouseData, setwarehouseData] = React.useState(null);
-
+        const office = row.original;
+        const [open, setOpen] = React.useState(false); 
+        const [OpenModal, setOpenModal] = React.useState(false)
+        const [officeData, setOfficeData] = React.useState(null);
+  
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse/${warehouse.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(warehouse.id);
+            onDelete(office.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -174,9 +165,10 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setwarehouseData(warehouse); // Create a state variable to hold the office data
+          setOfficeData(office); // Create a state variable to hold the office data
         };
-
+        
+  
         return (
           <>
             <DropdownMenu>
@@ -192,21 +184,21 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-
+  
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
+  
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently Remove
-                    Warehouser from the Branch.
+                    This action cannot be undone. This will permanently delete
+                    office from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -220,12 +212,9 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-            <WarehouseModal
-              onUpdate={onUpdate}
-              existingWareHouse={warehouseData}
-              OpenModal={OpenModal}
-              setOpenModal={setOpenModal}
-            />
+
+
+            <AddUserModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },
@@ -258,9 +247,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("office_name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("office_name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

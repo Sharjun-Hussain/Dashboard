@@ -22,9 +22,9 @@ const CustomCard = ({
   return (
     <div className={`${className}`}>
       <Card
-        className={`m-0 md:my-3 my-3 w-full shadow-sm bg-card dark:bg-accent  border-secondary ${insideClassName} `}
+        className={`m-0 p-0 my-3 w-full shadow-sm bg-card dark:bg-accent ${insideClassName} `}
       >
-        <div className="mt-6 ms-6 me-4 flex">
+        <div className="m-4 flex">
           <div className="flex flex-col">
             <div className="font-bold text-lg flex items-center">{title}{element}</div>
             <div className="font-medium  text-gray-600 dark:text-gray-400 text-sm">

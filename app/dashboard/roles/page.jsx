@@ -42,14 +42,14 @@ const RoleManagementDashboard = () => {
 
   return (
     <Fragment>
-      <CustomCard className="-mt-9 " insideClassName="border-black dark:border-gray-400">
+      <CustomCard className="-mt-9 " >
         <div className="flex -mt-4 items-center ">
           <div className="flex flex-col">
-            <h1 className="text-2xl font-bold">Users Managements</h1>
-            <h2>Manage users & Roles Here.</h2>
+            <h1 className="text-2xl font-bold">Roles Managements</h1>
+            <h2>Manage Permissions & Roles Here.</h2>
           </div>
           <div className="ms-auto">
-            <Button variant="outline">Add Users</Button>
+            <Button variant="outline">Create Roles</Button>
           </div>
         </div>
         <UsersTable data={{}} />

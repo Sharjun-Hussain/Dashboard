@@ -59,7 +59,7 @@ export default function DemoPage() {
   return (
     <div className="">
       <div className="container mx-auto">
-        <CustomCard className="-mt-9">
+        <CustomCard className="-mt-9" insideClassName="border-black">
           <div className="flex ">
            <div className="flex flex-col">
            <h2 className="text-xl font-bold">Sub category</h2>
