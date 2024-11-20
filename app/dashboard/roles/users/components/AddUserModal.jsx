@@ -13,76 +13,69 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"; // ShadCN Dropdown
+
+import { RoleCombobox } from "./ComboBox/RoleComboBox";
+import { WareHouseComboBox } from "./ComboBox/WareHouseComboBox";
+import { OfficeComboBox } from "./ComboBox/OfficeComboBox";
 
 export default function AddUserModal({
   onUpdate,
   OpenModal,
   setOpenModal,
-  existingOffice,
+  existingUser,
 }) {
-  const [code, setCode] = useState(existingOffice?.code || "");
-  const [office_name, setOfficeName] = useState(existingOffice?.office_name || "");
-  const [address, setAddress] = useState(existingOffice?.address || "");
-  const [phone_number, setPhoneNumber] = useState(existingOffice?.phone_number || "");
-  const [email, setEmail] = useState(existingOffice?.email || "");
+  const [name, setName] = useState(existingUser?.name || "");
+  const [email, setEmail] = useState(existingUser?.email || "");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState(existingUser?.role || null);
+  const [RoleData, setRoleData] = useState("");
+  const [selectedOffice, setSelectedOffice] = useState(null);
+  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]); // List of products
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on search
-  const [searchTerm, setSearchTerm] = useState(""); // For storing search input
-  const [selectedProduct, setSelectedProduct] = useState(null); // Store selected product
-  const isEditing = !!existingOffice;
+  const [roles, setRoles] = useState([]); // Roles for selection
+  const isEditing = !!existingUser;
 
   useEffect(() => {
-    // Fetch product list from API or static data
+    // Fetch roles from API
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/products`)
-      .then((res) => {
-        setProducts(res.data);
-        setFilteredProducts(res.data); // Initially set all products to be available
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${role}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer 58|UFxgcVa8hIQyqs25cJp2eN6JJvjBmpQ4bJY2dsmz279e2c25",
+        },
       })
+      .then((res) => setRoleData(res?.data?.data?.role))
       .catch((err) => setError(err.message));
-  }, []);
-
-  // Handle product selection
-  const handleProductSelect = (product) => {
-    setSelectedProduct(product);
-    setCode(product.code);
-    setEmail(product.weight); // Assuming weight is stored in email field
-  };
-
-  // Filter products based on search term
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value;
-    setSearchTerm(searchTerm);
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  };
+  }, [role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office${
-        isEditing ? `/${existingOffice.id}` : ""
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users${
+        isEditing ? `/${existingUser.id}` : ""
       }`;
       const method = isEditing ? "put" : "post";
       const res = await axios({
         method,
         url,
-        data: { code, office_name, address, phone_number, email },
+        data: {
+          name,
+          email,
+          password,
+          role :RoleData.name,
+          office_id: selectedOffice,
+          warehouse_id: selectedWarehouse,
+        },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (res.status === 200 || res.status === 201) {
         toast(
           `${
-            isEditing
-              ? "Office Branch Updated Successfully"
-              : "Office Branch Added Successfully"
+            isEditing ? "User Updated Successfully" : "User Added Successfully"
           }`,
           { duration: 1600, position: "top-right" }
         );
@@ -96,23 +89,19 @@ export default function AddUserModal({
     }
   };
 
-  useEffect(() => {
-    if (existingOffice) {
-      setCode(existingOffice.code);
-      setOfficeName(existingOffice.office_name);
-      setAddress(existingOffice.address);
-      setPhoneNumber(existingOffice.phone_number);
-      setEmail(existingOffice.email);
-    } else {
-      setCode("");
-      setOfficeName("");
-      setAddress("");
-      setPhoneNumber("");
-      setEmail("");
-    }
-  }, [existingOffice]);
+// Role-based disabling logic
+const trimmedRole = RoleData?.name?.replace(/\s/g, "").toLowerCase();
 
-  if (!OpenModal) return null;
+// Disable both office and warehouse for these roles
+const isOfficeAndWarehouseDisabled = [
+  "superadmin",
+  "systemadmin",
+  "headofficechairman",
+].includes(trimmedRole);
+
+// Disable warehouse for branch manager
+const isWarehouseDisabled = trimmedRole === "branch manager";
+
 
   return (
     <Dialog open={OpenModal} onOpenChange={setOpenModal}>
@@ -120,72 +109,86 @@ export default function AddUserModal({
         {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Update Stocks" : "Add Stocks"}</DialogTitle>
+            <DialogTitle>{isEditing ? "Update User" : "Add User"}</DialogTitle>
             <DialogDescription className="text-gray-600">
               Make changes here. Click save when done.
             </DialogDescription>
           </DialogHeader>
 
+          {/* User Information */}
           <div className="flex flex-row gap-4 pt-4">
-            {/* Searchable Dropdown */}
             <div className="flex-row w-full">
-              <div className="items-center gap-4">
-                <Label htmlFor="product" className="text-right">
-                  Search Product
-                </Label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Input
-                      id="product"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      placeholder="Search products"
-                      className="w-full"
-                    />
-                  </DropdownMenuTrigger>
-                  {filteredProducts.length > 0 && (
-                    <div className="dropdown-content">
-                      {filteredProducts.map((product) => (
-                        <DropdownMenuItem
-                          key={product.id}
-                          onClick={() => handleProductSelect(product)}
-                          className="cursor-pointer hover:bg-gray-200 p-2"
-                        >
-                          {product.name}
-                        </DropdownMenuItem>
-                      ))}
-                    </div>
-                  )}
-                </DropdownMenu>
-              </div>
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="col-span-3"
+              />
             </div>
 
-            {/* Other Fields for Product */}
             <div className="flex-row w-full">
-              <div className="items-center gap-4">
-                <Label htmlFor="code" className="text-right">
-                  Product Code
-                </Label>
-                <Input
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="col-span-3"
-                  disabled
-                />
-              </div>
-              <div className="items-center gap-4">
-                <Label htmlFor="weight" className="text-right">
-                  Weight (kg)
-                </Label>
-                <Input
-                  id="weight"
-                  value={email} // Using email state for weight
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="col-span-3"
-                  disabled
-                />
-              </div>
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-4 pt-4">
+            <div className="flex-row w-full">
+              <Label htmlFor="password" className="text-right">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="flex-row w-full">
+              <Label htmlFor="warehouse" className="text-right">
+                Select Role
+              </Label>
+              <RoleCombobox
+                name="Select Role"
+                roleid={(id) => {
+                  setRole(id);
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-4 pt-4">
+            <div className="flex-row w-full">
+              <Label htmlFor="office" className="text-right">
+                Select Office
+              </Label>
+              <OfficeComboBox
+                name="Select Office"
+                Officeid={(id) => setSelectedOffice(id)}
+                disabled={isOfficeAndWarehouseDisabled}
+              />
+            </div>
+            <div className="flex-row w-full">
+              <Label htmlFor="warehouse" className="text-right">
+                Select Warehouse
+              </Label>
+              <WareHouseComboBox
+                name="Select Warehouse"
+                warehouseid={(id) => setSelectedWarehouse(id)}
+                disabled={isOfficeAndWarehouseDisabled || isWarehouseDisabled}
+              />
             </div>
           </div>
 
@@ -196,11 +199,7 @@ export default function AddUserModal({
               variant="outline"
               type="submit"
             >
-              {loading
-                ? "Loading..."
-                : isEditing
-                ? "Update Branch"
-                : "Add Stock"}
+              {loading ? "Loading..." : isEditing ? "Update User" : "Add User"}
             </Button>
           </DialogFooter>
         </form>

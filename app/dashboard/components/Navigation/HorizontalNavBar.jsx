@@ -1,6 +1,6 @@
 // components/Navbar.js
 "use client";
-import Link from "next/link";
+import Link from "next/link"; 
 import { NavItems } from "./data";
 import useMediaQuery from "@/Hooks/useMediaQuery";
 import { DrawerDemo } from "./Drawer";
@@ -40,8 +40,6 @@ export default function Navbar() {
           </div>
         </header>
       )}
-
-      {isMobile && <DrawerDemo />}
     </>
   );
 }

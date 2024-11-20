@@ -3,9 +3,6 @@
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
-
-import { MoreVertical } from "lucide-react";
-
 import {
   ColumnDef,
   flexRender,
@@ -13,15 +10,11 @@ import {
   useReactTable,
   getSortedRowModel,
   getFilteredRowModel,
-  ColumnFiltersState,
-  SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
   ArrowUpDown,
-  Delete,
-  DeleteIcon,
   Pencil,
   Trash2,
   MoreHorizontal,
@@ -56,11 +49,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import WarehouseModal from "../WarehousesModal";
+import useMediaQuery from "@/Hooks/useMediaQuery";
 
 export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const columns = [
     {
@@ -357,7 +352,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Previous
+             {isMobile ? "<<" :"Previous" } 
             </Button>
             <span className="text-xs">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
@@ -369,7 +364,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next
+             {isMobile ? ">>" :"Next" } 
             </Button>
           </div>
         </div>

@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import CustomCard from "../../components/Custom/Card/card";
 import { Button } from "@/components/ui/button";
-
-import { Combobox } from "./components/ComboBox";
 import AddUserModal from "./Components/AddUserModal";
 import { UsersTable } from "./Components/DataTable/UsersTable";
+import { RoleCombobox } from "./Components/ComboBox/RoleComboBox";
+
+
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
@@ -21,8 +22,8 @@ const AddStockPage = () => {
           </h4>
         </div>
         <div className="md:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 md:ms-auto items-center">
-          <Combobox name="Select Office" />
-          <Combobox name="Select Warehouse" />
+          <RoleCombobox name="Select Office" />
+          <RoleCombobox name="Select Warehouse" />
           <Button onClick={() => setOpenModal(true)} variant="outline" className="w-full md:w-auto">
             Invite Users
           </Button>

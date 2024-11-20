@@ -7,12 +7,15 @@ import { useTheme } from "next-themes";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "next-auth/react";
 import { Notification } from "../Notification/Notification";
+import useMediaQuery from "@/Hooks/useMediaQuery";
+import { DrawerDemo } from "./Drawer";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { data: userSession } = useSession();
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Function to handle the toggling of the notification dropdown
   const handleSetNotification = () => {
@@ -56,18 +59,14 @@ const Header = () => {
 
   return (
     userSession && (
-      <div className="w-full hidden py-8 dark:bg-[#1E1E1E] bg-[#FDF2F4] h-[50px] md:flex items-center">
-        <div className="ms-3">Lgg</div>
-        <div className="mx-auto">
+      <div className="w-full flex  dark:bg-[#1E1E1E] bg-[#FDF2F4] h-[50px] md:flex items-center">
+        <div className="ms-3">{isMobile && <DrawerDemo/>}</div>
+        <div className="ms-3">Logo</div>
+        <div className="mx-auto hidden md:flex">
           <p>Railway Department - Colombo</p>
         </div>
         <div className="ms-auto flex items-center">
-          <div className="mx-3">
-            <Input
-              className="border-none bg-transparent placeholder:text-gray-400"
-              placeholder="Search"
-            />
-          </div>
+        
           <div className="ms-2 relative hover:cursor-pointer">
             <Bell onClick={handleSetNotification} width={20} />
             <Notification
@@ -88,7 +87,7 @@ const Header = () => {
               <AvatarImage src="#" />
               <AvatarFallback>C</AvatarFallback>
             </Avatar>
-            <div>
+            <div className="hidden md:flex md:flex-col">
               <p className="text-[12px] font-bold mx-1">
                 {userSession?.user?.name}
               </p>

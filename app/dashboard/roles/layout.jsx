@@ -2,16 +2,9 @@
 import React from "react";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 import Link from "next/link";
-
-import { ChevronDownIcon, DiamondMinus, LayoutList } from "lucide-react";
+import { LayoutList } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CustomCard from "../components/Custom/Card/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
 
 const Layout = ({ children }) => {
@@ -29,34 +22,36 @@ const Layout = ({ children }) => {
               <Link href="/dashboard/goods">
                 {" "}
                 <h2 className="font-bold text-xl mb-4 text-gray-800 dark:text-white">
-                 User Management
+                  User Management
                 </h2>
               </Link>
-
-        
-               
-
-        
-              <Link className={`font-bold flex  pe-3 ms-2 text-sm ${currentpath === "/dashboard/roles/permissions"
-                          ? "text-pink-600"
-                          : "dark:text-gray-300 hover:text-pink-600"
-                      } transition-colors duration-200 ease-in-out`}
-                href="/dashboard/roles/permissons"
+              <Link
+                className={`font-bold flex  pe-3 ms-2 text-sm ${
+                  currentpath === "/dashboard/roles/permissions"
+                    ? "text-pink-600"
+                    : "dark:text-gray-300 hover:text-pink-600"
+                } transition-colors duration-200 ease-in-out`}
+                href="/dashboard/roles/permissions"
               >
-                <LayoutList className="me-2" size={20} strokeWidth={2} /> Permissions
+                <LayoutList className="me-2" size={20} strokeWidth={2} />{" "}
+                Permissions
               </Link>
-              <Link className={`font-bold flex  pe-3 ms-2 text-sm ${currentpath === "/dashboard/roles/"
-                          ? "text-pink-600"
-                          : "dark:text-gray-300 hover:text-pink-600"
-                      } transition-colors duration-200 ease-in-out`}
+              <Link
+                className={`font-bold flex  pe-3 ms-2 text-sm ${
+                  currentpath === "/dashboard/roles"
+                    ? "text-pink-600"
+                    : "dark:text-gray-300 hover:text-pink-600"
+                } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/roles/"
               >
                 <LayoutList className="me-2" size={20} strokeWidth={2} /> Roles
               </Link>
-              <Link className={`font-bold flex  pe-3 ms-2 text-sm ${currentpath === "/dashboard/roles/users"
-                          ? "text-pink-600"
-                          : "dark:text-gray-300 hover:text-pink-600"
-                      } transition-colors duration-200 ease-in-out`}
+              <Link
+                className={`font-bold flex  pe-3 ms-2 text-sm ${
+                  currentpath === "/dashboard/roles/users"
+                    ? "text-pink-600"
+                    : "dark:text-gray-300 hover:text-pink-600"
+                } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/roles/users"
               >
                 <LayoutList className="me-2" size={20} strokeWidth={2} /> Users

@@ -13,37 +13,24 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"; // ShadCN Dropdown
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // ShadCN Dropdown
 
 export default function AddUserModal({
   onUpdate,
   OpenModal,
   setOpenModal,
-  existingOffice,
+  existingRole,
 }) {
-  const [code, setCode] = useState(existingOffice?.code || "");
-  const [office_name, setOfficeName] = useState(existingOffice?.office_name || "");
-  const [address, setAddress] = useState(existingOffice?.address || "");
-  const [phone_number, setPhoneNumber] = useState(existingOffice?.phone_number || "");
-  const [email, setEmail] = useState(existingOffice?.email || "");
+  const [role, setrole] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]); // List of products
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on search
   const [searchTerm, setSearchTerm] = useState(""); // For storing search input
   const [selectedProduct, setSelectedProduct] = useState(null); // Store selected product
-  const isEditing = !!existingOffice;
-
-  useEffect(() => {
-    // Fetch product list from API or static data
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/products`)
-      .then((res) => {
-        setProducts(res.data);
-        setFilteredProducts(res.data); // Initially set all products to be available
-      })
-      .catch((err) => setError(err.message));
-  }, []);
+  const isEditing = !!existingRole;
 
   // Handle product selection
   const handleProductSelect = (product) => {
@@ -66,8 +53,8 @@ export default function AddUserModal({
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office${
-        isEditing ? `/${existingOffice.id}` : ""
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles${
+        isEditing ? `/${existingRole.id}` : ""
       }`;
       const method = isEditing ? "put" : "post";
       const res = await axios({
@@ -81,8 +68,8 @@ export default function AddUserModal({
         toast(
           `${
             isEditing
-              ? "Office Branch Updated Successfully"
-              : "Office Branch Added Successfully"
+              ? "Role Updated Successfully"
+              : "Role Created Successfully"
           }`,
           { duration: 1600, position: "top-right" }
         );
@@ -97,20 +84,10 @@ export default function AddUserModal({
   };
 
   useEffect(() => {
-    if (existingOffice) {
-      setCode(existingOffice.code);
-      setOfficeName(existingOffice.office_name);
-      setAddress(existingOffice.address);
-      setPhoneNumber(existingOffice.phone_number);
-      setEmail(existingOffice.email);
+    if (existingRole) {
     } else {
-      setCode("");
-      setOfficeName("");
-      setAddress("");
-      setPhoneNumber("");
-      setEmail("");
     }
-  }, [existingOffice]);
+  }, [existingRole]);
 
   if (!OpenModal) return null;
 
@@ -120,55 +97,23 @@ export default function AddUserModal({
         {error && <p>{error}</p>}
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Update Stocks" : "Add Stocks"}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Update Role" : "Create Role"}
+            </DialogTitle>
             <DialogDescription className="text-gray-600">
               Make changes here. Click save when done.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-row gap-4 pt-4">
-            {/* Searchable Dropdown */}
-            <div className="flex-row w-full">
-              <div className="items-center gap-4">
-                <Label htmlFor="product" className="text-right">
-                  Search Product
-                </Label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Input
-                      id="product"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      placeholder="Search products"
-                      className="w-full"
-                    />
-                  </DropdownMenuTrigger>
-                  {filteredProducts.length > 0 && (
-                    <div className="dropdown-content">
-                      {filteredProducts.map((product) => (
-                        <DropdownMenuItem
-                          key={product.id}
-                          onClick={() => handleProductSelect(product)}
-                          className="cursor-pointer hover:bg-gray-200 p-2"
-                        >
-                          {product.name}
-                        </DropdownMenuItem>
-                      ))}
-                    </div>
-                  )}
-                </DropdownMenu>
-              </div>
-            </div>
-
-            {/* Other Fields for Product */}
             <div className="flex-row w-full">
               <div className="items-center gap-4">
                 <Label htmlFor="code" className="text-right">
-                  Product Code
+                  Role
                 </Label>
                 <Input
                   id="code"
-                  value={code}
+                  value={role}
                   onChange={(e) => setCode(e.target.value)}
                   className="col-span-3"
                   disabled
@@ -176,11 +121,11 @@ export default function AddUserModal({
               </div>
               <div className="items-center gap-4">
                 <Label htmlFor="weight" className="text-right">
-                  Weight (kg)
+                  Permissions
                 </Label>
                 <Input
                   id="weight"
-                  value={email} // Using email state for weight
+                  value={role} // Using email state for weight
                   onChange={(e) => setEmail(e.target.value)}
                   className="col-span-3"
                   disabled
@@ -199,8 +144,8 @@ export default function AddUserModal({
               {loading
                 ? "Loading..."
                 : isEditing
-                ? "Update Branch"
-                : "Add Stock"}
+                ? "Update Role"
+                : "Create Role"}
             </Button>
           </DialogFooter>
         </form>

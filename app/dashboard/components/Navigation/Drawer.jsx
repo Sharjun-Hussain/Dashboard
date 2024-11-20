@@ -12,6 +12,7 @@ import {
 import { NavItems } from "./data";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 
 export function DrawerDemo() {
   const [goal, setGoal] = React.useState(350);
@@ -19,13 +20,15 @@ export function DrawerDemo() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+       
+          <Menu size={18} />
+       
       </SheetTrigger>
-      <SheetContent className="w-[160px]">
+      <SheetContent className="w-[200px]">
         <SheetHeader>
-          <SheetTitle>Dashboard</SheetTitle>
-          <SheetDescription>
-            <div className="flex flex-col items-start justify-end space-y-2">
+          <SheetTitle className="text-sm my-9">Inventory Dashboard</SheetTitle>
+          <SheetDescription className="items-center h-full">
+            <div className="flex flex-col items-center  justify-end space-y-2">
               {NavItems.map((item) => {
                 return (
                   <div key={item.Path} className="flex-1 w-full   ">
