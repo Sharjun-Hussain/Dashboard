@@ -13,11 +13,6 @@ export default function DashboardLayout({ children }) {
     return <CreativeShapeLoader/>
   }
 
-  
-  // if (status === "unauthenticated") {
-  //   return <p>Access Denied</p>
-  // }
-
   return (
     <div >
       <Header />

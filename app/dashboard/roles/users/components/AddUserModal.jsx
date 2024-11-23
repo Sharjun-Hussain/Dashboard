@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-
 import { RoleCombobox } from "./ComboBox/RoleComboBox";
 import { WareHouseComboBox } from "./ComboBox/WareHouseComboBox";
 import { OfficeComboBox } from "./ComboBox/OfficeComboBox";
@@ -30,24 +29,57 @@ export default function AddUserModal({
   const [role, setRole] = useState(existingUser?.role || null);
   const [RoleData, setRoleData] = useState("");
   const [selectedOffice, setSelectedOffice] = useState(null);
+  const [fetchedWarehouses, setfetchedWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [roles, setRoles] = useState([]); // Roles for selection
   const isEditing = !!existingUser;
 
+  const handleRoleChange = (newRole) => {
+    if (newRole !== role) setRole(newRole);
+  };
+
+  useEffect(() => {
+    setSelectedWarehouse(null); // Reset selected warehouse
+    setfetchedWarehouses([]); // Clear previous warehouses
+    if (selectedOffice) {
+      axios
+        .get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-warehouse/${selectedOffice}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => setfetchedWarehouses(res?.data?.data))
+        .catch((err) => setError(err.message));
+    }
+  }, [selectedOffice]);
+
+  useEffect(() => {
+    if (!fetchedWarehouses.some((wh) => wh.id === selectedWarehouse)) {
+      setSelectedWarehouse(null); // Ensure warehouse is valid
+    }
+  }, [fetchedWarehouses, selectedWarehouse]);
+
   useEffect(() => {
     // Fetch roles from API
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${role}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            "Bearer 58|UFxgcVa8hIQyqs25cJp2eN6JJvjBmpQ4bJY2dsmz279e2c25",
-        },
-      })
-      .then((res) => setRoleData(res?.data?.data?.role))
-      .catch((err) => setError(err.message));
+    if (role) {
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${role}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withXSRFToken: true,
+          withCredentials: true,
+        })
+        .then((res) => setRoleData(res?.data?.data?.role))
+        .catch((err) =>
+          setError(err.response?.data?.message || "Error fetching data")
+        );
+    }
   }, [role]);
 
   const handleSubmit = async (e) => {
@@ -65,7 +97,7 @@ export default function AddUserModal({
           name,
           email,
           password,
-          role :RoleData.name,
+          role: RoleData?.name,
           office_id: selectedOffice,
           warehouse_id: selectedWarehouse,
         },
@@ -89,19 +121,18 @@ export default function AddUserModal({
     }
   };
 
-// Role-based disabling logic
-const trimmedRole = RoleData?.name?.replace(/\s/g, "").toLowerCase();
+  // Role-based disabling logic
+  const trimmedRole = RoleData?.name?.replace(/\s/g, "").toLowerCase();
 
-// Disable both office and warehouse for these roles
-const isOfficeAndWarehouseDisabled = [
-  "superadmin",
-  "systemadmin",
-  "headofficechairman",
-].includes(trimmedRole);
+  // Disable both office and warehouse for these roles
+  const isOfficeAndWarehouseDisabled = [
+    "superadmin",
+    "systemadmin",
+    "headofficechairman",
+  ].includes(trimmedRole);
 
-// Disable warehouse for branch manager
-const isWarehouseDisabled = trimmedRole === "branch manager";
-
+  // Disable warehouse for branch manager
+  const isWarehouseDisabled = trimmedRole === "branch manager";
 
   return (
     <Dialog open={OpenModal} onOpenChange={setOpenModal}>
@@ -160,12 +191,7 @@ const isWarehouseDisabled = trimmedRole === "branch manager";
               <Label htmlFor="warehouse" className="text-right">
                 Select Role
               </Label>
-              <RoleCombobox
-                name="Select Role"
-                roleid={(id) => {
-                  setRole(id);
-                }}
-              />
+              <RoleCombobox name="Select Role" roleid={handleRoleChange} />
             </div>
           </div>
 
@@ -185,8 +211,10 @@ const isWarehouseDisabled = trimmedRole === "branch manager";
                 Select Warehouse
               </Label>
               <WareHouseComboBox
+                data={fetchedWarehouses}
                 name="Select Warehouse"
                 warehouseid={(id) => setSelectedWarehouse(id)}
+                selectedOffice={selectedOffice}
                 disabled={isOfficeAndWarehouseDisabled || isWarehouseDisabled}
               />
             </div>

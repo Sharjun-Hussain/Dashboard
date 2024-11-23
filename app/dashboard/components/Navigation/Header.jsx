@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { Notification } from "../Notification/Notification";
 import useMediaQuery from "@/Hooks/useMediaQuery";
 import { DrawerDemo } from "./Drawer";
+import axios from "axios";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -16,12 +17,41 @@ const Header = () => {
   const { data: userSession } = useSession();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [officeData, setofficeData] = useState()
 
   // Function to handle the toggling of the notification dropdown
   const handleSetNotification = () => {
     setNotificationOpen(!notificationOpen);
   };
 
+  console.log(userSession);
+  
+
+  useEffect(() => {
+    
+    const fetchOffice = async () => {
+      
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${userSession.user?.officeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withXSRFToken: true,
+          withCredentials: true,
+        }
+      );
+
+      if (res.status == 200) {
+        console.log(res.data.data);
+        setofficeData(res.data.data);
+        
+      }
+    };
+    fetchOffice();
+   
+  }, [])
+  
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
     setMounted(true);
@@ -63,7 +93,7 @@ const Header = () => {
         <div className="ms-3">{isMobile && <DrawerDemo/>}</div>
         <div className="ms-3">Logo</div>
         <div className="mx-auto hidden md:flex">
-          <p>Railway Department - Colombo</p>
+          <p>Railway Department - {officeData?.office_name}</p>
         </div>
         <div className="ms-auto flex items-center">
         

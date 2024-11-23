@@ -1,16 +1,64 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomCard from "../../components/Custom/Card/card";
 import { Button } from "@/components/ui/button";
 import AddUserModal from "./Components/AddUserModal";
 import { UsersTable } from "./Components/DataTable/UsersTable";
 import { RoleCombobox } from "./Components/ComboBox/RoleComboBox";
+import axios from "axios";
 
 
 
-const AddStockPage = () => {
+const UsersPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
+  const [FetchedUsersData, setFetchedUsersData] = useState([])
+
+  const handleChildData = (user) => {
+    setFetchedUsersData((prev) => {
+      const userindex = prev.findIndex((o) => o.id === user.id);
+      if (userindex >= 0) {
+        // Update existing office
+        const updatedusers = [...prev];
+        updatedusers[userindex] = user;
+        return updatedusers;
+      } else {
+        // Add new office
+        return [...prev, user];
+      }
+    });
+  };
+
+
+  const handleDelete = (userid) => {
+    setFetchedUsersData((prev) => prev.filter((user) => user.id !== userid));
+  };
+
+  useEffect(() => {
+
+      const fetchusers = async () => {
+      setloading(true);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withXSRFToken: true,
+          withCredentials: true,
+        }
+      );
+
+      if (res.status == 200) {
+        console.log(res.data);
+        setFetchedUsersData(res.data.data);
+        setloading(false);
+      }
+    };
+    fetchusers();
+  }, [])
+  
+
 
   return (
     <div className="">
@@ -32,13 +80,13 @@ const AddStockPage = () => {
 
       <div className="mt-8">
         {/* Stock Table */}
-        <UsersTable data={[]} />
+        <UsersTable loading={loading} data={FetchedUsersData} onUpdate={handleChildData} onDelete={handleDelete} />
       </div>
 
       {/* Add Stock Modal */}
-      <AddUserModal OpenModal={OpenModal} setOpenModal={setOpenModal} />
+      <AddUserModal OpenModal={OpenModal} onUpdate={handleChildData} setOpenModal={setOpenModal} />
     </div>
   );
 };
 
-export default AddStockPage;
+export default UsersPage;

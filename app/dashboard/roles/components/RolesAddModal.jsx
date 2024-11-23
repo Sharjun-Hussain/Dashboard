@@ -15,27 +15,27 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Combobox } from "./ComboBox";
 
-export default function WarehouseModal({
+export default function RolesAddModal({
   onUpdate,
   OpenModal,
   setOpenModal,
-  existingWareHouse,
+  existingRole,
 }) {
   const [warehouse_code, setwarehouse_Code] = useState(
-    existingWareHouse?.warehouse_code || ""
+    existingRole?.warehouse_code || ""
   );
   const [warehouse_name, setwarehouse_name] = useState(
-    existingWareHouse?.warehouse_name || ""
+    existingRole?.warehouse_name || ""
   );
-  const [address, setAddress] = useState(existingWareHouse?.address || "");
+  const [address, setAddress] = useState(existingRole?.address || "");
   const [phone_number, setPhoneNumber] = useState(
-    existingWareHouse?.phone_number || ""
+    existingRole?.phone_number || ""
   );
-  const [email, setEmail] = useState(existingWareHouse?.email || "");
+  const [email, setEmail] = useState(existingRole?.email || "");
   const [selectedofficeid, setselectedofficeid] = useState();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const isEditing = !!existingWareHouse;
+  const isEditing = !!existingRole;
 
   const officeid = (officeid) => {
     setselectedofficeid(officeid);
@@ -46,7 +46,7 @@ export default function WarehouseModal({
     try {
       setLoading(true);
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse${
-        isEditing ? `/${existingWareHouse.id}` : ""
+        isEditing ? `/${existingRole.id}` : ""
       }`;
       const method = isEditing ? "put" : "post";
       const res = await axios({
@@ -115,12 +115,12 @@ export default function WarehouseModal({
   };
 
   useEffect(() => {
-    if (existingWareHouse) {
-      setwarehouse_Code(existingWareHouse.code);
-      setwarehouse_name(existingWareHouse.warehouse_name);
-      setAddress(existingWareHouse.address);
-      setPhoneNumber(existingWareHouse.phone_number);
-      setEmail(existingWareHouse.email);
+    if (existingRole) {
+      setwarehouse_Code(existingRole.code);
+      setwarehouse_name(existingRole.warehouse_name);
+      setAddress(existingRole.address);
+      setPhoneNumber(existingRole.phone_number);
+      setEmail(existingRole.email);
     } else {
       setwarehouse_Code("");
       setwarehouse_name("");
@@ -128,7 +128,7 @@ export default function WarehouseModal({
       setPhoneNumber("");
       setEmail("");
     }
-  }, [existingWareHouse]);
+  }, [existingRole]);
 
   if (!OpenModal) return null;
 

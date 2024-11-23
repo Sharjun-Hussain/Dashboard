@@ -6,7 +6,11 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "your-email@example.com" },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "your-email@example.com",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -41,13 +45,15 @@ export const authOptions = {
 
         if (loginRes.ok && data?.data) {
           console.log(data);
-          
+
           // Here, return a structured user object with necessary details
           return {
-            id:data.data.id,
-            name:data.data.name,
-            email:data.data.email,
-            token: data.token // Include token if you want to attach it in JWT
+            id: data.data.id,
+            name: data.data.name,
+            email: data.data.email,
+            officeId: data.data.office_id,
+            warehousedd: data.data.warehouse_id,
+            token: data.token, // Include token if you want to attach it in JWT
           };
         } else {
           console.error("Login failed:", data.message || "Invalid credentials");
@@ -67,14 +73,13 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.user = user; // Attach user object to the token
-        
       }
       return token;
     },
     async session({ session, token }) {
       session.user = token.user; // Attach user object to the session
-      console.log("session:"+JSON.stringify(session));
-      
+      console.log("session:" + JSON.stringify(session));
+
       return session;
     },
   },

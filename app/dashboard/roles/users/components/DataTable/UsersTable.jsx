@@ -57,10 +57,6 @@ import {
 import axios from "axios";
 import AddUserModal from "../AddUserModal";
 
-
-
-
-
 export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -92,31 +88,23 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "code",
-      header: "Code",
+      accessorKey: "id",
+      header: "ID",
     },
     {
-      accessorKey: "office_name",
+      accessorKey: "name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office
+            User Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office",
-    },
-    {
-      accessorKey: "address",
-      header: "Address",
-    },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
+      header: " User Name",
     },
     {
       accessorKey: "email",
@@ -134,26 +122,35 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Email",
     },
     {
+      accessorKey: "office_id",
+      header: "Office",
+    },
+    {
+      accessorKey: "warehouse_id",
+      header: "Warehouse",
+    },
+    
+    {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const office = row.original;
+        const user = row.original;
         const [open, setOpen] = React.useState(false); 
         const [OpenModal, setOpenModal] = React.useState(false)
-        const [officeData, setOfficeData] = React.useState(null);
+        const [userData, setuserData] = React.useState(null);
   
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users/${user.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(office.id);
+            onDelete(user.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -165,7 +162,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setOfficeData(office); // Create a state variable to hold the office data
+          setuserData(user); // Create a state variable to hold the office data
         };
         
   
@@ -198,7 +195,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
-                    office from the servers.
+                    user from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -214,7 +211,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
 
 
 
-            <AddUserModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddUserModal onUpdate={onUpdate}  existingOffice={userData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
           </>
         );
       },

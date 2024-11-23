@@ -55,12 +55,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import WarehouseModal from "../WarehousesModal";
+import RolesAddModal from "../RolesAddModal";
+import { Badge } from "@/components/ui/badge";
 
-export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
+export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
+
+  const colorMap = {
+    "Warehouse Create": "bg-green-500",
+    "Warehouse Update": "bg-blue-500",
+    "Warehouse Delete": "bg-red-500",
+    "Warehouse View": "bg-yellow-500",
+  };
 
   const columns = [
     {
@@ -85,84 +93,92 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       enableSorting: false,
       enableHiding: false,
     },
+
     {
-      accessorKey: "warehouse_code",
-      header: "Warehouse Code",
-    },
-    {
-      accessorKey: "office_id",
+      accessorKey: "name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office Name
+            Role Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office Name",
+      header: "Role Name",
     },
     {
-      accessorKey: "warehouse_name",
+      accessorKey: "permissions",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            WareHouse Name
+            Permissions
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " WareHouse Name",
-    },
-    {
-      accessorKey: "address",
-      header: "Address",
-    },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => {
+      cell: ({ row }) => {
+        const permissions = row.original.permissions;
+        console.log(permissions);
+        // Assuming permissions is an array of strings
+
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex flex-wrap gap-1">
+            {permissions.map((permission, index) => (
+              <span
+                key={index}
+                className={`badge  "bg-gray-500"
+                text-white px-2 py-2 rounded-md`}
+              >
+                <Badge
+                  variant={
+                    permission.name.toLowerCase().includes("create")
+                      ? "default"
+                      : permission.name.toLowerCase().includes("update")
+                      ? "forth"
+                      : permission.name.toLowerCase().includes("delete")
+                      ? "third"
+                      : permission.name.toLowerCase().includes("view")
+                      ? "outline"
+                      :""
+                  }
+                >
+                  {" "}
+                  {permission.name}
+                </Badge>
+              </span>
+            ))}
+          </div>
         );
       },
-      header: "Email",
     },
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const warehouse = row.original;
+        const role = row.original;
         const [open, setOpen] = React.useState(false);
         const [OpenModal, setOpenModal] = React.useState(false);
-        const [warehouseData, setwarehouseData] = React.useState(null);
+        const [RoleData, setRoleData] = React.useState(null);
 
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse/${warehouse.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${role.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(warehouse.id);
+            onDelete(role.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -174,7 +190,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setwarehouseData(warehouse); // Create a state variable to hold the office data
+          setRoleData(role); // Create a state variable to hold the office data
         };
 
         return (
@@ -206,7 +222,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently Remove
-                    Warehouser from the Branch.
+                    Role from the Branch.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -220,9 +236,9 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-            <WarehouseModal
+            <RolesAddModal
               onUpdate={onUpdate}
-              existingWareHouse={warehouseData}
+              existingRole={RoleData}
               OpenModal={OpenModal}
               setOpenModal={setOpenModal}
             />
@@ -255,11 +271,11 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Filter Roles"
+              value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
                 table
-                  .getColumn("office_name")
+                  .getColumn("name")
                   ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
