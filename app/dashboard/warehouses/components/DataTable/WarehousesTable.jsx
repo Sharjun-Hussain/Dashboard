@@ -250,11 +250,11 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Filter Warehouse"
+              value={table.getColumn("warehouse_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
                 table
-                  .getColumn("office_name")
+                  .getColumn("warehouse_name")
                   ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"

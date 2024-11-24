@@ -12,12 +12,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-import {
-  ArrowUpDown,
-  Pencil,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -133,24 +128,34 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Description",
     },
     {
-      accessorKey: "stock_summary",
-      header: "Stock Summary",
+      accessorKey: "Product Stocks",
+      cell: ({ row }) => {
+        const product_stocks = row.original.product_stocks;
+
+        return (
+          <div className="flex flex-wrap gap-1">
+            {product_stocks.map((product_stocks, index) => (
+              <span key={index}> {product_stocks.quantity.split(".")[0]}</span>
+            ))}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "low_stock_threshold",
       header: "Low Stock Threshold",
     },
-    
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const product = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [productData, setproductData] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -175,8 +180,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setproductData(product); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -192,14 +196,14 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -219,8 +223,6 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-
-
 
             {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
           </>

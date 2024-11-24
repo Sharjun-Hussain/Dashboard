@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "./components/ComboBox";
 import { ProductTable } from "./Components/DataTable/ProductTable";
 import axios from "axios";
+import Link from "next/link";
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
@@ -12,7 +13,9 @@ const AddStockPage = () => {
   const [FetchedProducts, setFetchedProducts] = useState([])
   console.log(FetchedProducts);
   
-
+  const handleDelete = (productid) => {
+    setFetchedProducts((prev) => prev.filter((product) => product.id !== productid));
+  };
 
   useEffect(() => {
     const fetchGoods = async () => {
@@ -49,15 +52,15 @@ const AddStockPage = () => {
         <div className="xxl:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 xxl:ms-auto items-center">
           <Combobox name="Select Office" />
           <Combobox name="Select Warehouse" />
-          <Button onClick={() => setOpenModal(true)} variant="outline" className="w-full md:w-auto">
+         <Link href="/dashboard/goods/add-product"> <Button  variant="outline" className="w-full md:w-auto">
             Add Stock
-          </Button>
+          </Button></Link>
         </div>
       </div>
 
       <div className="mt-8">
         {/* Stock Table */}
-        <ProductTable data={FetchedProducts} />
+        <ProductTable data={FetchedProducts} onDelete={handleDelete} />
       </div>
 
       {/* Add Stock Modal */}
