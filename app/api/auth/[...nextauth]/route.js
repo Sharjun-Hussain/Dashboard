@@ -51,8 +51,8 @@ export const authOptions = {
             id: data.data.id,
             name: data.data.name,
             email: data.data.email,
-            officeId: data.data.office_id,
-            warehousedd: data.data.warehouse_id,
+            office: data.data.office,
+            warehouse: data.data.warehouse,
             token: data.token, // Include token if you want to attach it in JWT
           };
         } else {

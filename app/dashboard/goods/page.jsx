@@ -1,13 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 // import AddStockModal from "./components/addstockmodal";
 import { Combobox } from "./components/ComboBox";
 import { ProductTable } from "./Components/DataTable/ProductTable";
+import axios from "axios";
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
+  const [FetchedProducts, setFetchedProducts] = useState([])
+  console.log(FetchedProducts);
+  
+
+
+  useEffect(() => {
+    const fetchGoods = async () => {
+      setloading(true);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withXSRFToken: true,
+          withCredentials: true,
+        }
+      );
+
+      if (res.status == 200) {
+        console.log(res.data);
+        setFetchedProducts(res.data.data);
+        setloading(false);
+      }
+    };
+    fetchGoods();
+  }, []);
 
   return (
     <div className="">
@@ -29,7 +57,7 @@ const AddStockPage = () => {
 
       <div className="mt-8">
         {/* Stock Table */}
-        <ProductTable data={[]} />
+        <ProductTable data={FetchedProducts} />
       </div>
 
       {/* Add Stock Modal */}

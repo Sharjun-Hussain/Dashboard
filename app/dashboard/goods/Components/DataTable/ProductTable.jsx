@@ -3,25 +3,17 @@
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
-
-import { MoreVertical } from "lucide-react";
-
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
   getFilteredRowModel,
-  ColumnFiltersState,
-  SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
   ArrowUpDown,
-  Delete,
-  DeleteIcon,
   Pencil,
   Trash2,
   MoreHorizontal,
@@ -44,7 +36,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
@@ -56,16 +47,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 
-
-
-
-
 export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-
-
 
   const columns = [
     {
@@ -91,68 +76,92 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
+      accessorKey: "id",
+      header: "ID",
+    },
+    {
       accessorKey: "code",
       header: "Code",
     },
     {
-      accessorKey: "office_name",
+      accessorKey: "name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Branch Office
+            Product Name
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: " Branch Office",
+      header: "Product Name",
     },
     {
-      accessorKey: "address",
-      header: "Address",
-    },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
-    },
-    {
-      accessorKey: "email",
+      accessorKey: "main_category_id",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Email
+            Main Category
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      header: "Email",
+      header: "Main Category",
     },
+    {
+      accessorKey: "sub_category_id",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sub Category
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      header: "Sub Category",
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
+      accessorKey: "stock_summary",
+      header: "Stock Summary",
+    },
+    {
+      accessorKey: "low_stock_threshold",
+      header: "Low Stock Threshold",
+    },
+    
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const office = row.original;
+        const product = row.original;
         const [open, setOpen] = React.useState(false); 
         const [OpenModal, setOpenModal] = React.useState(false)
-        const [officeData, setOfficeData] = React.useState(null);
+        const [productData, setproductData] = React.useState(null);
   
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${office.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${product.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(office.id);
+            onDelete(product.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -164,7 +173,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setOfficeData(office); // Create a state variable to hold the office data
+          setproductData(product); // Create a state variable to hold the office data
         };
         
   
@@ -197,7 +206,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
-                    office from the servers.
+                    product from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -243,10 +252,10 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Filter products"
+              value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

@@ -17,6 +17,12 @@ export default function Login() {
 
   useEffect(() => {
     console.log(userSession);
+    sessionStorage.setItem("office_name", userSession?.user?.office?.office_name)
+    sessionStorage.setItem("office_id", userSession?.user?.office?.id)
+    sessionStorage.setItem("office_code", userSession?.user?.office?.code)
+    sessionStorage.setItem("warehouse_name", userSession?.user?.warehouse?.warehouse_name)
+    sessionStorage.setItem("warehouse_id", userSession?.user?.warehouse?.id)
+    sessionStorage.setItem("warehouse_code", userSession?.user?.warehouse?.warehouse_code)
     localStorage.setItem("token", userSession?.user?.token);
   }, [userSession]);
 

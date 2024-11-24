@@ -40,7 +40,7 @@ export function Combobox({ Officeid, name }) {
           variant="select"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between m-0"
+          className="lg:w-[200px] w-full justify-between m-0"
         >
           {value
             ? `${fetchedOffices.find((office) => office.office_name === value)?.code} - ${fetchedOffices.find((office) => office.office_name === value)?.office_name}`

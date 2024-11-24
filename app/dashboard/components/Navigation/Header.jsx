@@ -10,6 +10,7 @@ import { Notification } from "../Notification/Notification";
 import useMediaQuery from "@/Hooks/useMediaQuery";
 import { DrawerDemo } from "./Drawer";
 import axios from "axios";
+import { HeaderDropDownMenu } from "./HeaderDropDown";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -17,7 +18,7 @@ const Header = () => {
   const { data: userSession } = useSession();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [officeData, setofficeData] = useState()
+  const [officeData, setofficeData] = useState();
 
   // Function to handle the toggling of the notification dropdown
   const handleSetNotification = () => {
@@ -25,12 +26,9 @@ const Header = () => {
   };
 
   console.log(userSession);
-  
 
   useEffect(() => {
-    
     const fetchOffice = async () => {
-      
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${userSession.user?.officeId}`,
         {
@@ -45,13 +43,11 @@ const Header = () => {
       if (res.status == 200) {
         console.log(res.data.data);
         setofficeData(res.data.data);
-        
       }
     };
     fetchOffice();
-   
-  }, [])
-  
+  }, []);
+
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
     setMounted(true);
@@ -90,13 +86,12 @@ const Header = () => {
   return (
     userSession && (
       <div className="w-full flex  dark:bg-[#1E1E1E] bg-[#FDF2F4] h-[50px] md:flex items-center">
-        <div className="ms-3">{isMobile && <DrawerDemo/>}</div>
+        <div className="ms-3">{isMobile && <DrawerDemo />}</div>
         <div className="ms-3">Logo</div>
         <div className="mx-auto hidden md:flex">
           <p>Railway Department - {officeData?.office_name}</p>
         </div>
         <div className="ms-auto flex items-center">
-        
           <div className="ms-2 relative hover:cursor-pointer">
             <Bell onClick={handleSetNotification} width={20} />
             <Notification
@@ -112,20 +107,25 @@ const Header = () => {
           >
             {theme === "light" ? <Moon width={20} /> : <Sun width={20} />}
           </button>
-          <div className="mr-2 flex items-center ring-pink-600 justify-start border-primary border rounded-full px-2 py-1 hover:bg-secondary hover:cursor-pointer">
-            <Avatar className="w-7 h-7">
-              <AvatarImage src="#" />
-              <AvatarFallback>C</AvatarFallback>
-            </Avatar>
-            <div className="hidden md:flex md:flex-col">
-              <p className="text-[12px] font-bold mx-1">
-                {userSession?.user?.name}
-              </p>
-              <p className="text-[11px] -mt-1 mx-1">
-                {userSession?.user?.email}
-              </p>
-            </div>
-          </div>
+
+          <HeaderDropDownMenu
+            Component={
+              <div className="mr-2 flex items-center ring-pink-600 justify-start border-primary border rounded-full px-2 py-1 hover:bg-secondary hover:cursor-pointer">
+                <Avatar className="w-7 h-7">
+                  <AvatarImage src="#" />
+                  <AvatarFallback>C</AvatarFallback>
+                </Avatar>
+                <div className="hidden md:flex md:flex-col">
+                  <p className="text-[12px] font-bold mx-1">
+                    {userSession?.user?.name}
+                  </p>
+                  <p className="text-[11px] -mt-1 mx-1">
+                    {userSession?.user?.email}
+                  </p>
+                </div>
+              </div>
+            }
+          />
         </div>
       </div>
     )

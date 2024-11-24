@@ -25,6 +25,17 @@ const Layout = ({ children }) => {
                   User Management
                 </h2>
               </Link>
+              
+              <Link
+                className={`font-bold flex  pe-3 ms-2 text-sm ${
+                  currentpath === "/dashboard/roles"
+                    ? "text-pink-600"
+                    : "dark:text-gray-300 hover:text-pink-600"
+                } transition-colors duration-200 ease-in-out`}
+                href="/dashboard/roles/"
+              >
+                <LayoutList className="me-2" size={20} strokeWidth={2} /> Roles
+              </Link>
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
                   currentpath === "/dashboard/roles/permissions"
@@ -35,16 +46,6 @@ const Layout = ({ children }) => {
               >
                 <LayoutList className="me-2" size={20} strokeWidth={2} />{" "}
                 Permissions
-              </Link>
-              <Link
-                className={`font-bold flex  pe-3 ms-2 text-sm ${
-                  currentpath === "/dashboard/roles"
-                    ? "text-pink-600"
-                    : "dark:text-gray-300 hover:text-pink-600"
-                } transition-colors duration-200 ease-in-out`}
-                href="/dashboard/roles/"
-              >
-                <LayoutList className="me-2" size={20} strokeWidth={2} /> Roles
               </Link>
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
