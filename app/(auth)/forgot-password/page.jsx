@@ -21,9 +21,9 @@ export default function ForgotPassword() {
     );
 
     if(res.status==200){
-      console.log(res.status);
       
-      toast(res.data.message,{
+      
+      toast.success(res.data.message,{
         dismissible:true,
         richColors:true,
         icon:<Info size={18} className="me-2"/>,
@@ -36,6 +36,7 @@ export default function ForgotPassword() {
       <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
         Forgot Password
       </h2>
+      <div className="text-center text-sm">Enter your registered email to get an reset password link </div>
       <form onSubmit={handleForgotPassword} className="mt-6 space-y-4">
         <Input
           placeholder="Email"

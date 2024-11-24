@@ -85,7 +85,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Warehouse Code",
     },
     {
-      accessorKey: "office_id",
+      accessorKey: "office",
       header: ({ column }) => {
         return (
           <Button
@@ -98,6 +98,14 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
         );
       },
       header: " Branch Office Name",
+      cell: ({ row }) => {
+        const office = row.original.office;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{office?.office_name}</span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "warehouse_name",

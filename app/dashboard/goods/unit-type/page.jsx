@@ -63,7 +63,7 @@ export default function DemoPage() {
           <div className="flex ">
            <div className="flex flex-col">
            <h2 className="text-xl font-bold">Unit Type</h2>
-           <h2 className="text-sm font-semibold text-gray-300">Manage your Sub Category Here</h2>
+           <h2 className="text-sm font-semibold ">Manage your Sub Category Here</h2>
            </div>
            <div className="ms-auto">
            <Button

@@ -94,7 +94,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Product Name",
     },
     {
-      accessorKey: "main_category_id",
+      accessorKey: "main_category",
       header: ({ column }) => {
         return (
           <Button
@@ -107,9 +107,17 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
         );
       },
       header: "Main Category",
+      cell: ({ row }) => {
+        const main_category = row.original.main_category;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{main_category?.name}</span>
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "sub_category_id",
+      accessorKey: "sub_category",
       header: ({ column }) => {
         return (
           <Button
@@ -122,6 +130,14 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
         );
       },
       header: "Sub Category",
+      cell: ({ row }) => {
+        const sub_category = row.original.sub_category;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{sub_category?.name}</span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "description",

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+
 export default function Login() {
   const { data: userSession } = useSession();
   const router = useRouter();
@@ -17,12 +18,21 @@ export default function Login() {
 
   useEffect(() => {
     console.log(userSession);
-    sessionStorage.setItem("office_name", userSession?.user?.office?.office_name)
-    sessionStorage.setItem("office_id", userSession?.user?.office?.id)
-    sessionStorage.setItem("office_code", userSession?.user?.office?.code)
-    sessionStorage.setItem("warehouse_name", userSession?.user?.warehouse?.warehouse_name)
-    sessionStorage.setItem("warehouse_id", userSession?.user?.warehouse?.id)
-    sessionStorage.setItem("warehouse_code", userSession?.user?.warehouse?.warehouse_code)
+    sessionStorage.setItem(
+      "office_name",
+      userSession?.user?.office?.office_name
+    );
+    sessionStorage.setItem("office_id", userSession?.user?.office?.id);
+    sessionStorage.setItem("office_code", userSession?.user?.office?.code);
+    sessionStorage.setItem(
+      "warehouse_name",
+      userSession?.user?.warehouse?.warehouse_name
+    );
+    sessionStorage.setItem("warehouse_id", userSession?.user?.warehouse?.id);
+    sessionStorage.setItem(
+      "warehouse_code",
+      userSession?.user?.warehouse?.warehouse_code
+    );
     localStorage.setItem("token", userSession?.user?.token);
   }, [userSession]);
 
@@ -56,20 +66,18 @@ export default function Login() {
       // Assuming login is successful
 
       toast.success("Login Successful!");
-       // Use accessToken from the signIn response
+      // Use accessToken from the signIn response
       router.push("/dashboard");
     }
   };
 
-
-    
-
   return (
     <div className="">
+      
       <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
         Login
       </h2>
-      {error && <pre className="text-red-500">{error}</pre>}{" "}
+
       {/* Display error if any */}
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <Input

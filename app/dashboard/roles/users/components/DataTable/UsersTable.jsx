@@ -62,8 +62,6 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
 
-
-
   const columns = [
     {
       id: "select",
@@ -122,24 +120,40 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Email",
     },
     {
-      accessorKey: "office_id",
+      accessorKey: "office",
       header: "Office",
+      cell: ({ row }) => {
+        const office = row.original.office;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{office?.office_name}</span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "warehouse_id",
       header: "Warehouse",
+      cell: ({ row }) => {
+        const warehouse = row.original.warehouse;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{warehouse?.warehouse_name}</span>
+          </div>
+        );
+      },
     },
-    
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const user = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [userData, setuserData] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -164,8 +178,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setuserData(user); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -181,14 +194,14 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -209,9 +222,12 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <AddUserModal onUpdate={onUpdate}  existingOffice={userData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddUserModal
+              onUpdate={onUpdate}
+              existingOffice={userData}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -244,7 +260,9 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("office_name")
+                  ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

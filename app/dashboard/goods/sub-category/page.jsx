@@ -59,11 +59,11 @@ export default function DemoPage() {
   return (
     <div className="">
       <div className="container mx-auto">
-        <CustomCard className="-mt-9" insideClassName="border-black">
+        <CustomCard className="-mt-9" >
           <div className="flex ">
            <div className="flex flex-col">
            <h2 className="text-xl font-bold">Sub category</h2>
-           <h2 className="text-sm font-semibold text-gray-300">Manage your Sub Category Here</h2>
+           <h2 className="text-sm font-semibold ">Manage your Sub Category Here</h2>
            </div>
            <div className="ms-auto">
            <Button

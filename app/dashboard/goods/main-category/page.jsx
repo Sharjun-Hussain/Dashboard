@@ -62,7 +62,7 @@ export default function DemoPage() {
   return (
     <div className="">
       <div className="">
-        <CustomCard className="-mt-9" insideClassName="border-black m-0 p-0">
+        <CustomCard className="-mt-9" >
           <div className="flex md:flex-row flex-col -mt-5 ">
             <div className="flex flex-col">
               <h2 className="text-sm md:text-xl font-bold">Main category</h2>
