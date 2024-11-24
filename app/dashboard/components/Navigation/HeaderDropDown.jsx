@@ -1,10 +1,8 @@
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
@@ -13,8 +11,41 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation"; // Import useRouter
+import { toast } from "sonner";
 
 export function HeaderDropDownMenu({ Component }) {
+  const router = useRouter(); // Initialize useRouter
+
+  const handleSignout = async () => {
+    try {
+      await signOut({
+        redirect: false,
+      });
+
+      toast.success("Logout Successfully!");
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("office_name");
+      sessionStorage.removeItem("office_id");
+      sessionStorage.removeItem("office_code");
+      sessionStorage.removeItem("warehouse_name");
+      sessionStorage.removeItem("warehouse_id");
+      sessionStorage.removeItem("warehouse_code");
+
+      // Redirect to login page after successful logout
+      router.push("/login"); // Redirect to login page
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        "Something went wrong! Please check your internet connection."
+      );
+    } finally {
+      // Reset loading state if necessary
+      // setLoading(false);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{Component}</DropdownMenuTrigger>
@@ -49,7 +80,7 @@ export function HeaderDropDownMenu({ Component }) {
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignout}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

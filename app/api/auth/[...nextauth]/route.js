@@ -29,17 +29,20 @@ export const authOptions = {
         }
 
         // Step 2: Login request
-        const loginRes = await fetch("http://128.199.31.7/api/admin/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-          credentials: "include",
-        });
+        const loginRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+            credentials: "include",
+          }
+        );
 
         const data = await loginRes.json();
 
