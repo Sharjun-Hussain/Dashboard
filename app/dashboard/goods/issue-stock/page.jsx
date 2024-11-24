@@ -107,7 +107,7 @@ const StockIssuePage = () => {
 
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/stock-in`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/stock-out`,
         {
           product_id: finalSearchedProductData.id,
           warehouse_id: sessionStorage.getItem("warehouse_id"),
