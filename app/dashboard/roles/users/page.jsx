@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import CustomCard from "../../components/Custom/Card/card";
 import { Button } from "@/components/ui/button";
-import AddUserModal from "./Components/AddUserModal";
-import { UsersTable } from "./Components/DataTable/UsersTable";
-import { RoleCombobox } from "./Components/ComboBox/RoleComboBox";
+import AddUserModal from "./components/AddUserModal";
+import { UsersTable } from "./components/DataTable/UsersTable";
+import { RoleCombobox } from "./components/ComboBox/RoleComboBox";
 import axios from "axios";
 
 
