@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { MainCategoryComboBox } from "./components/MainCategoryComboBox";
 import { UnitTypeComboBox } from "./components/UnitTypeComboBox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Subcategorycombobox } from "./components/Subcategorycombobox";
 
 // todo : get data from sub category and store here for super admin manually select

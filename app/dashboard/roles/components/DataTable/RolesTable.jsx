@@ -4,24 +4,17 @@ import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 
-import { MoreVertical } from "lucide-react";
-
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
   getFilteredRowModel,
-  ColumnFiltersState,
-  SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
   ArrowUpDown,
-  Delete,
-  DeleteIcon,
   Pencil,
   Trash2,
   MoreHorizontal,
