@@ -7,9 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import { MainCategoryComboBox } from "./components/MainCategoryComboBox";
-import { UnitTypeComboBox } from "./components/UnitTypeComboBox";
-import SubcategoryCombobox from "./components/SubCategoryComboBox";
+import { MainCategoryComboBox } from "./Components/MainCategoryComboBox";
+import { UnitTypeComboBox } from "./Components/UnitTypeComboBox";
+import SubcategoryCombobox from "./Components/SubcategoryCombobox";
 
 
 
