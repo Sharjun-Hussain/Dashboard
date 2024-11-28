@@ -9,7 +9,8 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { MainCategoryComboBox } from "./components/MainCategoryComboBox";
 import { UnitTypeComboBox } from "./components/UnitTypeComboBox";
-import Subcategorycombobox from "./components/Sub_Cat_ComboBox";
+import SubcategoryCombobox from "./components/SubCategoryComboBox";
+
 
 
 // todo : get data from sub category and store here for super admin manually select
@@ -197,7 +198,7 @@ const StockIssuePage = () => {
           </div>
           <div>
             <Label htmlFor="size">Sub Category</Label>
-            <Subcategorycombobox
+            <SubcategoryCombobox
               CategoryName={
                 search ? finalSearchedProductData?.sub_category?.name : ""
               }

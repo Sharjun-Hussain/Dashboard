@@ -18,7 +18,7 @@ export default function CreativeLoader() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       
-      <span class="loader"></span>
+      <span className="loader"></span>
     </div>
   );
 }
