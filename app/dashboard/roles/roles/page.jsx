@@ -4,8 +4,8 @@ import CustomCard from "../../components/Custom/Card/card";
 import { Button } from "@/components/ui/button";
 
 import { Combobox } from "./components/ComboBox";
-import AddUserModal from "./Components/AddUserModal";
-import { Usertable } from "./Components/DataTable/Usertable";
+import AddUserModal from "./components/AddUserModal";
+import { Usertable } from "./components/DataTable/Usertable";
 
 
 const AddStockPage = () => {
