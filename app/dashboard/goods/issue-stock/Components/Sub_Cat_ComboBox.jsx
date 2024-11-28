@@ -8,7 +8,7 @@ import {Popover,PopoverContent,PopoverTrigger} from "@/components/ui/popover"
 import axios from "axios"
 
 
-export function Subcategorycombobox({ CategoryName , mainCategoryId , CategoryNameFromComboBox }) {
+const Subcategorycombobox = ({ CategoryName , mainCategoryId , CategoryNameFromComboBox }) => {
   
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
@@ -95,3 +95,6 @@ export function Subcategorycombobox({ CategoryName , mainCategoryId , CategoryNa
     </Popover>
   )
 }
+
+
+export default Subcategorycombobox;
