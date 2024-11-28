@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 
 import { Combobox } from "./components/ComboBox";
 import AddUserModal from "./Components/AddUserModal";
-import { UsersTable } from "./Components/DataTable/UsersTable";
+import { Usertable } from "./Components/DataTable/Usertable";
+
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
@@ -31,7 +32,7 @@ const AddStockPage = () => {
 
       <div className="mt-8">
         {/* Stock Table */}
-        <UsersTable data={[]} />
+        <Usertable data={[]} />
       </div>
 
       {/* Add Stock Modal */}

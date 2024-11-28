@@ -55,13 +55,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import AddUserModal from "../AddUserModal";
+import AddUserModal from "../AddUserModal"; 
 
 
 
 
 
-export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
+export function Usertable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
