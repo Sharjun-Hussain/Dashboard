@@ -89,7 +89,7 @@ const Header = () => {
         <div className="ms-3">{isMobile && <DrawerDemo />}</div>
         <div className="ms-3">Logo</div>
         <div className="mx-auto hidden md:flex">
-          <p>Srilanka Railway Department {officeData?.office_name}</p>
+          <p> Railway Department Srilanka Admin Section {officeData?.office_name}</p>
         </div>
         <div className="ms-auto flex items-center">
           <div className="ms-2 relative hover:cursor-pointer">
