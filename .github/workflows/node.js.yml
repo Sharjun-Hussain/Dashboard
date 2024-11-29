@@ -26,6 +26,7 @@ jobs:
             cd ../var/www/Dashboard/
             git pull origin master 
             npm install  
+            npm run build
             pm2 restart next-app  
           ENDSSH
 
