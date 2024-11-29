@@ -26,7 +26,7 @@ jobs:
             cd ../var/www/Dashboard/
             git pull origin main  
             npm install  
-            pm2 restart app  
+            pm2 restart next-app  
           ENDSSH
 
       - name: Install Node.js
