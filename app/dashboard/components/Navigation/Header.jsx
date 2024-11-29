@@ -46,7 +46,7 @@ const Header = () => {
       }
     };
     fetchOffice();
-  }, []);
+  }, [userSession?.user]);
 
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
@@ -89,7 +89,7 @@ const Header = () => {
         <div className="ms-3">{isMobile && <DrawerDemo />}</div>
         <div className="ms-3">Logo</div>
         <div className="mx-auto hidden md:flex">
-          <p>Railway Department - {officeData?.office_name}</p>
+          <p>Railway Department  {officeData?.office_name}</p>
         </div>
         <div className="ms-auto flex items-center">
           <div className="ms-2 relative hover:cursor-pointer">
