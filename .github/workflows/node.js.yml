@@ -24,7 +24,7 @@ jobs:
         run: |
           sshpass -p "$DROPLET_PASSWORD" ssh -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP << 'ENDSSH'
             cd ../var/www/Dashboard/
-            git pull origin main  
+            git pull origin master 
             npm install  
             pm2 restart next-app  
           ENDSSH
