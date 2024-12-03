@@ -3,51 +3,50 @@ import React, { useState, useEffect } from "react";
 import CustomCard from "../../components/Custom/Card/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Combobox } from "./components/ComboBox";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { MainCategoryComboBox } from "../sub-category/components/MainCategoryComboBox";
-import { SubCategoryComboBox } from "./components/SubCategoryComboBox";
+
 import axios from "axios";
-import { UnitTypeComboBox } from "./components/UnitTypeComboBox";
+
 import { toast } from "sonner";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { MainCategoryComboBox } from "./MainCategoryComboBox";
+import { SubCategoryComboBox } from "./SubCategoryComboBox";
+import { UnitTypeComboBox } from "./UnitTypeComboBox";
 
-const ProductUpdateSheet = () => {
-  const [SubCategoryData, setSubCategoryData] = useState();
-  const [UnitTypeData, setUnitTypeData] = useState();
-  const [MainCategory, setMainCategory] = useState();
-  const [unitType, setunitType] = useState();
-  const [SubCategory, setSubCategory] = useState();
-  const [name, setname] = useState(null);
-  const [code, setcode] = useState(null);
-  const [color, setcolor] = useState(null);
-  const [low_stock_threshold, setlow_stock_threshold] = useState();
-  const [size, setsize] = useState();
-  const [description, setdescription] = useState("");
-  const [loading, setloading] = useState(false);
-  const [Error, setError] = useState(null)
 
-  const HandleMainCategory = (categoryid) => setMainCategory(categoryid);
-  const HandleSubCategory = (categoryid) => setSubCategory(categoryid);
-  const HandleUnitType = (unitType) => setunitType(unitType);
+const ProductUpdateSheet = ({ existingProduct, openSheet, setopenSheet }) => {
+  console.log(existingProduct);
+  
+  const [SubCategoryData, setSubCategoryData] = useState([]);
+  const [UnitTypeData, setUnitTypeData] = useState([]);
+  const [MainCategory, setMainCategory] = useState(existingProduct?.main_category_id || null);
+  const [unitType, setUnitType] = useState(existingProduct?.unitType_id || null);
+  const [SubCategory, setSubCategory] = useState(existingProduct?.sub_category_id || null);
+  const [name, setName] = useState(existingProduct?.name || "");
+  const [code, setCode] = useState(existingProduct?.code || "");
+  const [color, setColor] = useState(existingProduct?.color || "");
+  const [low_stock_threshold, setLowStockThreshold] = useState(existingProduct?.low_stock_threshold || 0);
+  const [size, setSize] = useState(existingProduct?.size || "");
+  const [description, setDescription] = useState(existingProduct?.description || "");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSubCategory = async () => {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-sub-category/${MainCategory}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withXSRFToken: true,
-          withCredentials: true,
+      if (MainCategory) {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-sub-category/${MainCategory}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            withXSRFToken: true,
+            withCredentials: true,
+          }
+        );
+        if (res.status === 200) {
+          setSubCategoryData(res.data.data);
         }
-      );
-
-      if (res.status == 200) {
-        console.log(res.data);
-        setSubCategoryData(res.data.data);
-        console.log(res.data);
       }
     };
     fetchSubCategory();
@@ -65,9 +64,7 @@ const ProductUpdateSheet = () => {
           withCredentials: true,
         }
       );
-
-      if (res.status == 200) {
-        console.log(res.data);
+      if (res.status === 200) {
         setUnitTypeData(res.data.data);
       }
     };
@@ -77,192 +74,179 @@ const ProductUpdateSheet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setloading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`;
-      const method = "post";
+      setLoading(true);
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${existingProduct?.id}`;
+      const method = existingProduct ? "put" : "post";
       const res = await axios({
         method,
         url,
-        data: { code, name, main_category_id:MainCategory ,sub_category_id:SubCategory, unitType_id:unitType, color, size,low_stock_threshold,description },
+        data: {
+          code,
+          name,
+          main_category_id: MainCategory,
+          sub_category_id: SubCategory,
+          unitType_id: unitType,
+          color,
+          size,
+          low_stock_threshold,
+          description,
+        },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (res.status === 200 || res.status === 201) {
-        toast("Product Added Successfully", {
+        toast.success("Product Updated Successfully", {
           duration: 1600,
           position: "top-right",
-          
         });
-        setloading(false);
-        setcode(null);
-        setname(null);
-        setcolor(null);
-        setdescription(null);
-        
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.errors) {
-        const errorMessages = err.response.data.errors;
-        
-        // Loop through each field in the error object
-        Object.keys(errorMessages).forEach((field) => {
-          const fieldErrors = errorMessages[field];
-          
-          // Show a toast for each error message related to the field
-          fieldErrors.forEach((errorMessage) => {
-            toast.error(`${field}: ${errorMessage}`, {
-              duration: 4000, // Duration for each toast
-              position: "top-right", // Position of the toast
-            });
+      if (err.response?.data?.errors) {
+        Object.entries(err.response.data.errors).forEach(([field, errors]) => {
+          errors.forEach((message) => {
+            toast.error(`${field}: ${message}`, { duration: 4000 });
           });
         });
       } else {
-        setError("An unexpected error occurred.");
-        toast.error("An unexpected error occurred.", {
-          duration: 4000,
-          position: "top-right",
-        });
+        toast.error("An unexpected error occurred.", { duration: 4000 });
       }
-      setLoading(false);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (existingProduct) {
+      setCode(existingProduct.code);
+      setName(existingProduct.name);
+      setDescription(existingProduct.description);
+      setLowStockThreshold(existingProduct.low_stock_threshold);
+      setMainCategory(existingProduct.main_category_id);
+      setSubCategory(existingProduct.sub_category_id);
+      setUnitType(existingProduct.unitType_id);
+
+    } else {
+      setCode("");
+      setName("");
+      setDescription("");
+      setLowStockThreshold("");
+      setMainCategory("");
+      setSubCategory("");
+      setUnitType("");
+    }
+  }, [existingProduct]);
+
   return (
-    <div>
-      <div className="flex ">
-        <div className="  flex flex-col  ">
-          <h1 className="text-xl font-bold">Add Goods</h1>
-          <h4 className="text-md font-semibold opacity-70 ">
-            Add your Branch Goods Details
-          </h4>
-        </div>
-        <div className=" ms-auto space-x-4">
-          <Combobox />
-          <Combobox />
-        </div>
-      </div>
-
-      <div>
-        <CustomCard
-          MoreOption={false}
-          title="Basic Information"
-          description="Basic product identification details"
-          insideClassName="border border-black dark:border-gray-500 pb-3 "
-        >
-          <div className="flex flex-row gap-4 pt-4 space-x-4">
-            <div className="items-center w-1/3 gap-4">
-              <Label htmlFor="name" className="text-right">
-                Product Name
-              </Label>
-              <Input
-                id="name"
-                onChange={(e) => setname(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="items-center w-1/3 gap-4 ">
-              <Label htmlFor="branchcode" className="text-right">
-                Product Code
-              </Label>
-              <Input
-                id="branchcode"
-                onChange={(e) => setcode(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="items-center w-1/3 gap-4 ">
-              <Label htmlFor="branchcode" className="text-right">
-                Main Category
-              </Label>
-              <MainCategoryComboBox
-                className=""
-                categoryid={HandleMainCategory}
-              />
+    <Sheet open={openSheet} onOpenChange={setopenSheet}>
+     
+      <SheetContent  className="w-full   md:min-w-[85vw] overflow-auto">
+        <div>
+          <div className="flex">
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold">Update Product</h1>
+              <h4 className="text-md font-semibold opacity-70">
+                Edit the product details
+              </h4>
             </div>
           </div>
-          <div className="mt-4 flex flex-row gap-4 pt-4 space-x-4 ">
-            <div className="items-center w-1/3 gap-4 ">
-              <Label htmlFor="branchcode" className="text-right">
-                Sub Category
-              </Label>
-              <SubCategoryComboBox
-                data={SubCategoryData}
-                className="w-full"
-                categoryid={HandleSubCategory}
-              />
-            </div>
-            <div className="items-center w-1/3 gap-4 ">
-              <Label htmlFor="branchcode" className="text-right">
-                Unit Type
-              </Label>
-              <UnitTypeComboBox
-                data={UnitTypeData}
-                className=""
-                categoryid={HandleUnitType}
-              />
-            </div>
-            <div className="items-center w-1/3 gap-4 ">
-              <Label htmlFor="threshold" className="text-right">
-                Product Threshold
-              </Label>
-              <Input
-                type="number"
-                onChange={(e) => setlow_stock_threshold(e.target.value)}
-                id="threshold"
-                className="col-span-3"
-              />
-            </div>
-          </div>
-        </CustomCard>
 
-        <CustomCard
-          MoreOption={false}
-          title="Dimension & Weights"
-          description="Basic product identification details"
-          insideClassName="border border-black dark:border-gray-500 pb-3 "
-        >
-          <div className="flex flex-row gap-4 pt-4 space-x-4">
-            <div className="flex flex-col space-y-2 w-2/3 gap-1.5">
-              <Label htmlFor="message">Enter Description</Label>
-              <Textarea
-                placeholder="Type your message here."
-                className="h-[160px]"
-                onChange={(e) => setdescription(e.target.value)}
-                id="message"
-              />
+          <CustomCard
+            MoreOption={false}
+            title="Basic Information"
+            description="Basic product identification details"
+            insideClassName="border border-black dark:border-gray-500 pb-3"
+          >
+            <div className="flex flex-row gap-4 pt-4">
+              <div className="w-1/3">
+                <Label htmlFor="name">Product Name</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label htmlFor="code">Product Code</Label>
+                <Input
+                  id="code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label htmlFor="mainCategory">Main Category</Label>
+                <MainCategoryComboBox
+                  categoryid={setMainCategory}
+                  defaultValue={MainCategory}
+                />
+              </div>
             </div>
-            <div className=" flex flex-col w-1/3 ">
-              <div className="items-start flex flex-col w-full gap-4">
-                <Label htmlFor="color" className="text-right">
-                  Color
-                </Label>
+            <div className="flex flex-row gap-4 pt-4">
+              <div className="w-1/3">
+                <Label htmlFor="subCategory">Sub Category</Label>
+                <SubCategoryComboBox
+                  data={SubCategoryData}
+                  categoryid={setSubCategory}
+                  defaultValue={SubCategory}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label htmlFor="unitType">Unit Type</Label>
+                <UnitTypeComboBox
+                  data={UnitTypeData}
+                  categoryid={setUnitType}
+                  defaultValue={unitType}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label htmlFor="threshold">Low Stock Threshold</Label>
+                <Input
+                  id="threshold"
+                  type="number"
+                  value={low_stock_threshold}
+                  onChange={(e) => setLowStockThreshold(e.target.value)}
+                />
+              </div>
+            </div>
+          </CustomCard>
+
+          <CustomCard
+            MoreOption={false}
+            title="Dimension & Weights"
+            description="Additional product details"
+            insideClassName="border border-black dark:border-gray-500 pb-3"
+          >
+            <div className="flex flex-row gap-4 pt-4">
+              <div className="flex flex-col space-y-2 w-2/3">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label htmlFor="color">Color</Label>
                 <Input
                   id="color"
-                  onChange={(e) => setcolor(e.target.value)}
-                  className="col-span-3"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
                 />
-              </div>
-              <div className="items-start flex flex-col w-full mt-3 ">
-                <Label htmlFor="size" className="text-right">
-                  Size
-                </Label>
+                <Label htmlFor="size" className="mt-3">Size</Label>
                 <Input
                   id="size"
-                  onChange={(e) => setsize(e.target.value)}
-                  className="col-span-3 mt-3"
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
                 />
-              </div>
-              <div className="items-start flex flex-col w-full  ">
-                <Button onClick={handleSubmit} className="w-full mt-2">
-                  Add Product
+                <Button onClick={handleSubmit} className="w-full mt-4">
+                  {loading ? "Updating..." : "Update Product"}
                 </Button>
               </div>
             </div>
-          </div>
-        </CustomCard>
-      </div>
-    </div>
+          </CustomCard>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };
 

@@ -41,6 +41,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+import ProductUpdateSheet from "../ProductUpdateSheet";
 
 export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
@@ -239,6 +240,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            <ProductUpdateSheet existingProduct={productData} openSheet={OpenModal} setopenSheet={setOpenModal} />
 
             {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
           </>
