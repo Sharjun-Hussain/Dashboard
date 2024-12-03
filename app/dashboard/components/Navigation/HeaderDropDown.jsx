@@ -26,12 +26,12 @@ export function HeaderDropDownMenu({ Component }) {
 
       toast.success("Logout Successfully!");
       localStorage.removeItem("token");
-      sessionStorage.removeItem("office_name");
-      sessionStorage.removeItem("office_id");
-      sessionStorage.removeItem("office_code");
-      sessionStorage.removeItem("warehouse_name");
-      sessionStorage.removeItem("warehouse_id");
-      sessionStorage.removeItem("warehouse_code");
+      localStorage.removeItem("office_name");
+      localStorage.removeItem("office_id");
+      localStorage.removeItem("office_code");
+      localStorage.removeItem("warehouse_name");
+      localStorage.removeItem("warehouse_id");
+      localStorage.removeItem("warehouse_code");
 
       // Redirect to login page after successful logout
       router.push("/login"); // Redirect to login page

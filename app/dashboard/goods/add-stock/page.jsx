@@ -110,7 +110,7 @@ const StockAddPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/admin/stock-in`,
         {
           product_id: finalSearchedProductData.id,
-          warehouse_id: sessionStorage.getItem("warehouse_id"),
+          warehouse_id: localStorage.getItem("warehouse_id"),
           transaction_type:"in",
           quantity: UnitValue,
           remarks: description,

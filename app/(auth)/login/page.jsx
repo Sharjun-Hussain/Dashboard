@@ -18,18 +18,18 @@ export default function Login() {
 
   useEffect(() => {
     console.log(userSession);
-    sessionStorage.setItem(
+    localStorage.setItem(
       "office_name",
       userSession?.user?.office?.office_name
     );
-    sessionStorage.setItem("office_id", userSession?.user?.office?.id);
-    sessionStorage.setItem("office_code", userSession?.user?.office?.code);
-    sessionStorage.setItem(
+    localStorage.setItem("office_id", userSession?.user?.office?.id);
+    localStorage.setItem("office_code", userSession?.user?.office?.code);
+    localStorage.setItem(
       "warehouse_name",
       userSession?.user?.warehouse?.warehouse_name
     );
-    sessionStorage.setItem("warehouse_id", userSession?.user?.warehouse?.id);
-    sessionStorage.setItem(
+    localStorage.setItem("warehouse_id", userSession?.user?.warehouse?.id);
+    localStorage.setItem(
       "warehouse_code",
       userSession?.user?.warehouse?.warehouse_code
     );
