@@ -122,7 +122,7 @@ const StockIssuePage = () => {
       );
 
       if (res.status === 201) {
-        toast.success("Product Added Successfully!");
+        toast.success("Product Updated Successfully!");
         setCode("");
         setName("");
         setDescription("");
