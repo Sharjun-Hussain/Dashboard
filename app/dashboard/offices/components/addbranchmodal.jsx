@@ -46,7 +46,7 @@ export default function AddOfficeModal({
         data: { code, office_name, address, phone_number, email },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-  
+
       if (res.status === 200 || res.status === 201) {
         toast.success(
           `${
@@ -57,24 +57,24 @@ export default function AddOfficeModal({
           { duration: 1600, position: "top-right" }
         );
         setLoading(false);
-  
+
         onUpdate(res.data.data);
         setCode("");
         setOfficeName("");
         setAddress("");
         setPhoneNumber("");
         setEmail("");
-  
+
         setOpenModal(false);
       }
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
+
         // Loop through each field in the error object
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
+
           // Show a toast for each error message related to the field
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
@@ -95,7 +95,6 @@ export default function AddOfficeModal({
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (existingOffice) {
@@ -181,7 +180,33 @@ export default function AddOfficeModal({
           <div>
             <div className="items-center gap-4">
               <Label htmlFor="address" className="text-right">
-                Address
+                Address 1
+              </Label>
+              <Input
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="items-center gap-4">
+              <Label htmlFor="address" className="text-right">
+                Address 2
+              </Label>
+              <Input
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>{" "}
+          <div>
+            <div className="items-center gap-4">
+              <Label htmlFor="address" className="text-right">
+                Select Divition
               </Label>
               <Input
                 id="address"
