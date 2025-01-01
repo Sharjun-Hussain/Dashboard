@@ -1,6 +1,6 @@
 import { Factory, HardDrive, LayoutGrid, School } from "lucide-react";
 
-export const NavItems = [
+export const SubNavItems = [
   {
     Name: "Dashboard",
     Path: "/dashboard",

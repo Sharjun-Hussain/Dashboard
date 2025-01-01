@@ -1,45 +1,100 @@
-// components/Navbar.js
 "use client";
-import Link from "next/link"; 
+
+import * as React from "react";
+import Link from "next/link";
+
+import { cn } from "@/lib/utils";
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { BookDashed } from "lucide-react";
 import { NavItems } from "./data";
-import useMediaQuery from "@/Hooks/useMediaQuery";
-import { DrawerDemo } from "./Drawer";
-import { usePathname } from "next/navigation";
 
-export default function Navbar() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const path = usePathname();
-
+export function Navbar() {
   return (
-    <>
-      {!isMobile && (
-        <header className="bg-white w-[700px] rounded-full mx-auto mt-3  dark:bg-accent shadow-md">
-          <div className="container  mx-auto flex justify-center h-14 items-center  px-6">
-            {/* Navigation Links */}
-            <nav className="flex">
-              {NavItems.map((item) => {
-                const isActive = path === item.Path;
-                return (
-                  <div
-                    key={item.Path}
-                    className="flex mx-1 hover:text-pink-600"
+    <div className="flex justify-center mt-4">
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <Link href="/dashboard" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Dashboard
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Assets</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {NavItems.map((component) => (
+                  <ListItem
+                    key={component.Path}
+                    title={component.Name}
+                    href={component.Path}
                   >
-                    <Link
-                      href={item.Path}
-                      className={`text-gray-800 items-center flex text-xs font-medium space-x-1 hover:text-pink-600 p-2 rounded-full px-4 hover:bg-secondary ${
-                        isActive ? "hover:bg-primary" : ""
-                      } dark:text-slate-200 hover:text-gray-500`}
-                    >
-                      {item.Icon}
-                      <span>{item.Name}</span>
-                    </Link>
-                  </div>
-                );
-              })}
-            </nav>
-          </div>
-        </header>
-      )}
-    </>
+                    {component.description}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/dashboard/offices" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Offices
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/dashboard/warehouses" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Warehouses
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <Link href="/dashboard/roles" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                User and Roles
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
   );
 }
+
+const ListItem = React.forwardRef(
+  ({ className, title, children, ...props }, ref) => {
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <a
+            ref={ref}
+            className={cn(
+              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+              className
+            )}
+            {...props}
+          >
+            <div className="text-sm font-medium leading-none">{title}</div>
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
+          </a>
+        </NavigationMenuLink>
+      </li>
+    );
+  }
+);
+ListItem.displayName = "ListItem";
