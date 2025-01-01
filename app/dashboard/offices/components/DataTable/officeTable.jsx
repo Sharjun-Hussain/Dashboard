@@ -13,12 +13,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-import {
-  ArrowUpDown,
-  Pencil,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -50,17 +45,11 @@ import axios from "axios";
 import AddOfficeModal from "../addbranchmodal";
 import useMediaQuery from "@/Hooks/useMediaQuery";
 
-
-
-
 export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-
-
 
   const columns = [
     {
@@ -105,6 +94,10 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
       header: " Branch Office",
     },
     {
+      accessorKey: "division",
+      header: "Division",
+    },
+    {
       accessorKey: "address",
       header: "Address",
     },
@@ -133,10 +126,10 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
       header: "Actions",
       cell: ({ row }) => {
         const office = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [officeData, setOfficeData] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -161,8 +154,7 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setOfficeData(office); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -178,14 +170,14 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -206,9 +198,12 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddOfficeModal
+              onUpdate={onUpdate}
+              existingOffice={officeData}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -241,7 +236,9 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("office_name")
+                  ?.setFilterValue(event.target.value)
               }
               className="w-full"
             />
@@ -338,7 +335,7 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-             {isMobile ? "<<" :"Previous" } 
+              {isMobile ? "<<" : "Previous"}
             </Button>
             <span className="text-xs">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
@@ -350,7 +347,7 @@ export function OfficeTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-             {isMobile ? ">>" :"Next" } 
+              {isMobile ? ">>" : "Next"}
             </Button>
           </div>
         </div>

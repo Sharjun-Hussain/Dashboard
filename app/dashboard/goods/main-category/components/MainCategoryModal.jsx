@@ -21,8 +21,9 @@ export default function MainCategoryModal({
   existingCategory,
 }) {
   const [code, setCode] = useState(existingCategory?.code || "");
-  const [name, setName] = useState(
-    existingCategory?.name || ""
+  const [name, setName] = useState(existingCategory?.name || "");
+  const [Description, setDescription] = useState(
+    existingCategory?.Description || ""
   );
 
   const [error, setError] = useState(null);
@@ -62,11 +63,11 @@ export default function MainCategoryModal({
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
+
         // Loop through each field in the error object
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
+
           // Show a toast for each error message related to the field
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
@@ -92,11 +93,9 @@ export default function MainCategoryModal({
     if (existingCategory) {
       setCode(existingCategory.code);
       setName(existingCategory.office_name);
-      
     } else {
       setCode("");
       setName("");
-      
     }
   }, [existingCategory]);
 
@@ -136,6 +135,17 @@ export default function MainCategoryModal({
                   id="branchcode"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="items-center gap-4 pt-4">
+                <Label htmlFor="description" className="text-right">
+                  Description
+                </Label>
+                <Input
+                  id="description"
+                  value={Description}
+                  onChange={(e) => setDescription(e.target.value)}
                   className="col-span-3"
                 />
               </div>

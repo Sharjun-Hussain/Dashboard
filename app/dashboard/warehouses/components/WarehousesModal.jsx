@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Combobox } from "./ComboBox";
+import { Combobox, FetchOfficeComboBox } from "./fetchOfficeComboBox";
 
 export default function WarehouseModal({
   onUpdate,
@@ -86,11 +86,11 @@ export default function WarehouseModal({
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
+
         // Loop through each field in the error object
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
+
           // Show a toast for each error message related to the field
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
@@ -107,11 +107,9 @@ export default function WarehouseModal({
         });
       }
       setLoading(false);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
-      
-    
   };
 
   useEffect(() => {
@@ -147,34 +145,35 @@ export default function WarehouseModal({
           </DialogHeader>
           <div className="flex flex-row gap-4 pt-4">
             <div className="flex-row">
-              <div className="items-center gap-4">
+              <div className="gap-4">
                 <Label htmlFor="name" className="text-right">
-                  WareHouse Name
+                  Select Office Branch
                 </Label>
-                <Combobox Officeid={officeid} />
+                <FetchOfficeComboBox Officeid={officeid} />
               </div>
+
               <div className="items-center gap-4 pt-4">
-                <Label htmlFor="branchcode" className="text-right">
-                  WareHouse Code
+                <Label htmlFor="warehouse_name" className="text-right">
+                  Warehouse Name
                 </Label>
                 <Input
-                  id="branchcode"
-                  value={warehouse_code}
-                  onChange={(e) => setwarehouse_Code(e.target.value)}
+                  id="warehouse_name"
+                  value={warehouse_name}
+                  onChange={(e) => setwarehouse_name(e.target.value)}
                   className="col-span-3"
                 />
               </div>
             </div>
             <div className="flex-row">
-              <div className="items-center gap-4">
+              <div className="gap-4">
                 <Label htmlFor="name" className="text-right">
-                  WareHouse Name
+                  Warehouse Code
                 </Label>
                 <Input
                   id="name"
-                  value={warehouse_name}
-                  onChange={(e) => setwarehouse_name(e.target.value)}
-                  className="col-span-3"
+                  value={warehouse_code}
+                  onChange={(e) => setwarehouse_Code(e.target.value)}
+                  className=""
                 />
               </div>
 

@@ -29,6 +29,13 @@ export function Navbar() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/dashboard/goods" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Assets Management
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
 
           <NavigationMenuItem>
             <NavigationMenuTrigger>Assets</NavigationMenuTrigger>
