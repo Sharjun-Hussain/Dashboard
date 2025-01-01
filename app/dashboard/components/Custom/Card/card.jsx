@@ -17,7 +17,7 @@ const CustomCard = ({
   children,
   MoreOption,
   insideClassName,
-  element
+  element,
 }) => {
   return (
     <div className={`${className}`}>
@@ -26,7 +26,10 @@ const CustomCard = ({
       >
         <div className="m-4 flex">
           <div className="flex flex-col">
-            <div className="font-bold text-lg flex items-center">{title}{element}</div>
+            <div className="font-bold text-lg flex items-center">
+              {title}
+              {element}
+            </div>
             <div className="font-medium  text-gray-600 dark:text-gray-400 text-sm">
               {description}
             </div>

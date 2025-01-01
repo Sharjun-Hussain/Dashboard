@@ -1,15 +1,26 @@
-"use client"
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import axios from "axios"
+"use client";
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import axios from "axios";
 
-export function OfficeComboBox({ Officeid, name , disabled }) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+export function OfficeComboBox({ Officeid, name, disabled }) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
   const [fetchedOffices, setFetchedOffices] = React.useState([]);
 
   React.useEffect(() => {
@@ -44,8 +55,16 @@ export function OfficeComboBox({ Officeid, name , disabled }) {
           disabled={disabled}
         >
           {value
-            ? `${fetchedOffices.find((office) => office.office_name === value)?.code} - ${fetchedOffices.find((office) => office.office_name === value)?.office_name}`
-            : name ? name : "Select office..."}
+            ? `${
+                fetchedOffices?.find((office) => office.office_name === value)
+                  ?.code
+              } - ${
+                fetchedOffices?.find((office) => office.office_name === value)
+                  ?.office_name
+              }`
+            : name
+            ? name
+            : "Select office..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -55,14 +74,14 @@ export function OfficeComboBox({ Officeid, name , disabled }) {
           <CommandList>
             <CommandEmpty>No Office found.</CommandEmpty>
             <CommandGroup>
-              {fetchedOffices.map((office) => (
+              {fetchedOffices?.map((office) => (
                 <CommandItem
                   key={office.id}
                   value={office.office_name}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    Officeid(office.id)
-                    setOpen(false)
+                    setValue(currentValue === value ? "" : currentValue);
+                    Officeid(office.id);
+                    setOpen(false);
                   }}
                 >
                   <Check
@@ -79,5 +98,5 @@ export function OfficeComboBox({ Officeid, name , disabled }) {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

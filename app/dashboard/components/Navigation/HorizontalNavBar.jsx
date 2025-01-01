@@ -25,7 +25,7 @@ export function Navbar() {
     const fetchMainCategory = async () => {
       setloading(true);
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-main-category`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/MainCategory`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

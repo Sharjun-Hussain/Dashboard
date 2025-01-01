@@ -1,15 +1,26 @@
-"use client"
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import axios from "axios"
+"use client";
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import axios from "axios";
 
 export function RoleCombobox({ roleid, name }) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
   const [fetchedRoles, setFetchedRoles] = React.useState([]);
 
   React.useEffect(() => {
@@ -43,8 +54,10 @@ export function RoleCombobox({ roleid, name }) {
           className="w-[200px] justify-between m-0"
         >
           {value
-            ? `${fetchedRoles.find((role) => role.name === value)?.name} `
-            : name ? name : "Select Role..."}
+            ? `${fetchedRoles?.find((role) => role.name === value)?.name} `
+            : name
+            ? name
+            : "Select Role..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -54,14 +67,14 @@ export function RoleCombobox({ roleid, name }) {
           <CommandList>
             <CommandEmpty>No Office found.</CommandEmpty>
             <CommandGroup>
-              {fetchedRoles.map((role) => (
+              {fetchedRoles?.map((role) => (
                 <CommandItem
                   key={role.id}
                   value={role.name}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    roleid(role.id)
-                    setOpen(false)
+                    setValue(currentValue === value ? "" : currentValue);
+                    roleid(role.id);
+                    setOpen(false);
                   }}
                 >
                   <Check
@@ -78,5 +91,5 @@ export function RoleCombobox({ roleid, name }) {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
