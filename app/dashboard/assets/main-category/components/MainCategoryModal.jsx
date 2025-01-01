@@ -22,7 +22,7 @@ export default function MainCategoryModal({
 }) {
   const [code, setCode] = useState(existingCategory?.code || "");
   const [name, setName] = useState(existingCategory?.name || "");
-  const [Description, setDescription] = useState(
+  const [description, setDescription] = useState(
     existingCategory?.Description || ""
   );
 
@@ -41,7 +41,7 @@ export default function MainCategoryModal({
       const res = await axios({
         method,
         url,
-        data: { code, name },
+        data: { code, name, description },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -144,7 +144,7 @@ export default function MainCategoryModal({
                 </Label>
                 <Input
                   id="description"
-                  value={Description}
+                  value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="col-span-3"
                 />

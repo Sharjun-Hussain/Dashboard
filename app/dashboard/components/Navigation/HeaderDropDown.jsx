@@ -54,11 +54,12 @@ export function HeaderDropDownMenu({ Component }) {
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-
+          <Link href="/dashboard/profile">
+            <DropdownMenuItem>
+              Profile
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
           <Link href="/dashboard/settings">
             <DropdownMenuItem>
               Settings

@@ -3,7 +3,13 @@ import React from "react";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 import Link from "next/link";
 
-import { ChevronDownIcon, DiamondMinus, LayoutList } from "lucide-react";
+import {
+  Bookmark,
+  ChartNoAxesColumn,
+  ChevronDownIcon,
+  DiamondMinus,
+  LayoutList,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CustomCard from "../components/Custom/Card/card";
 import {
@@ -20,45 +26,45 @@ const Layout = ({ children }) => {
   const Inventory_Control_Links = [
     {
       name: "Add Stock",
-      Url: "/dashboard/goods/add-stock",
+      Url: "/dashboard/assets/add-stock",
     },
     {
       name: " Issue Stock",
-      Url: "/dashboard/goods/issue-stock",
+      Url: "/dashboard/assets/issue-stock",
     },
   ];
 
   const Master_Products_Link = [
     {
       name: "Add New Product",
-      Url: "/dashboard/goods/add-product",
+      Url: "/dashboard/assets/add-product",
     },
     {
       name: "Add New Main Category",
-      Url: "/dashboard/goods/main-category",
+      Url: "/dashboard/assets/main-category",
     },
     {
       name: "Add New Sub Category",
-      Url: "/dashboard/goods/sub-category",
+      Url: "/dashboard/assets/sub-category",
     },
     {
       name: "Add Unit Type",
-      Url: "/dashboard/goods/unit-type",
+      Url: "/dashboard/assets/unit-type",
     },
   ];
 
   const Report_Link = [
     {
       name: "Product Summary",
-      Url: "/dashboard/goods/report/products",
+      Url: "/dashboard/assets/report/products",
     },
     {
       name: "Stock In Summary",
-      Url: "/dashboard/goods/report/products/in",
+      Url: "/dashboard/assets/report/products/in",
     },
     {
       name: "Stock Out Summary",
-      Url: "/dashboard/goods/report/products/out",
+      Url: "/dashboard/assets/report/products/out",
     },
   ];
   return (
@@ -70,7 +76,7 @@ const Layout = ({ children }) => {
             {/* Sidebar section */}
             <div className="w-[25%] hidden lg:flex p-1 px-2  flex-col rounded-lg dark:bg-transparent space-y-4">
               {/* Main heading */}
-              <Link href="/dashboard/goods">
+              <Link href="/dashboard/assets">
                 {" "}
                 <h2 className="font-bold text-xl mb-4 text-gray-800 dark:text-white">
                   Dashboard
@@ -80,9 +86,9 @@ const Layout = ({ children }) => {
               {/* Inventory Control Accordion */}
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 ease-in-out rounded-lg">
+                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-primary transition duration-200 ease-in-out rounded-lg">
                     <div className="flex items-center">
-                      <DiamondMinus size={20} strokeWidth={2} />
+                      <ChartNoAxesColumn size={20} strokeWidth={2} />
                       <span className="font-bold ms-2">Inventory Control</span>
                     </div>
                     <ChevronDownIcon className="h-4 w-4 ms-auto shrink-0 text-muted-foreground transition-transform duration-200" />
@@ -110,9 +116,9 @@ const Layout = ({ children }) => {
               {/* Master Products Accordion */}
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 ease-in-out rounded-lg">
+                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-primary transition duration-200 ease-in-out rounded-lg">
                     <div className="flex items-center">
-                      <DiamondMinus size={20} strokeWidth={2} />
+                      <Bookmark size={20} strokeWidth={2} />
                       <span className="font-bold ms-2">Master Products</span>
                     </div>
                     <ChevronDownIcon className="h-4 w-4 ms-auto shrink-0 text-muted-foreground transition-transform duration-200" />
@@ -141,7 +147,7 @@ const Layout = ({ children }) => {
 
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 ease-in-out rounded-lg">
+                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-primary transition duration-200 ease-in-out rounded-lg">
                     <div className="flex items-center">
                       <LayoutList className="me-2" size={20} strokeWidth={2} />
                       <span className="font-bold ">Reports</span>

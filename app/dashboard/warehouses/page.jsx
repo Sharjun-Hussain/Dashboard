@@ -14,18 +14,23 @@ axios.defaults.withCredentials = true;
 
 export default function DemoPage() {
   const [Offices, setOffices] = useState([]);
-  console.log(Offices);
-
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const handleChildData = async (office) => {
-    const tempId = Date.now();
-    const tempOffice = { ...office, id: tempId };
-
-    // Instantly add to the table with temp ID
-    setOffices((prevOffices) => [...prevOffices, tempOffice]);
+  const handleChildData = (office) => {
+    setOffices((prevOffices) => {
+      const officeIndex = prevOffices.findIndex((o) => o.id === office.id);
+      if (officeIndex >= 0) {
+        // Update existing office
+        const updatedOffices = [...prevOffices];
+        updatedOffices[officeIndex] = office;
+        return updatedOffices;
+      } else {
+        // Add new office
+        return [...prevOffices, office];
+      }
+    });
   };
 
   const handleDelete = (officeId) => {
@@ -71,19 +76,20 @@ export default function DemoPage() {
             <div className="flex">
               <div className="flex justify-start space-x-1">
                 <Button variant="outline">
-                  <CheckCheck size={14} className="me-[2px]" />
+                  {" "}
+                  <CheckCheck size={14} className="me-[2px]" />{" "}
                   {isMobile ? "" : "All"}
                 </Button>
                 <Button variant="outline">
-                  <Send size={14} className="me-[2px]" />
+                  <Send size={14} className="me-[2px]" />{" "}
                   {isMobile ? "" : "Invited"}
                 </Button>
                 <Button variant="outline">
-                  <ToggleRight size={14} className="me-[2px]" />
+                  <ToggleRight size={14} className="me-[2px]" />{" "}
                   {isMobile ? "" : "Disabled"}
                 </Button>
                 <Button variant="outline">
-                  <PenOff size={14} className="me-[2px]" />
+                  <PenOff size={14} className="me-[2px]" />{" "}
                   {isMobile ? "" : "Resticted"}
                 </Button>
               </div>
@@ -93,6 +99,7 @@ export default function DemoPage() {
                   onClick={() => setOpenModal(true)}
                   variant="outline"
                 >
+                  {" "}
                   <Plus size={15} className={` ${isMobile ? "" : "me-1"}`} />
                   {isMobile ? "" : " Add Branch Office"}
                 </Button>
@@ -113,6 +120,7 @@ export default function DemoPage() {
             setOpenModal={setOpenModal}
           />
         </CustomCard>
+        {/* <DataTable columns={columns} data={data} /> */}
       </div>
     </div>
   );

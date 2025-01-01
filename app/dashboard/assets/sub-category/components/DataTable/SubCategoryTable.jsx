@@ -3,6 +3,9 @@
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
+
+import { MoreVertical } from "lucide-react";
+
 import {
   ColumnDef,
   flexRender,
@@ -10,10 +13,19 @@ import {
   useReactTable,
   getSortedRowModel,
   getFilteredRowModel,
+  ColumnFiltersState,
+  SortingState,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, Pencil, Trash2, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  Delete,
+  DeleteIcon,
+  Pencil,
+  Trash2,
+  MoreHorizontal,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -43,14 +55,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import WarehouseModal from "../WarehousesModal";
-import useMediaQuery from "@/Hooks/useMediaQuery";
+import SubCategoryModal from "../SubCategoryModal";
 
-export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
+export function SubCategoryTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const columns = [
     {
@@ -76,81 +86,46 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "warehouse_code",
-      header: "Warehouse Code",
+      accessorKey: "code",
+      header: "Code",
     },
     {
-      accessorKey: "office",
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Main Category
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      header: "Main Category",
+    },
 
-      header: "Branch Office Name",
-      cell: ({ row }) => {
-        const office = row.original.office;
-        return (
-          <div className="flex flex-wrap gap-1">
-            <span>{office?.office_name}</span>
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "warehouse_name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            WareHouse Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: " WareHouse Name",
-    },
-    {
-      accessorKey: "address",
-      header: "Address",
-    },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: "Email",
-    },
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const warehouse = row.original;
+        const category = row.original;
         const [open, setOpen] = React.useState(false);
         const [OpenModal, setOpenModal] = React.useState(false);
-        const [warehouseData, setwarehouseData] = React.useState(null);
+        const [categorydata, setcategorydata] = React.useState(null);
 
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse/${warehouse.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/MainCategory/${category.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(warehouse.id);
+            onDelete(category.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -162,7 +137,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setwarehouseData(warehouse); // Create a state variable to hold the office data
+          setcategorydata(category); // Create a state variable to hold the office data
         };
 
         return (
@@ -193,8 +168,8 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently Remove
-                    Warehouser from the Branch.
+                    This action cannot be undone. This will permanently delete
+                    office from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -208,9 +183,9 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-            <WarehouseModal
+            <SubCategoryModal
               onUpdate={onUpdate}
-              existingWareHouse={warehouseData}
+              existingCategory={categorydata}
               OpenModal={OpenModal}
               setOpenModal={setOpenModal}
             />
@@ -242,16 +217,14 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       <div className="bg-card my-3 md:my-3 dark:bg-accent rounded-lg w-full">
         <div className="flex">
           <div className="flex items-center py-4">
-            <Input
-              placeholder="Filter Warehouse"
-              value={table.getColumn("warehouse_name")?.getFilterValue() ?? ""}
+            {/* <Input
+              placeholder="Filter offices"
+              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("warehouse_name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("office_name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
-            />
+            /> */}
           </div>
         </div>
         <div>
@@ -345,7 +318,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              {isMobile ? "<<" : "Previous"}
+              Previous
             </Button>
             <span className="text-xs">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
@@ -357,7 +330,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              {isMobile ? ">>" : "Next"}
+              Next
             </Button>
           </div>
         </div>

@@ -89,14 +89,17 @@ const Header = () => {
         <div className="ms-3">{isMobile && <DrawerDemo />}</div>
         <div className="ms-3">Logo</div>
         <div className="mx-auto hidden md:flex">
-          <p> Railway Department Srilanka Admin Section {officeData?.office_name}</p>
+          <p>
+            {" "}
+            Railway Department Srilanka Admin Section {officeData?.office_name}
+          </p>
         </div>
         <div className="ms-auto flex items-center">
           <div className="ms-2 relative hover:cursor-pointer">
             <Bell onClick={handleSetNotification} width={20} />
             <Notification
-              className={`absolute ${
-                notificationOpen ? "" : "hidden"
+              className={`absolute  ${
+                notificationOpen ? "z-50 " : "hidden"
               } top-0  right-7`}
             />
           </div>

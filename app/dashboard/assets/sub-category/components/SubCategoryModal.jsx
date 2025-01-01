@@ -30,7 +30,6 @@ export default function SubCategoryModal({
   const isEditing = !!existingCategory;
 
   const categoryId = (categoryid) => {
-    alert(categoryid);
     setselectedMainCategory(categoryid);
   };
 
@@ -45,7 +44,7 @@ export default function SubCategoryModal({
       const res = await axios({
         method,
         url,
-        data: { code, name,main_category_id:selectedMainCategory },
+        data: { code, name, main_category_id: selectedMainCategory },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -67,11 +66,11 @@ export default function SubCategoryModal({
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
+
         // Loop through each field in the error object
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
+
           // Show a toast for each error message related to the field
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
@@ -120,11 +119,14 @@ export default function SubCategoryModal({
           </DialogHeader>
           <div className="flex w-full  flex-row gap-4 pt-4">
             <div className="flex-row flex-1">
-            <div className="items-center  gap-4">
+              <div className="items-center  gap-4 mb-3">
                 <Label htmlFor="name" className="text-right">
-                  Category Code
+                  Select Main Category
                 </Label>
-                <MainCategoryComboBox categoryid={categoryId} className="w-full" />
+                <MainCategoryComboBox
+                  categoryid={categoryId}
+                  className="w-full"
+                />
               </div>
 
               <div className="items-center  gap-4">

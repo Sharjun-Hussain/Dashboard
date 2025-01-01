@@ -114,7 +114,7 @@ export default function WarehouseModal({
 
   useEffect(() => {
     if (existingWareHouse) {
-      setwarehouse_Code(existingWareHouse.code);
+      setwarehouse_Code(existingWareHouse.warehouse_code);
       setwarehouse_name(existingWareHouse.warehouse_name);
       setAddress(existingWareHouse.address);
       setPhoneNumber(existingWareHouse.phone_number);

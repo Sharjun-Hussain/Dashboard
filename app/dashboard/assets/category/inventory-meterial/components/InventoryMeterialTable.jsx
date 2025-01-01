@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Input } from "@/components/ui/input";
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -32,7 +31,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
@@ -43,14 +41,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import WarehouseModal from "../WarehousesModal";
-import useMediaQuery from "@/Hooks/useMediaQuery";
 
-export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
+export function InventoryMeterialTable({
+  data,
+  width,
+  loading,
+  onUpdate,
+  onDelete,
+}) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const columns = [
     {
@@ -76,81 +77,96 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
       enableHiding: false,
     },
     {
-      accessorKey: "warehouse_code",
-      header: "Warehouse Code",
+      accessorKey: "id",
+      header: "ID",
     },
     {
-      accessorKey: "office",
+      accessorKey: "code",
+      header: "Code",
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Product Name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      header: "Product Name",
+    },
 
-      header: "Branch Office Name",
+    {
+      accessorKey: "sub_category",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sub Category
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      header: "Sub Category",
       cell: ({ row }) => {
-        const office = row.original.office;
+        const sub_category = row.original.sub_category;
         return (
           <div className="flex flex-wrap gap-1">
-            <span>{office?.office_name}</span>
+            <span>{sub_category?.name}</span>
           </div>
         );
       },
     },
     {
-      accessorKey: "warehouse_name",
-      header: ({ column }) => {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
+      accessorKey: "Product Stocks",
+      cell: ({ row }) => {
+        const product_stocks = row.original.product_stocks;
+
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            WareHouse Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex flex-wrap gap-1">
+            {product_stocks.map((product_stocks, index) => (
+              <span key={index}> {product_stocks.quantity.split(".")[0]}</span>
+            ))}
+          </div>
         );
       },
-      header: " WareHouse Name",
     },
     {
-      accessorKey: "address",
-      header: "Address",
+      accessorKey: "low_stock_threshold",
+      header: "Low Stock Threshold",
     },
-    {
-      accessorKey: "phone_number",
-      header: "Phone Number",
-    },
-    {
-      accessorKey: "email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: "Email",
-    },
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const warehouse = row.original;
+        const product = row.original;
         const [open, setOpen] = React.useState(false);
         const [OpenModal, setOpenModal] = React.useState(false);
-        const [warehouseData, setwarehouseData] = React.useState(null);
+        const [productData, setproductData] = React.useState(null);
 
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/warehouse/${warehouse.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${product.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
               }
             );
-            onDelete(warehouse.id);
+            onDelete(product.id);
             // Optionally, you can call a function to refresh the table data here
           } catch (error) {
             console.error("Failed to delete:", error);
@@ -162,7 +178,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
           // Pass the entire office object to the modal
           setOpenModal(true);
           // Set the office data that you want to update
-          setwarehouseData(warehouse); // Create a state variable to hold the office data
+          setproductData(product); // Create a state variable to hold the office data
         };
 
         return (
@@ -193,8 +209,8 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently Remove
-                    Warehouser from the Branch.
+                    This action cannot be undone. This will permanently delete
+                    product from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -207,13 +223,13 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            {/* <ProductUpdateSheet
+              existingProduct={productData}
+              openSheet={OpenModal}
+              setopenSheet={setOpenModal}
+            /> */}
 
-            <WarehouseModal
-              onUpdate={onUpdate}
-              existingWareHouse={warehouseData}
-              OpenModal={OpenModal}
-              setOpenModal={setOpenModal}
-            />
+            {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
           </>
         );
       },
@@ -243,12 +259,10 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter Warehouse"
-              value={table.getColumn("warehouse_name")?.getFilterValue() ?? ""}
+              placeholder="Filter products"
+              value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("warehouse_name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />
@@ -345,7 +359,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              {isMobile ? "<<" : "Previous"}
+              Previous
             </Button>
             <span className="text-xs">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
@@ -357,7 +371,7 @@ export function WareHouseTable({ data, width, loading, onUpdate, onDelete }) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              {isMobile ? ">>" : "Next"}
+              Next
             </Button>
           </div>
         </div>

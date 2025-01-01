@@ -58,15 +58,16 @@ import axios from "axios";
 
 import MainCategoryModal from "../MainCategoryModal";
 
-
-
-
-export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) {
+export function MainCategoryTable({
+  data,
+  width,
+  loading,
+  onUpdate,
+  onDelete,
+}) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-
-
 
   const columns = [
     {
@@ -110,18 +111,17 @@ export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) 
       },
       header: "Main Category",
     },
-    
-    
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const category = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [categorydata, setcategorydata] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -146,8 +146,7 @@ export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) 
           // Set the office data that you want to update
           setcategorydata(category); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -163,14 +162,14 @@ export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) 
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -191,9 +190,12 @@ export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) 
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <MainCategoryModal onUpdate={onUpdate}  existingCategory={categorydata} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <MainCategoryModal
+              onUpdate={onUpdate}
+              existingCategory={categorydata}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -222,14 +224,14 @@ export function MainCategoryTable({ data, width, loading, onUpdate, onDelete }) 
       <div className="bg-card my-3 md:my-3 dark:bg-accent rounded-lg w-full">
         <div className="flex">
           <div className="flex items-center py-4">
-            <Input
+            {/* <Input
               placeholder="Filter offices"
               value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
-            />
+            /> */}
           </div>
         </div>
         <div>

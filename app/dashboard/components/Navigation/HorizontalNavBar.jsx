@@ -16,8 +16,33 @@ import {
 } from "@/components/ui/navigation-menu";
 import { BookDashed } from "lucide-react";
 import { NavItems } from "./data";
+import axios from "axios";
 
 export function Navbar() {
+  const [MainCategory, setMainCategory] = React.useState([]);
+  const [loading, setloading] = React.useState(false);
+  React.useEffect(() => {
+    const fetchMainCategory = async () => {
+      setloading(true);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-main-category`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withXSRFToken: true,
+          withCredentials: true,
+        }
+      );
+
+      if (res.status == 200) {
+        setMainCategory(res.data.data);
+        setloading(false);
+      }
+    };
+    fetchMainCategory();
+  }, []);
+
   return (
     <div className="flex justify-center mt-4">
       <NavigationMenu>
@@ -30,7 +55,7 @@ export function Navbar() {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/dashboard/goods" legacyBehavior passHref>
+            <Link href="/dashboard/assets" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Assets Management
               </NavigationMenuLink>
@@ -41,11 +66,13 @@ export function Navbar() {
             <NavigationMenuTrigger>Assets</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {NavItems.map((component) => (
+                {MainCategory.map((component) => (
                   <ListItem
-                    key={component.Path}
-                    title={component.Name}
-                    href={component.Path}
+                    key={component.name}
+                    title={component.name}
+                    href={`/dashboard/assets/category/${component.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
                   >
                     {component.description}
                   </ListItem>

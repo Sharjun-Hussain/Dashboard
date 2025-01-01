@@ -2,7 +2,7 @@
 import React from "react";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 import Link from "next/link";
-import { LayoutList } from "lucide-react";
+import { Bold, Bolt, LayoutList, Store, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CustomCard from "../components/Custom/Card/card";
 import { usePathname } from "next/navigation";
@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
                   User Management
                 </h2>
               </Link>
-              
+
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
                   currentpath === "/dashboard/roles"
@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
                 } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/roles/"
               >
-                <LayoutList className="me-2" size={20} strokeWidth={2} /> Roles
+                <Store className="me-2" size={20} strokeWidth={2} /> Roles
               </Link>
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
@@ -44,8 +44,7 @@ const Layout = ({ children }) => {
                 } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/roles/permissions"
               >
-                <LayoutList className="me-2" size={20} strokeWidth={2} />{" "}
-                Permissions
+                <Bolt className="me-2" size={20} strokeWidth={2} /> Permissions
               </Link>
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
@@ -55,7 +54,7 @@ const Layout = ({ children }) => {
                 } transition-colors duration-200 ease-in-out`}
                 href="/dashboard/roles/users"
               >
-                <LayoutList className="me-2" size={20} strokeWidth={2} /> Users
+                <User className="me-2" size={20} strokeWidth={2} /> Users
               </Link>
             </div>
 
