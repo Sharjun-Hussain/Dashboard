@@ -7,7 +7,7 @@ const page = () => {
   return (
     <div className="space-y-6 p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
-        <Label htmlFor="footer" className="text-lg font-medium">
+        <Label htmlFor="footer" className=" font-medium">
           Footer Content :
         </Label>
         <div className="flex w-[70%] space-x-4">
@@ -20,11 +20,11 @@ const page = () => {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <Label htmlFor="footer" className="text-lg font-medium">
-          Copyright :
+        <Label htmlFor="footer" className=" font-medium">
+          Version :
         </Label>
         <div className="flex w-[70%] space-x-4">
-          <Input className="flex-1" id="footer" value="2025" />
+          <Input className="flex-1" id="footer" value="Version 1.0" />
           <Button>Save</Button>
         </div>
       </div>

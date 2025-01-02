@@ -1,34 +1,45 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Button } from "@/components/ui/button"; // Import Button component
+import { Input } from "@/components/ui/input"; // Import Input component
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // Import Sheet components for modal functionality
+import { Switch } from "@/components/ui/switch"; // Import Switch component
+import { Label } from "@/components/ui/label"; // Import Label component
+import { useEffect, useState } from "react"; // Import hooks from React
+import axios from "axios"; // Import axios for API requests
 
-export function RolesAddSheet({onUpdate}) {
-  const [loading, setLoading] = useState(false);
-  const [permissions, setPermissions] = useState({});
-  const [selectedPermissions, setSelectedPermissions] = useState({});
-  const [Role, setRole] = useState("");
-  const isEditing = false;
+export function RolesAddSheet({ onUpdate }) {
+  // State hooks to manage component state
+  const [loading, setLoading] = useState(false); // Loading state during API calls
+  const [permissions, setPermissions] = useState({}); // Permissions grouped by categories
+  const [selectedPermissions, setSelectedPermissions] = useState({}); // Permissions selected by the user
+  const [Role, setRole] = useState(""); // Role name input state
+  const isEditing = false; // Flag to check if editing existing role
 
+  // Additional state hooks to manage permission data in different formats
+  const [permissionsByGroup, setPermissionsByGroup] = useState({}); // Permissions categorized by group
+  const [permissionsById, setPermissionsById] = useState([]); // List of permission IDs
+  const [permissionsByName, setPermissionsByName] = useState({}); // Permissions categorized by name
+  const [selectedPermissionsByName, setSelectedPermissionsByName] = useState(
+    []
+  ); // Selected permission names
+
+  // Fetch permissions when component mounts
   useEffect(() => {
     const fetchPermissions = async () => {
-      setLoading(true);
+      setLoading(true); // Start loading
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/admin/permission`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in headers
             },
-            withXSRFToken: true,
-            withCredentials: true,
+            withXSRFToken: true, // Enable CSRF protection
+            withCredentials: true, // Include credentials in request
           }
         );
 
         if (res.status === 200) {
+          // Group permissions by their group_name
           const groupedPermissions = res.data.data.reduce((acc, permission) => {
             const groupName = permission.group_name;
             if (!acc[groupName]) {
@@ -38,19 +49,39 @@ export function RolesAddSheet({onUpdate}) {
             return acc;
           }, {});
 
-          setPermissions(groupedPermissions);
+          setPermissions(groupedPermissions); // Store grouped permissions
+
+          // Prepare additional permission states
+          const permissionsByIdList = res.data.data.map((perm) => perm.id);
+          const permissionsByNameGrouped = res.data.data.reduce(
+            (acc, permission) => {
+              const groupName = permission.group_name;
+              if (!acc[groupName]) {
+                acc[groupName] = [];
+              }
+              acc[groupName].push(permission.name);
+              return acc;
+            },
+            {}
+          );
+          const permissionNames = res.data.data.map((perm) => perm.name);
+
+          setPermissionsByGroup(groupedPermissions); // Store permissions by group
+          setPermissionsById(permissionsByIdList); // Store permission IDs
+          setPermissionsByName(permissionsByNameGrouped); // Store permissions by name
+          setSelectedPermissionsByName(permissionNames); // Store selected permission names
         }
       } catch (error) {
-        console.error("Failed to fetch permissions", error);
+        console.error("Failed to fetch permissions", error); // Log errors
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading
       }
     };
 
-    fetchPermissions();
+    fetchPermissions(); // Trigger fetch function
   }, []);
 
-  // Handle toggle for individual permission
+  // Toggle individual permission selections
   const handlePermissionToggle = (groupName, permId) => {
     setSelectedPermissions((prev) => {
       const newSelected = { ...prev };
@@ -58,6 +89,7 @@ export function RolesAddSheet({onUpdate}) {
         newSelected[groupName] = [];
       }
 
+      // Add or remove permission based on its current selection state
       if (newSelected[groupName].includes(permId)) {
         newSelected[groupName] = newSelected[groupName].filter(
           (id) => id !== permId
@@ -69,42 +101,44 @@ export function RolesAddSheet({onUpdate}) {
     });
   };
 
-  console.log(selectedPermissions);
-
-  // Handle toggle for select all in a group
+  // Toggle entire group of permissions
   const handleSelectAllToggle = (groupName, isSelected) => {
     setSelectedPermissions((prev) => {
       const newSelected = { ...prev };
       if (isSelected) {
+        // Select all permissions within the group
         newSelected[groupName] = permissions[groupName].map((perm) => perm.id);
+        console.log(permissionsByGroup, permissionsById, permissionsByName);
       } else {
+        // Deselect all permissions
         delete newSelected[groupName];
       }
       return newSelected;
     });
   };
 
+  // Handle form submission to create or update a role
   const HandleRoleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setLoading(true); // Start loading
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles${
         isEditing ? `/${existingRole.id}` : ""
       }`;
-      const method = isEditing ? "put" : "post";
+      const method = isEditing ? "put" : "post"; // Choose method based on editing status
       const res = await axios({
         method,
         url,
         data: {
-          name: Role,
-          permissions: selectedPermissions,
+          name: Role, // Role name
+          permissions: selectedPermissions, // Selected permissions
         },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (res.status === 200 || res.status === 201) {
         toast(
-          `${
+          `$${
             isEditing
               ? "Role Updated Successfully"
               : "Role Created Successfully"
@@ -112,54 +146,27 @@ export function RolesAddSheet({onUpdate}) {
           { duration: 1600, position: "top-right" }
         );
         setLoading(false);
-
-        onUpdate(res.data.data);
+        onUpdate(res.data.data); // Trigger update callback
         setRole("");
-        setSelectedPermissions([]);
-        // setAddress("");
-        // setPhoneNumber("");
-        // setEmail("");
-
-        // setOpenModal(false);
+        setSelectedPermissions([]); // Reset selections
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.errors) {
-        const errorMessages = err.response.data.errors;
-
-        // Loop through each field in the error object
-        Object.keys(errorMessages).forEach((field) => {
-          const fieldErrors = errorMessages[field];
-
-          // Show a toast for each error message related to the field
-          fieldErrors.forEach((errorMessage) => {
-            toast.error(`${field}: ${errorMessage}`, {
-              duration: 4000, // Duration for each toast
-              position: "top-right", // Position of the toast
-            });
-          });
-        });
-      } else {
-        // setError("An unexpected error occurred.");
-        toast.error("An unexpected error occurred.", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-      setLoading(false);
-    } finally {
+      console.error("An error occurred.");
       setLoading(false);
     }
   };
 
+  // Disable the Create button if Role input is empty
   const HandleRoleCreateDisable = () => {
     return Role === "";
   };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">Create Role</Button>
       </SheetTrigger>
-      <SheetContent className="w-full   md:min-w-[85vw]">
+      <SheetContent className="w-full md:min-w-[85vw]">
         <div className="flex flex-col mb-6">
           <h1 className="text-xl font-bold">Create Roles</h1>
           <h4 className="text-sm font-semibold text-opacity-70">
@@ -201,7 +208,7 @@ export function RolesAddSheet({onUpdate}) {
                       {permissionList.map((perm) => (
                         <div key={perm.id} className="flex items-center">
                           <Switch
-                          className="dark:bg-pink-600"
+                            className="dark:bg-pink-600"
                             id={`perm-${perm.id}`}
                             checked={selectedPermissions[groupName]?.includes(
                               perm.id
@@ -210,7 +217,10 @@ export function RolesAddSheet({onUpdate}) {
                               handlePermissionToggle(groupName, perm.id)
                             }
                           />
-                          <Label htmlFor={`perm-${perm.id}`} className="ml-2 font-normal">
+                          <Label
+                            htmlFor={`perm-${perm.id}`}
+                            className="ml-2 font-normal"
+                          >
                             {perm.name}
                           </Label>
                         </div>
@@ -240,7 +250,12 @@ export function RolesAddSheet({onUpdate}) {
           )}
         </div>
 
-        <Button variant="outline" disabled={HandleRoleCreateDisable} onClick={HandleRoleSubmit} className="mt-12">
+        <Button
+          variant="outline"
+          disabled={HandleRoleCreateDisable()}
+          onClick={HandleRoleSubmit}
+          className="mt-12"
+        >
           Create Role
         </Button>
       </SheetContent>

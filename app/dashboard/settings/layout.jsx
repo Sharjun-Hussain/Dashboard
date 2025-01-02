@@ -26,7 +26,7 @@ const Layout = ({ children }) => {
                 </h2>
               </Link>
 
-              <Link
+              {/* <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
                   currentpath === "/dashboard/settings/general"
                     ? "text-pink-600"
@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
               >
                 <Grid className="me-2" size={20} strokeWidth={2} /> General
                 Settings
-              </Link>
+              </Link> */}
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
                   currentpath === "/dashboard/settings/footer"

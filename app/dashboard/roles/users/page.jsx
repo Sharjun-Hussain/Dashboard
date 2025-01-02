@@ -7,12 +7,10 @@ import { UsersTable } from "./components/DataTable/UsersTable";
 import { RoleCombobox } from "./components/ComboBox/RoleComboBox";
 import axios from "axios";
 
-
-
 const UsersPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
-  const [FetchedUsersData, setFetchedUsersData] = useState([])
+  const [FetchedUsersData, setFetchedUsersData] = useState([]);
 
   const handleChildData = (user) => {
     setFetchedUsersData((prev) => {
@@ -29,14 +27,12 @@ const UsersPage = () => {
     });
   };
 
-
   const handleDelete = (userid) => {
     setFetchedUsersData((prev) => prev.filter((user) => user.id !== userid));
   };
 
   useEffect(() => {
-
-      const fetchusers = async () => {
+    const fetchusers = async () => {
       setloading(true);
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users`,
@@ -56,13 +52,11 @@ const UsersPage = () => {
       }
     };
     fetchusers();
-  }, [])
-  
-
+  }, []);
 
   return (
     <div className="">
-      <div className="md:flex md:justify-between  md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
+      <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
         <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
           <h1 className="text-xl font-bold">Users</h1>
           <h4 className="text-sm font-semibold text-opacity-70">
@@ -72,7 +66,11 @@ const UsersPage = () => {
         <div className="md:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 md:ms-auto items-center">
           <RoleCombobox name="Select Office" />
           <RoleCombobox name="Select Warehouse" />
-          <Button onClick={() => setOpenModal(true)} variant="outline" className="w-full md:w-auto">
+          <Button
+            onClick={() => setOpenModal(true)}
+            variant="outline"
+            className="w-full md:w-auto"
+          >
             Invite Users
           </Button>
         </div>
@@ -80,11 +78,20 @@ const UsersPage = () => {
 
       <div className="mt-8">
         {/* Stock Table */}
-        <UsersTable loading={loading} data={FetchedUsersData} onUpdate={handleChildData} onDelete={handleDelete} />
+        <UsersTable
+          loading={loading}
+          data={FetchedUsersData}
+          onUpdate={handleChildData}
+          onDelete={handleDelete}
+        />
       </div>
 
       {/* Add Stock Modal */}
-      <AddUserModal OpenModal={OpenModal} onUpdate={handleChildData} setOpenModal={setOpenModal} />
+      <AddUserModal
+        OpenModal={OpenModal}
+        onUpdate={handleChildData}
+        setOpenModal={setOpenModal}
+      />
     </div>
   );
 };

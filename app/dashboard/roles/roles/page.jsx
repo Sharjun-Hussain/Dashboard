@@ -7,7 +7,6 @@ import { Combobox } from "./components/ComboBox";
 import AddUserModal from "./components/AddUserModal";
 import { Usertable } from "./components/DataTable/Usertable";
 
-
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
@@ -24,7 +23,11 @@ const AddStockPage = () => {
         <div className="md:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 md:ms-auto items-center">
           <Combobox name="Select Office" />
           <Combobox name="Select Warehouse" />
-          <Button onClick={() => setOpenModal(true)} variant="outline" className="w-full md:w-auto">
+          <Button
+            onClick={() => setOpenModal(true)}
+            variant="outline"
+            className="w-full md:w-auto"
+          >
             Invite Users
           </Button>
         </div>

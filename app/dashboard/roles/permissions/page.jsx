@@ -55,7 +55,7 @@ const AddStockPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
         <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
           <h1 className="text-xl font-bold">Permissions</h1>
@@ -78,11 +78,19 @@ const AddStockPage = () => {
 
       <div className="mt-8">
         {/* Users Table */}
-        <PermissionTable data={permissions} onDelete={handleDelete} onUpdate={handleChildData} />
+        <PermissionTable
+          data={permissions}
+          onDelete={handleDelete}
+          onUpdate={handleChildData}
+        />
       </div>
 
       {/* Add User Modal */}
-      <AddPermissionModal OpenModal={OpenModal} onUpdate={handleChildData} setOpenModal={setOpenModal} />
+      <AddPermissionModal
+        OpenModal={OpenModal}
+        onUpdate={handleChildData}
+        setOpenModal={setOpenModal}
+      />
     </div>
   );
 };

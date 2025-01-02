@@ -4,7 +4,6 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { CheckCheck, PenOff, Plus, Send, ToggleRight } from "lucide-react";
 
-
 import useMediaQuery from "@/Hooks/useMediaQuery";
 import { RolesTable } from "./components/DataTable/RolesTable";
 import RolesAddModal from "./components/RolesAddModal";
@@ -60,28 +59,36 @@ export default function DemoPage() {
   }, []);
 
   return (
-    <div className="p-4">
-    <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
-      <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
-        <h1 className="text-xl font-bold">Roles</h1>
-        <h4 className="text-sm font-semibold text-opacity-70">
-          Manage Roles & Permissions here
-        </h4>
+    <div className="">
+      <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
+        <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
+          <h1 className="text-xl font-bold">Roles</h1>
+          <h4 className="text-sm font-semibold text-opacity-70">
+            Manage Roles & Permissions here
+          </h4>
+        </div>
+
+        {/* Add the correct flex and ms-auto classes to align the button right on large screens */}
+        <div className="flex md:ms-auto items-center md:w-auto w-full justify-end">
+          <RolesAddSheet onUpdate={handleChildData} />
+        </div>
       </div>
 
-      {/* Add the correct flex and ms-auto classes to align the button right on large screens */}
-      <div className="flex md:ms-auto items-center md:w-auto w-full justify-end">
-        <RolesAddSheet onUpdate={handleChildData}/>
+      <div className="mt-8">
+        {/* Users Table */}
+        <RolesTable
+          data={Roles}
+          onDelete={handleDelete}
+          onUpdate={handleChildData}
+        />
       </div>
-    </div>
 
-    <div className="mt-8">
-      {/* Users Table */}
-      <RolesTable data={Roles} onDelete={handleDelete} onUpdate={handleChildData} />
+      {/* Add User Modal */}
+      <RolesAddModal
+        OpenModal={OpenModal}
+        onUpdate={handleChildData}
+        setOpenModal={setOpenModal}
+      />
     </div>
-
-    {/* Add User Modal */}
-    <RolesAddModal OpenModal={OpenModal} onUpdate={handleChildData} setOpenModal={setOpenModal} />
-  </div>
   );
 }
