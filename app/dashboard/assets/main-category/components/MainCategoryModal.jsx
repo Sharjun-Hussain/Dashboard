@@ -50,7 +50,7 @@ export default function MainCategoryModal({
           `${
             isEditing
               ? "Main Category Updated Successfully"
-              : "Main Category Added Successfully"
+              : "Main Category Created Successfully"
           }`,
           { duration: 1600, position: "top-right" }
         );
