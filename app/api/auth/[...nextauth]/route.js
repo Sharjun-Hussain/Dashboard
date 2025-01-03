@@ -55,8 +55,12 @@ export const authOptions = {
             name: data.data.name,
             email: data.data.email,
             office: data.data.office,
+            office_id: data.data.office_id,
+            warehouse_id: data.data.warehouse_id,
             warehouse: data.data.warehouse,
             token: data.token, // Include token if you want to attach it in JWT
+            permissions: data.permissions,
+            roles: data.roles, // Fetch roles from the API and attach them to the user object
           };
         } else {
           console.error("Login failed:", data.message || "Invalid credentials");

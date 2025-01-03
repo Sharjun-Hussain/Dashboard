@@ -102,7 +102,7 @@ export default function DemoPage() {
                   <Plus size={15} className={` ${isMobile ? "" : "me-1"}`} />
                   {isMobile ? "" : " Add Branch Office"}
                 </Button>
-              </div> 
+              </div>
             </div>
             <div>
               <OfficeTable

@@ -58,16 +58,10 @@ import axios from "axios";
 import AddUserModal from "../AddPermissionModal";
 import AddPermissionModal from "../AddPermissionModal";
 
-
-
-
-
 export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-
-
 
   const columns = [
     {
@@ -94,12 +88,23 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
     },
     {
       accessorKey: "id",
-      header: "ID",
+      header: ({ column }) => {
+        return (
+          <div
+            className="flex"
+            variant="link"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            ID
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </div>
+        );
+      },
     },
-    {
-      accessorKey: "guard_name",
-      header: "Guard Name",
-    },
+    // {
+    //   accessorKey: "guard_name",
+    //   header: "Guard Name",
+    // },
     {
       accessorKey: "group_name",
       header: ({ column }) => {
@@ -113,23 +118,23 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
           </Button>
         );
       },
-      header: "Group Name",
+      // header: "Group Name",
     },
     {
       accessorKey: "name",
-      header: "name",
+      header: "Permission",
     },
-    
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const permission = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [permissionData, setpermissionData] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -154,8 +159,7 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setpermissionData(permission); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -171,14 +175,14 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -199,9 +203,12 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <AddPermissionModal onUpdate={onUpdate}  existingPermission={permissionData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddPermissionModal
+              onUpdate={onUpdate}
+              existingPermission={permissionData}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -234,7 +241,9 @@ export function PermissionTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter Groups"
               value={table.getColumn("group_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("group_name")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("group_name")
+                  ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

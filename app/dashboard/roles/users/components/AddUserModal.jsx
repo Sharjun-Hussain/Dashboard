@@ -26,6 +26,7 @@ export default function AddUserModal({
   const [name, setName] = useState(existingUser?.name || "");
   const [email, setEmail] = useState(existingUser?.email || "");
   const [password, setPassword] = useState("");
+  const [password_confirmation, setpassword_confirmation] = useState("");
   const [role, setRole] = useState(existingUser?.role || null);
   const [RoleData, setRoleData] = useState("");
   const [selectedOffice, setSelectedOffice] = useState(null);
@@ -97,6 +98,7 @@ export default function AddUserModal({
           name,
           email,
           password,
+          password_confirmation,
           role: RoleData?.name,
           office_id: selectedOffice,
           warehouse_id: selectedWarehouse,
@@ -187,6 +189,21 @@ export default function AddUserModal({
               />
             </div>
 
+            <div className="flex-row w-full">
+              <Label htmlFor="password" className="text-right">
+                Password Confirmation
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password_confirmation}
+                onChange={(e) => setpassword_confirmation(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-4 pt-4">
             <div className="flex-row w-full">
               <Label htmlFor="warehouse" className="text-right">
                 Select Role

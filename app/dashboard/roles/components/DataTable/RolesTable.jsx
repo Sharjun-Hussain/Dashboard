@@ -13,12 +13,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-import {
-  ArrowUpDown,
-  Pencil,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -55,13 +50,6 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-
-  const colorMap = {
-    "Warehouse Create": "bg-green-500",
-    "Warehouse Update": "bg-blue-500",
-    "Warehouse Delete": "bg-red-500",
-    "Warehouse View": "bg-yellow-500",
-  };
 
   const columns = [
     {
@@ -138,7 +126,7 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
                       ? "third"
                       : permission.name.toLowerCase().includes("view")
                       ? "outline"
-                      :""
+                      : ""
                   }
                 >
                   {" "}
@@ -267,9 +255,7 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter Roles"
               value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

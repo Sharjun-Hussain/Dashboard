@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-
 export default function Login() {
   const { data: userSession } = useSession();
   const router = useRouter();
@@ -18,10 +17,7 @@ export default function Login() {
 
   useEffect(() => {
     console.log(userSession);
-    localStorage.setItem(
-      "office_name",
-      userSession?.user?.office?.office_name
-    );
+    localStorage.setItem("office_name", userSession?.user?.office?.office_name);
     localStorage.setItem("office_id", userSession?.user?.office?.id);
     localStorage.setItem("office_code", userSession?.user?.office?.code);
     localStorage.setItem(
@@ -73,7 +69,6 @@ export default function Login() {
 
   return (
     <div className="">
-      
       <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
         Login
       </h2>
@@ -112,16 +107,6 @@ export default function Login() {
           {loading ? "Sign-in Please Wait" : "Sign In"}
         </Button>
       </form>
-      {/* Optional Sign Up link */}
-      {/* <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
-        Don&lsquo;t have an account?{" "}
-        <Link
-          href="/signup"
-          className="text-pink-600 font-semibold dark:text-blue-400"
-        >
-          Sign Up
-        </Link>
-      </p> */}
     </div>
   );
 }
