@@ -5,12 +5,19 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
+// Assuming you are using react-toastify for toast notifications
 
-export function RolesAddSheet({ onUpdate }) {
+export function RolesAddSheet({
+  onUpdate,
+  openSheet,
+  setOpenSheet,
+  existingRole,
+}) {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState({});
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [Role, setRole] = useState("");
+  const [Role, setRole] = useState(existingRole ? existingRole.name : "");
 
   useEffect(() => {
     const fetchPermissions = async () => {
@@ -33,6 +40,14 @@ export function RolesAddSheet({ onUpdate }) {
             return acc;
           }, {});
           setPermissions(grouped);
+
+          // Pre-select permissions if updating an existing role
+          if (existingRole) {
+            const preSelected = existingRole.permissions.map(
+              (perm) => perm.name
+            );
+            setSelectedPermissions(preSelected);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch permissions", error);
@@ -42,7 +57,7 @@ export function RolesAddSheet({ onUpdate }) {
     };
 
     fetchPermissions();
-  }, []);
+  }, [existingRole]);
 
   const handlePermissionToggle = (permName) => {
     setSelectedPermissions((prev) =>
@@ -66,28 +81,34 @@ export function RolesAddSheet({ onUpdate }) {
   };
 
   const isGroupSelected = (group) => {
-    console.log(selectedPermissions);
-
-    permissions[group].every((perm) => selectedPermissions.includes(perm.name));
+    return permissions[group].every((perm) =>
+      selectedPermissions.includes(perm.name)
+    );
   };
 
-  const HandleRoleSubmit = async (e) => {
+  const handleRoleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles`,
-        {
+      const url = existingRole
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${existingRole.id}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles`;
+      const method = existingRole ? "put" : "post";
+
+      const res = await axios({
+        method,
+        url,
+        data: {
           name: Role,
           permissions: selectedPermissions,
         },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-      if (res.status === 201) {
-        toast("Role Created Successfully", {
+      if (res.status === (existingRole ? 200 : 201)) {
+        toast("Role Updated Successfully", {
           duration: 1600,
           position: "top-right",
         });
@@ -96,7 +117,7 @@ export function RolesAddSheet({ onUpdate }) {
         setSelectedPermissions([]);
       }
     } catch (err) {
-      toast.error("Failed to create role.", {
+      toast.error("Failed to save role.", {
         duration: 4000,
         position: "top-right",
       });
@@ -106,15 +127,16 @@ export function RolesAddSheet({ onUpdate }) {
   };
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">Create Role</Button>
-      </SheetTrigger>
+    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
       <SheetContent className="w-full md:min-w-[85vw] overflow-y-auto">
         <div className="flex flex-col mb-6">
-          <h1 className="text-xl font-bold">Create Roles</h1>
+          <h1 className="text-xl font-bold">
+            {existingRole ? "Update Role" : "Create Role"}
+          </h1>
           <h4 className="text-sm font-semibold text-opacity-70">
-            You Can Create Customized User Roles Here
+            {existingRole
+              ? "You can update the details of the selected role."
+              : "You can create a customized user role here."}
           </h4>
         </div>
 
@@ -156,10 +178,10 @@ export function RolesAddSheet({ onUpdate }) {
         <Button
           variant="outline"
           disabled={!Role}
-          onClick={HandleRoleSubmit}
+          onClick={handleRoleSubmit}
           className="mt-12"
         >
-          Create Role
+          {existingRole ? "Update Role" : "Create Role"}
         </Button>
       </SheetContent>
     </Sheet>

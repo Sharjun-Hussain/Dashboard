@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 export default function DemoPage() {
   const [Roles, setRoles] = useState([]);
   const [loading, setloading] = useState(false);
-  const [OpenModal, setOpenModal] = useState(false);
+  const [OpenSheet, setOpenSheet] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleChildData = (role) => {
@@ -70,7 +70,18 @@ export default function DemoPage() {
 
         {/* Add the correct flex and ms-auto classes to align the button right on large screens */}
         <div className="flex md:ms-auto items-center md:w-auto w-full justify-end">
-          <RolesAddSheet onUpdate={handleChildData} />
+          <Button
+            onClick={() => setOpenSheet(true)}
+            variant="outline"
+            className="w-full md:w-auto"
+          >
+            Create Role
+          </Button>
+          <RolesAddSheet
+            openSheet={OpenSheet}
+            setOpenSheet={setOpenSheet}
+            onUpdate={handleChildData}
+          />
         </div>
       </div>
 
@@ -84,11 +95,11 @@ export default function DemoPage() {
       </div>
 
       {/* Add User Modal */}
-      <RolesAddModal
+      {/* <RolesAddModal
         OpenModal={OpenModal}
         onUpdate={handleChildData}
         setOpenModal={setOpenModal}
-      />
+      /> */}
     </div>
   );
 }

@@ -45,6 +45,7 @@ import {
 import axios from "axios";
 import RolesAddModal from "../RolesAddModal";
 import { Badge } from "@/components/ui/badge";
+import { RolesAddSheet } from "../RolesAddSheet";
 
 export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
@@ -172,6 +173,7 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
           setOpenModal(true);
           // Set the office data that you want to update
           setRoleData(role); // Create a state variable to hold the office data
+          console.log(role);
         };
 
         return (
@@ -217,11 +219,11 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-            <RolesAddModal
+            <RolesAddSheet
               onUpdate={onUpdate}
               existingRole={RoleData}
-              OpenModal={OpenModal}
-              setOpenModal={setOpenModal}
+              openSheet={OpenModal}
+              setOpenSheet={setOpenModal}
             />
           </>
         );
