@@ -17,10 +17,14 @@ import {
 import { BookDashed } from "lucide-react";
 import { NavItems } from "./data";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { hasPermission } from "@/lib/PermissionChecker";
 
 export function Navbar() {
+  const { data } = useSession();
   const [MainCategory, setMainCategory] = React.useState([]);
   const [loading, setloading] = React.useState(false);
+  const [UserPermissions, setUserPermissions] = React.useState([]);
   React.useEffect(() => {
     const fetchMainCategory = async () => {
       setloading(true);
@@ -43,6 +47,17 @@ export function Navbar() {
     fetchMainCategory();
   }, []);
 
+  React.useEffect(() => {
+    setUserPermissions(data.user.permissions);
+  }, []);
+
+  const canViewOffices = hasPermission(UserPermissions, "Office", "Index");
+  const canViewWarehouses = hasPermission(
+    UserPermissions,
+    "Warehouse",
+    "Index"
+  );
+  const canViewRoles = hasPermission(UserPermissions, "Role", "Index");
   return (
     <div className="flex justify-center mt-4">
       <NavigationMenu>
@@ -80,28 +95,34 @@ export function Navbar() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/dashboard/offices" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Offices
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/dashboard/warehouses" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Warehouses
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {canViewOffices ? (
+            <NavigationMenuItem>
+              <Link href="/dashboard/offices" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Offices
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
+          {canViewWarehouses ? (
+            <NavigationMenuItem>
+              <Link href="/dashboard/warehouses" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Warehouses
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
 
-          <NavigationMenuItem>
-            <Link href="/dashboard/roles" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                User and Roles
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {canViewRoles ? (
+            <NavigationMenuItem>
+              <Link href="/dashboard/roles" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  User and Roles
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
         </NavigationMenuList>
       </NavigationMenu>
     </div>

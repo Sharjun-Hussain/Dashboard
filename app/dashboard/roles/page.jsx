@@ -18,7 +18,7 @@ export default function DemoPage() {
 
   const handleChildData = (role) => {
     setRoles((prev) => {
-      const RoleIndex = prev.findIndex((o) => o.id === rele.id);
+      const RoleIndex = prev.findIndex((o) => o.id === role.id);
       if (RoleIndex >= 0) {
         // Update existing office
         const updatedRole = [...prev];

@@ -27,26 +27,26 @@ const Header = () => {
 
   console.log(userSession);
 
-  useEffect(() => {
-    const fetchOffice = async () => {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${userSession.user?.officeId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withXSRFToken: true,
-          withCredentials: true,
-        }
-      );
+  // useEffect(() => {
+  //   const fetchOffice = async () => {
+  //     const res = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office/${userSession.user?.officeId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //         withXSRFToken: true,
+  //         withCredentials: true,
+  //       }
+  //     );
 
-      if (res.status == 200) {
-        console.log(res.data.data);
-        setofficeData(res.data.data);
-      }
-    };
-    fetchOffice();
-  }, [userSession?.user]);
+  //     if (res.status == 200) {
+  //       console.log(res.data.data);
+  //       setofficeData(res.data.data);
+  //     }
+  //   };
+  //   fetchOffice();
+  // }, [userSession?.user]);
 
   // Ensure that the component only renders after the client has mounted
   useEffect(() => {
@@ -91,7 +91,7 @@ const Header = () => {
         <div className="mx-auto hidden md:flex">
           <p>
             {" "}
-            Railway Department Srilanka Admin Section {officeData?.office_name}
+            Railway Department Srilanka - Admin Section - Assets Management
           </p>
         </div>
         <div className="ms-auto flex items-center">
