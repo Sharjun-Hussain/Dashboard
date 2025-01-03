@@ -18,7 +18,7 @@ import { BookDashed } from "lucide-react";
 import { NavItems } from "./data";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { hasPermission } from "@/lib/PermissionChecker";
+import { hasPermission, hasPermissions } from "@/lib/PermissionChecker";
 
 export function Navbar() {
   const { data } = useSession();
@@ -51,13 +51,12 @@ export function Navbar() {
     setUserPermissions(data.user.permissions);
   }, []);
 
-  const canViewOffices = hasPermission(UserPermissions, "Office", "Index");
-  const canViewWarehouses = hasPermission(
-    UserPermissions,
-    "Warehouse",
-    "Index"
-  );
-  const canViewRoles = hasPermission(UserPermissions, "Role", "Index");
+  const canViewOffices = hasPermissions(UserPermissions, "Office", ["Index"]);
+  const canManageAssets = hasPermissions(UserPermissions, "Product", ["Index"]);
+  const canViewWarehouses = hasPermissions(UserPermissions, "Warehouse", [
+    "Index",
+  ]);
+  const canViewRoles = hasPermissions(UserPermissions, "Role", ["Index"]);
   return (
     <div className="flex justify-center mt-4">
       <NavigationMenu>
@@ -69,13 +68,15 @@ export function Navbar() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/dashboard/assets" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Assets Management
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          {canManageAssets ? (
+            <NavigationMenuItem>
+              <Link href="/dashboard/assets" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Assets Management
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ) : null}
 
           <NavigationMenuItem>
             <NavigationMenuTrigger>Assets</NavigationMenuTrigger>
