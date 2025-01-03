@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-// Assuming you are using react-toastify for toast notifications
+// Assuming you have a Spinner component or use any library for it.
+import CreativeLoader from "@/components/loaders/loader";
 
 export function RolesAddSheet({
   onUpdate,
@@ -20,7 +21,11 @@ export function RolesAddSheet({
   const [Role, setRole] = useState(existingRole ? existingRole.name : "");
 
   useEffect(() => {
+    let isMounted = true; // Flag to check if component is mounted
+
     const fetchPermissions = async () => {
+      if (Object.keys(permissions).length > 0) return; // Avoid fetching if permissions are already set
+
       setLoading(true);
       try {
         const res = await axios.get(
@@ -32,7 +37,8 @@ export function RolesAddSheet({
           }
         );
 
-        if (res.status === 200) {
+        if (res.status === 200 && isMounted) {
+          // Only update state if component is still mounted
           const grouped = res.data.data.reduce((acc, perm) => {
             const group = perm.group_name || "Ungrouped";
             if (!acc[group]) acc[group] = [];
@@ -52,12 +58,19 @@ export function RolesAddSheet({
       } catch (error) {
         console.error("Failed to fetch permissions", error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchPermissions();
-  }, [existingRole]);
+
+    // Cleanup function to set flag when component unmounts
+    return () => {
+      isMounted = false;
+    };
+  }, [existingRole, permissions]);
 
   const handlePermissionToggle = (permName) => {
     setSelectedPermissions((prev) =>
@@ -73,10 +86,14 @@ export function RolesAddSheet({
       selectedPermissions.includes(name)
     );
 
-    setSelectedPermissions((prev) =>
-      allSelected
-        ? prev.filter((name) => !groupPermissions.includes(name))
-        : [...prev, ...groupPermissions.filter((name) => !prev.includes(name))]
+    setSelectedPermissions(
+      (prev) =>
+        allSelected
+          ? prev.filter((name) => !groupPermissions.includes(name))
+          : [
+              ...prev,
+              ...groupPermissions.filter((name) => !prev.includes(name)),
+            ] // Add missing permissions if any
     );
   };
 
@@ -150,7 +167,9 @@ export function RolesAddSheet({
 
         <div className="mt-8 space-y-8">
           {loading ? (
-            <p>Loading permissions...</p>
+            <div className="flex justify-center items-center">
+              <CreativeLoader />
+            </div>
           ) : (
             Object.keys(permissions).map((group) => (
               <div key={group} className="border rounded-md p-4">

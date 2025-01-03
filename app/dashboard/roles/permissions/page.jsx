@@ -5,7 +5,7 @@ import { PermissionTable } from "./Components/DataTable/PermissionTable";
 import AddPermissionModal from "./Components/AddPermissionModal";
 import axios from "axios";
 
-const AddStockPage = () => {
+const PermissionPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
   const [permissions, setpermissions] = useState([]);
@@ -95,4 +95,4 @@ const AddStockPage = () => {
   );
 };
 
-export default AddStockPage;
+export default PermissionPage;
