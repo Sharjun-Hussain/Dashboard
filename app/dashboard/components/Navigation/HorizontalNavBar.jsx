@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-
 import { cn } from "@/lib/utils";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,11 +12,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { BookDashed } from "lucide-react";
-import { NavItems } from "./data";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { hasPermission, hasPermissions } from "@/lib/PermissionChecker";
+import { hasPermissions } from "@/lib/PermissionChecker";
 
 export function Navbar() {
   const { data } = useSession();
@@ -57,6 +53,7 @@ export function Navbar() {
     "Index",
   ]);
   const canViewRoles = hasPermissions(UserPermissions, "Role", ["Index"]);
+
   return (
     <div className="flex justify-center mt-4">
       <NavigationMenu>

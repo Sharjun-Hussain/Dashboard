@@ -15,9 +15,23 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; // Import useRouter
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export function HeaderDropDownMenu({ Component }) {
+  const { data } = useSession();
+  const [OfficeName, setOfficeName] = useState(data.user.office.office_name);
+  const [WarehouseName, setWarehouseName] = useState(
+    data.user.warehouse.warehouse_name
+  );
   const router = useRouter(); // Initialize useRouter
+
+  useEffect(() => {
+    setOfficeName(data.user.office.office_name);
+    setWarehouseName(data.user.warehouse.warehouse_name);
+  }, []);
+
+  console.log(OfficeName, WarehouseName);
 
   const handleSignout = async () => {
     try {
@@ -83,6 +97,13 @@ export function HeaderDropDownMenu({ Component }) {
           </DropdownMenuSub>
         </DropdownMenuGroup> */}
 
+        <DropdownMenuSeparator />
+        {OfficeName && (
+          <DropdownMenuItem>Branch : {OfficeName}</DropdownMenuItem>
+        )}
+        {WarehouseName && (
+          <DropdownMenuItem>Warehouse : {WarehouseName}</DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignout}>
           Log out
