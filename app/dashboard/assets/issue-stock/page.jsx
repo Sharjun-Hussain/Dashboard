@@ -11,8 +11,6 @@ import { MainCategoryComboBox } from "./Components/MainCategoryComboBox";
 import { UnitTypeComboBox } from "./Components/UnitTypeComboBox";
 import SubcategoryCombobox from "./Components/SubcategoryCombobox";
 
-
-
 // todo : get data from sub category and store here for super admin manually select
 
 const StockIssuePage = () => {
@@ -112,7 +110,8 @@ const StockIssuePage = () => {
         {
           product_id: finalSearchedProductData.id,
           warehouse_id: localStorage.getItem("warehouse_id"),
-          transaction_type:"out",
+          office_id: localStorage.getItem("office_id"),
+          transaction_type: "out",
           quantity: UnitValue,
           remarks: description,
         },

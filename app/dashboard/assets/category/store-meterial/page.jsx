@@ -22,8 +22,10 @@ const StoreMeterialsPage = () => {
   useEffect(() => {
     const fetchGoods = async () => {
       setloading(true);
+      const warehouse_id = await localStorage.getItem("warehouse_id");
+      const office_id = await localStorage.getItem("office_id");
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${office_id}/${warehouse_id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

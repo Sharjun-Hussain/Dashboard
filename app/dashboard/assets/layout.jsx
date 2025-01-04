@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../components/Custom/Breadcrumb/Breadcrumbs";
 import Link from "next/link";
 
@@ -19,8 +19,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
+import { hasPermissions } from "@/lib/PermissionChecker";
+import { useSession } from "next-auth/react";
 
 const Layout = ({ children }) => {
+  const { data: usersession } = useSession();
+  const [UserPermissions, setUserPermissions] = useState([]);
+  useEffect(() => {
+    setUserPermissions(usersession.user.permissions);
+  }, []);
+  const canManageProduct = hasPermissions(UserPermissions, "Product", [
+    "Index",
+    "Create",
+    "Update",
+    "Delete",
+  ]);
   const currentpath = usePathname();
 
   const Inventory_Control_Links = [
@@ -114,34 +127,36 @@ const Layout = ({ children }) => {
               </Accordion>
 
               {/* Master Products Accordion */}
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-primary transition duration-200 ease-in-out rounded-lg">
-                    <div className="flex items-center">
-                      <Bookmark size={20} strokeWidth={2} />
-                      <span className="font-bold ms-2">Master Products</span>
-                    </div>
-                    <ChevronDownIcon className="h-4 w-4 ms-auto shrink-0 text-muted-foreground transition-transform duration-200" />
-                  </AccordionTrigger>
-                  <AccordionContent className="ms-2 space-y-2">
-                    {Master_Products_Link.map((items) => {
-                      return (
-                        <Link
-                          key={items.Url}
-                          className={`flex text-sm p-1 rounded-md ${
-                            currentpath === items.Url
-                              ? "text-pink-600"
-                              : "dark:text-gray-300 hover:text-pink-600"
-                          } transition-colors duration-200 ease-in-out`}
-                          href={items.Url}
-                        >
-                          {items.name}
-                        </Link>
-                      );
-                    })}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              {canManageProduct ? (
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger className="w-full flex justify-between items-center p-2 space-x-2 hover:bg-gray-200 dark:hover:bg-primary transition duration-200 ease-in-out rounded-lg">
+                      <div className="flex items-center">
+                        <Bookmark size={20} strokeWidth={2} />
+                        <span className="font-bold ms-2">Master Products</span>
+                      </div>
+                      <ChevronDownIcon className="h-4 w-4 ms-auto shrink-0 text-muted-foreground transition-transform duration-200" />
+                    </AccordionTrigger>
+                    <AccordionContent className="ms-2 space-y-2">
+                      {Master_Products_Link.map((items) => {
+                        return (
+                          <Link
+                            key={items.Url}
+                            className={`flex text-sm p-1 rounded-md ${
+                              currentpath === items.Url
+                                ? "text-pink-600"
+                                : "dark:text-gray-300 hover:text-pink-600"
+                            } transition-colors duration-200 ease-in-out`}
+                            href={items.Url}
+                          >
+                            {items.name}
+                          </Link>
+                        );
+                      })}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              ) : null}
 
               {/* Report Link */}
 
