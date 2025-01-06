@@ -55,18 +55,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import AddUserModal from "../AddUserModal"; 
-
-
-
-
+import AddUserModal from "../AddUserModal";
 
 export function Usertable({ data, width, loading, onUpdate, onDelete }) {
   const [sorting, setSorting] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState([]);
-
-
 
   const columns = [
     {
@@ -139,10 +133,10 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
       header: "Actions",
       cell: ({ row }) => {
         const office = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [officeData, setOfficeData] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -167,8 +161,7 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setOfficeData(office); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -184,14 +177,14 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -212,9 +205,12 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <AddUserModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <AddUserModal
+              onUpdate={onUpdate}
+              existingOffice={officeData}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -222,7 +218,7 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -247,7 +243,9 @@ export function Usertable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("office_name")
+                  ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

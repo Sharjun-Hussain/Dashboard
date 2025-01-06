@@ -240,7 +240,11 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <ProductUpdateSheet existingProduct={productData} openSheet={OpenModal} setopenSheet={setOpenModal} />
+            <ProductUpdateSheet
+              existingProduct={productData}
+              openSheet={OpenModal}
+              setopenSheet={setOpenModal}
+            />
 
             {/* <AddOfficeModal onUpdate={onUpdate}  existingOffice={officeData} OpenModal={OpenModal} setOpenModal={setOpenModal} /> */}
           </>
@@ -250,7 +254,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -312,7 +316,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                     Loading...
                   </TableCell>
                 </TableRow>
-              ) : table.getRowModel().rows?.length ? (
+              ) : (table?.getRowModel()?.rows || []).length > 0 ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     className="border-white border-opacity-10"
