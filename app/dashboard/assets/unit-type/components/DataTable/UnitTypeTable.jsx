@@ -104,18 +104,17 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
       },
       header: "Unit Type",
     },
-    
-    
+
     {
       id: "actions",
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const unit = row.original;
-        const [open, setOpen] = React.useState(false); 
-        const [OpenModal, setOpenModal] = React.useState(false)
+        const [open, setOpen] = React.useState(false);
+        const [OpenModal, setOpenModal] = React.useState(false);
         const [unitypedata, setunitypedata] = React.useState(null);
-  
+
         const handleDelete = async () => {
           try {
             await axios.delete(
@@ -140,8 +139,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
           // Set the office data that you want to update
           setunitypedata(unit); // Create a state variable to hold the office data
         };
-        
-  
+
         return (
           <>
             <DropdownMenu>
@@ -157,14 +155,14 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
                 <DropdownMenuItem onClick={() => setOpen(true)}>
                   <Trash2 size={16} className="me-2" /> Delete
                 </DropdownMenuItem>
-  
+
                 <DropdownMenuItem onClick={handleUpdate}>
                   <Pencil size={16} className="me-2" />
                   Update
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-  
+
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -185,9 +183,12 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
               </AlertDialogContent>
             </AlertDialog>
 
-
-
-            <UnitTypeModal onUpdate={onUpdate}  existingCategory={{}} OpenModal={OpenModal} setOpenModal={setOpenModal} />
+            <UnitTypeModal
+              onUpdate={onUpdate}
+              existingCategory={{}}
+              OpenModal={OpenModal}
+              setOpenModal={setOpenModal}
+            />
           </>
         );
       },
@@ -195,7 +196,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -220,7 +221,9 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table.getColumn("office_name")?.setFilterValue(event.target.value)
+                table
+                  .getColumn("office_name")
+                  ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

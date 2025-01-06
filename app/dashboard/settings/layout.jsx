@@ -60,6 +60,17 @@ const Layout = ({ children }) => {
               </Link>
               <Link
                 className={`font-bold flex  pe-3 ms-2 text-sm ${
+                  currentpath === "/dashboard/settings/theme"
+                    ? "text-pink-600"
+                    : "dark:text-gray-300 hover:text-pink-600"
+                } transition-colors duration-200 ease-in-out`}
+                href="/dashboard/settings/theme"
+              >
+                <Key className="me-2" size={20} strokeWidth={2} /> Theme
+                Settings
+              </Link>
+              <Link
+                className={`font-bold flex  pe-3 ms-2 text-sm ${
                   currentpath === "/dashboard/settings/critical"
                     ? "text-pink-600"
                     : "dark:text-gray-300 hover:text-pink-600"

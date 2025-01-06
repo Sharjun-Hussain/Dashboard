@@ -15,7 +15,9 @@ const AddStockPage = () => {
   const [FetchedProducts, setFetchedProducts] = useState([]);
   const [fetchedwarehouse, setfetchedwarehouse] = useState([]);
   const [userofficeid, setuserofficeid] = useState(
-    JSON.parse(localStorage.getItem("office_id")) ?? null
+    localStorage.getItem("office_id")
+      ? JSON.parse(localStorage.getItem("office_id")) ?? null
+      : null
   );
   const [userofficename, setuserofficename] = useState(
     localStorage.getItem("office_name")

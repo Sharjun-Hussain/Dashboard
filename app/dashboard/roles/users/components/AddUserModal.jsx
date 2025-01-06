@@ -23,6 +23,8 @@ export default function AddUserModal({
   setOpenModal,
   existingUser,
 }) {
+  console.log(existingUser);
+
   const [name, setName] = useState(existingUser?.name || "");
   const [email, setEmail] = useState(existingUser?.email || "");
   const [password, setPassword] = useState("");
@@ -42,31 +44,6 @@ export default function AddUserModal({
   };
 
   useEffect(() => {
-    setSelectedWarehouse(null); // Reset selected warehouse
-    setfetchedWarehouses([]); // Clear previous warehouses
-    if (selectedOffice) {
-      axios
-        .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-warehouse/${selectedOffice}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        )
-        .then((res) => setfetchedWarehouses(res?.data?.data))
-        .catch((err) => setError(err.message));
-    }
-  }, [selectedOffice]);
-
-  useEffect(() => {
-    if (!fetchedWarehouses.some((wh) => wh.id === selectedWarehouse)) {
-      setSelectedWarehouse(null); // Ensure warehouse is valid
-    }
-  }, [fetchedWarehouses, selectedWarehouse]);
-
-  useEffect(() => {
-    // Fetch roles from API
     if (role) {
       axios
         .get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${role}`, {
@@ -83,10 +60,25 @@ export default function AddUserModal({
     }
   }, [role]);
 
+  useEffect(() => {
+    setName(existingUser?.name);
+    setEmail(existingUser?.email);
+    setSelectedOffice(existingUser?.office_id);
+    setSelectedWarehouse(existingUser?.warehouse_id);
+    setRole(existingUser?.role_id);
+    setRoleData(existingUser?.role);
+    // }
+  }, [existingUser]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setLoading(true);
+      if (!name || !email) {
+        setError("Please fill in all required fields");
+        return;
+      }
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users${
         isEditing ? `/${existingUser.id}` : ""
       }`;
@@ -97,8 +89,8 @@ export default function AddUserModal({
         data: {
           name,
           email,
-          password,
-          password_confirmation: password,
+          password: "password",
+          password_confirmation: "password",
           role: RoleData?.name,
           office_id: selectedOffice,
           warehouse_id: selectedWarehouse,
@@ -123,18 +115,25 @@ export default function AddUserModal({
     }
   };
 
-  // Role-based disabling logic
-  const trimmedRole = RoleData?.name?.replace(/\s/g, "").toLowerCase();
+  const officeid = (officeid) => {
+    setSelectedOffice(officeid);
+  };
 
-  // Disable both office and warehouse for these roles
-  const isOfficeAndWarehouseDisabled = [
-    "superadmin",
-    "systemadmin",
-    "headofficechairman",
-  ].includes(trimmedRole);
+  const warehouseid = (warehouseid) => {
+    setSelectedWarehouse(warehouseid);
+  };
+  // // Role-based disabling logic
+  // const trimmedRole = RoleData?.name?.replace(/\s/g, "").toLowerCase();
 
-  // Disable warehouse for branch manager
-  const isWarehouseDisabled = trimmedRole === "branch manager";
+  // // Disable both office and warehouse for these roles
+  // const isOfficeAndWarehouseDisabled = [
+  //   "superadmin",
+  //   "systemadmin",
+  //   "headofficechairman",
+  // ].includes(trimmedRole);
+
+  // // Disable warehouse for branch manager
+  // const isWarehouseDisabled = trimmedRole === "branch manager";
 
   return (
     <Dialog open={OpenModal} onOpenChange={setOpenModal}>
@@ -167,6 +166,7 @@ export default function AddUserModal({
                 Email
               </Label>
               <Input
+                disabled
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -175,26 +175,9 @@ export default function AddUserModal({
             </div>
           </div>
 
-          <div className="flex flex-row gap-4 pt-4">
-            <div className="flex-row w-full">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-
-            <div className="flex-row w-full">
-              <Label htmlFor="warehouse" className="text-right">
-                Select Role
-              </Label>
-              <RoleCombobox name="Select Role" roleid={handleRoleChange} />
-            </div>
+          <div className="flex flex-col gap-4 pt-4">
+            <Label htmlFor="warehouse">Select Role</Label>
+            <RoleCombobox name="Select Role" roleid={handleRoleChange} />
           </div>
 
           <div className="flex flex-row gap-4 pt-4"></div>
@@ -204,22 +187,17 @@ export default function AddUserModal({
               <Label htmlFor="office" className="text-right">
                 Select Office
               </Label>
-              <OfficeComboBox
-                name="Select Office"
-                Officeid={(id) => setSelectedOffice(id)}
-                disabled={isOfficeAndWarehouseDisabled}
-              />
+              <OfficeComboBox Officeid={officeid} name="Select Office" />
             </div>
             <div className="flex-row w-full">
               <Label htmlFor="warehouse" className="text-right">
                 Select Warehouse
               </Label>
               <WareHouseComboBox
+                warehouseid={warehouseid}
                 data={fetchedWarehouses}
                 name="Select Warehouse"
-                warehouseid={(id) => setSelectedWarehouse(id)}
                 selectedOffice={selectedOffice}
-                disabled={isOfficeAndWarehouseDisabled || isWarehouseDisabled}
               />
             </div>
           </div>

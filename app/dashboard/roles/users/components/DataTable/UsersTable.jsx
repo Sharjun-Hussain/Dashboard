@@ -173,10 +173,8 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
         };
 
         const handleUpdate = () => {
-          // Pass the entire office object to the modal
+          setuserData(user);
           setOpenModal(true);
-          // Set the office data that you want to update
-          setuserData(user); // Create a state variable to hold the office data
         };
 
         return (
@@ -224,7 +222,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
 
             <AddUserModal
               onUpdate={onUpdate}
-              existingOffice={userData}
+              existingUser={userData}
               OpenModal={OpenModal}
               setOpenModal={setOpenModal}
             />
@@ -257,12 +255,10 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className=" ">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Search Users"
+              value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("office_name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

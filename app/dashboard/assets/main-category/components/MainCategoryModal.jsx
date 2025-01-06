@@ -20,10 +20,14 @@ export default function MainCategoryModal({
   setOpenModal,
   existingCategory,
 }) {
+  console.log(existingCategory);
+
   const [code, setCode] = useState(existingCategory?.code || "");
-  const [name, setName] = useState(existingCategory?.name || "");
+  const [MainCategoryname, setMainCategoryname] = useState(
+    existingCategory?.name || ""
+  );
   const [description, setDescription] = useState(
-    existingCategory?.Description || ""
+    existingCategory?.description || ""
   );
 
   const [error, setError] = useState(null);
@@ -41,7 +45,7 @@ export default function MainCategoryModal({
       const res = await axios({
         method,
         url,
-        data: { code, name, description },
+        data: { code, name: MainCategoryname, description },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -92,10 +96,12 @@ export default function MainCategoryModal({
   useEffect(() => {
     if (existingCategory) {
       setCode(existingCategory.code);
-      setName(existingCategory.office_name);
+      setMainCategoryname(existingCategory.name);
+      setDescription(existingCategory.description);
     } else {
       setCode("");
-      setName("");
+      setMainCategoryname("");
+      setDescription("");
     }
   }, [existingCategory]);
 
@@ -133,8 +139,8 @@ export default function MainCategoryModal({
                 </Label>
                 <Input
                   id="branchcode"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={MainCategoryname}
+                  onChange={(e) => setMainCategoryname(e.target.value)}
                   className="col-span-3"
                 />
               </div>

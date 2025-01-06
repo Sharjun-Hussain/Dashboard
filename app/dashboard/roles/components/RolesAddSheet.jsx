@@ -70,7 +70,7 @@ export function RolesAddSheet({
     return () => {
       isMounted = false;
     };
-  }, [existingRole, permissions]);
+  }, []);
 
   const handlePermissionToggle = (permName) => {
     setSelectedPermissions((prev) =>

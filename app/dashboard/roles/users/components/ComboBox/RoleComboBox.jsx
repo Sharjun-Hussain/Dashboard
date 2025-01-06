@@ -51,7 +51,7 @@ export function RoleCombobox({ roleid, name }) {
           variant="select"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between m-0"
+          className="w-full justify-between m-0"
         >
           {value
             ? `${fetchedRoles?.find((role) => role.name === value)?.name} `
