@@ -104,43 +104,45 @@ export function RolesAddSheet({
   };
 
   const handleRoleSubmit = async (e) => {
+    console.log([Role, selectedPermissions]);
+
     e.preventDefault();
     setLoading(true);
-    try {
-      const url = existingRole
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${existingRole.id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles`;
-      const method = existingRole ? "put" : "post";
+    // try {
+    //   const url = existingRole
+    //     ? `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles/${existingRole.id}`
+    //     : `${process.env.NEXT_PUBLIC_API_URL}/api/admin/roles`;
+    //   const method = existingRole ? "put" : "post";
 
-      const res = await axios({
-        method,
-        url,
-        data: {
-          name: Role,
-          permissions: selectedPermissions,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+    //   const res = await axios({
+    //     method,
+    //     url,
+    //     data: {
+    //       name: Role,
+    //       permissions: selectedPermissions,
+    //     },
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //   });
 
-      if (res.status === (existingRole ? 200 : 201)) {
-        toast("Role Updated Successfully", {
-          duration: 1600,
-          position: "top-right",
-        });
-        onUpdate(res.data.data);
-        setRole("");
-        setSelectedPermissions([]);
-      }
-    } catch (err) {
-      toast.error("Failed to save role.", {
-        duration: 4000,
-        position: "top-right",
-      });
-    } finally {
-      setLoading(false);
-    }
+    //   if (res.status === (existingRole ? 200 : 201)) {
+    //     toast.success("Role Created Successfully", {
+    //       duration: 1600,
+    //       position: "top-right",
+    //     });
+    //     onUpdate(res.data.data);
+    //     setRole("");
+    //     setSelectedPermissions([]);
+    //   }
+    // } catch (err) {
+    //   toast.error("Failed to save role.", {
+    //     duration: 4000,
+    //     position: "top-right",
+    //   });
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (

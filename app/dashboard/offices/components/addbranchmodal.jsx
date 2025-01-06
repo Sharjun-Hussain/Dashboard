@@ -22,7 +22,9 @@ export default function AddOfficeModal({
   existingOffice,
 }) {
   const [code, setCode] = useState(existingOffice?.code || "");
-  const [division, setDivision] = useState(existingOffice?.division || "");
+  const [divisionName, setDivisionName] = useState(
+    existingOffice?.division || ""
+  );
   const [office_name, setOfficeName] = useState(
     existingOffice?.office_name || ""
   );
@@ -35,8 +37,8 @@ export default function AddOfficeModal({
   const [loading, setLoading] = useState(false);
   const isEditing = !!existingOffice;
 
-  const handleDivision = (division) => {
-    setDivision(division);
+  const division = (divisionname) => {
+    setDivisionName(divisionname);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +51,7 @@ export default function AddOfficeModal({
       const res = await axios({
         method,
         url,
-        data: { code, office_name, address, phone_number, email, division },
+        data: { code, office_name, address, phone_number, email, divisionName },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -66,7 +68,7 @@ export default function AddOfficeModal({
 
         onUpdate(res.data.data);
         setCode("");
-        setDivision(""), setOfficeName("");
+        setDivisionName(""), setOfficeName("");
         setAddress("");
         setPhoneNumber("");
         setEmail("");
@@ -105,14 +107,14 @@ export default function AddOfficeModal({
   useEffect(() => {
     if (existingOffice) {
       setCode(existingOffice.code);
-      setDivision(existingOffice.division);
+      setDivisionName(existingOffice.division);
       setOfficeName(existingOffice.office_name);
       setAddress(existingOffice.address);
       setPhoneNumber(existingOffice.phone_number);
       setEmail(existingOffice.email);
     } else {
       setCode("");
-      setDivision(""), setOfficeName("");
+      setDivisionName(""), setOfficeName("");
       setAddress("");
       setPhoneNumber("");
       setEmail("");
@@ -204,7 +206,7 @@ export default function AddOfficeModal({
                 Select Division
               </Label>
 
-              <DivisionComboBox division={handleDivision} />
+              <DivisionComboBox divisionName={division} />
             </div>
           </div>
           <DialogFooter>

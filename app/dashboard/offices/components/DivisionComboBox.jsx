@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/popover";
 import axios from "axios";
 
-export function DivisionComboBox({ division }) {
+export function DivisionComboBox({ divisionName }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const [fetchedDivisions, setfetchedDivisions] = React.useState([]);
@@ -75,7 +75,8 @@ export function DivisionComboBox({ division }) {
                   value={division.name}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
-                    division(division.name);
+                    divisionName(currentValue);
+
                     setOpen(false);
                   }}
                 >

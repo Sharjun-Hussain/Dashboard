@@ -106,12 +106,12 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
       },
       cell: ({ row }) => {
         const permissions = row.original.permissions;
-        console.log(permissions);
+        // console.log(permissions);
         // Assuming permissions is an array of strings
 
         return (
           <div className="flex flex-wrap gap-1">
-            {permissions.map((permission, index) => (
+            {permissions?.map((permission, index) => (
               <span
                 key={index}
                 className={`badge  "bg-gray-500"

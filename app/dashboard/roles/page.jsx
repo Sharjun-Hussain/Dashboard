@@ -17,6 +17,8 @@ export default function DemoPage() {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleChildData = (role) => {
+    console.log(role);
+
     setRoles((prev) => {
       const RoleIndex = prev.findIndex((o) => o.id === role.id);
       if (RoleIndex >= 0) {
@@ -50,7 +52,7 @@ export default function DemoPage() {
       );
 
       if (res.status == 200) {
-        console.log(res.data);
+        console.log("roles" + res.data.data[0].permissions[0].id);
         setRoles(res.data.data);
         setloading(false);
       }
