@@ -255,7 +255,7 @@ export function UsersTable({ data, width, loading, onUpdate, onDelete }) {
     <div className={`${width}`}>
       <div className="bg-card my-3 md:my-3 dark:bg-accent rounded-lg w-full">
         <div className="flex">
-          <div className="flex items-center py-4">
+          <div className=" ">
             <Input
               placeholder="Filter offices"
               value={table.getColumn("office_name")?.getFilterValue() ?? ""}

@@ -56,7 +56,7 @@ const PermissionPage = () => {
 
   return (
     <div className="">
-      <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
+      <div className="md:flex md:space-x-6  md:mx-0 -mt-8 md:mt-1">
         <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
           <h1 className="text-xl font-bold">Permissions</h1>
           <h4 className="text-sm font-semibold text-opacity-70">

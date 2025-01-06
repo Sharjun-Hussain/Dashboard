@@ -135,7 +135,7 @@ const StockIssuePage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-xl font-bold">Stocks Issue</h1>

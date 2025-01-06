@@ -66,49 +66,48 @@ export default function DemoPage() {
   return (
     <div className="">
       <div className="container mx-auto">
-        <CustomCard className="-mt-9">
-          <div className="flex ">
-            <div className="flex flex-col">
-              <h2 className="text-xl font-bold">Sub category</h2>
-              <h2 className="text-sm font-semibold  text-gray-700 dark:text-gray-400 ">
-                Manage your Sub Category Here
-              </h2>
-            </div>
-            <div className="ms-auto">
-              <Button
-                className="pe-2 ps-1"
-                onClick={() => setOpenModal(true)}
-                variant="outline"
-              >
-                {" "}
-                <Plus size={15} className="me-1" />
-                Add Sub Category
-              </Button>
-            </div>
+        <div className="flex ">
+          <div className="flex flex-col">
+            <h2 className="text-xl font-bold">Sub category</h2>
+            <h2 className="text-sm font-semibold  text-gray-700 dark:text-gray-400 ">
+              Manage your Sub Category Here
+            </h2>
           </div>
+          <div className="ms-auto">
+            <Button
+              className="pe-2 ps-1"
+              onClick={() => setOpenModal(true)}
+              variant="outline"
+            >
+              {" "}
+              <Plus size={15} className="me-1" />
+              Add Sub Category
+            </Button>
+          </div>
+        </div>
 
-          <div>
-            <div className="flex">
-              <div className="ms-auto">
-                {/* <AddOfficeModal sendDatatoParent={handleChildData} /> */}
-              </div>
-              {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
+        <div>
+          <div className="flex">
+            <div className="ms-auto">
+              {/* <AddOfficeModal sendDatatoParent={handleChildData} /> */}
             </div>
-            <div>
-              <SubCategoryTable
-                onDelete={handleDelete}
-                data={MainCategory}
-                loading={loading}
-                onUpdate={handleChildData}
-              />
-            </div>
+            {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
           </div>
-          <SubCategoryModal
-            onUpdate={handleChildData}
-            OpenModal={OpenModal}
-            setOpenModal={setOpenModal}
-          />
-        </CustomCard>
+          <div>
+            <SubCategoryTable
+              onDelete={handleDelete}
+              data={MainCategory}
+              loading={loading}
+              onUpdate={handleChildData}
+            />
+          </div>
+        </div>
+        <SubCategoryModal
+          onUpdate={handleChildData}
+          OpenModal={OpenModal}
+          setOpenModal={setOpenModal}
+        />
+
         {/* <DataTable columns={columns} data={data} /> */}
       </div>
     </div>

@@ -111,7 +111,7 @@ const StockAddPage = () => {
         {
           product_id: finalSearchedProductData.id,
           warehouse_id: localStorage.getItem("warehouse_id"),
-          transaction_type:"in",
+          transaction_type: "in",
           quantity: UnitValue,
           remarks: description,
         },
@@ -135,7 +135,7 @@ const StockAddPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-xl font-bold">Stocks In</h1>

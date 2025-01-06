@@ -15,10 +15,16 @@ const AddStockPage = () => {
   const [FetchedProducts, setFetchedProducts] = useState([]);
   const [fetchedwarehouse, setfetchedwarehouse] = useState([]);
   const [userofficeid, setuserofficeid] = useState(
-    localStorage.getItem("office_id" ?? null)
+    JSON.parse(localStorage.getItem("office_id")) ?? null
+  );
+  const [userofficename, setuserofficename] = useState(
+    localStorage.getItem("office_name")
+  );
+  const [userwarehousename, setuserwarehousename] = useState(
+    localStorage.getItem("warehouse_name")
   );
   const [userwarehouseid, setuserwarehouseid] = useState(
-    localStorage.getItem("warehouse_id" ?? null)
+    JSON.parse(localStorage.getItem("warehouse_id")) ?? null
   );
 
   const handleDelete = (productid) => {
@@ -28,8 +34,6 @@ const AddStockPage = () => {
   };
 
   useEffect(() => {
-    console.log(userofficeid);
-
     const fetchProducts = async () => {
       setloading(true);
       try {
@@ -85,11 +89,9 @@ const AddStockPage = () => {
 
   const officeid = (officeid) => {
     setuserofficeid(officeid);
-    console.log(userofficeid);
   };
   const warehouseid = (warehouseid) => {
     setuserwarehouseid(warehouseid);
-    console.log(userwarehouseid);
   };
 
   return (
@@ -104,7 +106,7 @@ const AddStockPage = () => {
         <div className="xxl:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 xxl:ms-auto items-center">
           <Combobox
             Officeid={officeid}
-            name="Select Office"
+            name={userofficename ? userofficename : "Select Office"}
             officedata={userofficeid}
           />
           <GitCommitHorizontal scale={2} />

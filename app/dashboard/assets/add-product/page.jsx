@@ -25,7 +25,7 @@ const Page = () => {
   const [size, setsize] = useState();
   const [description, setdescription] = useState("");
   const [loading, setloading] = useState(false);
-  const [Error, setError] = useState(null)
+  const [Error, setError] = useState(null);
 
   const HandleMainCategory = (categoryid) => setMainCategory(categoryid);
   const HandleSubCategory = (categoryid) => setSubCategory(categoryid);
@@ -83,7 +83,17 @@ const Page = () => {
       const res = await axios({
         method,
         url,
-        data: { code, name, main_category_id:MainCategory ,sub_category_id:SubCategory, unitType_id:unitType, color, size,low_stock_threshold,description },
+        data: {
+          code,
+          name,
+          main_category_id: MainCategory,
+          sub_category_id: SubCategory,
+          unitType_id: unitType,
+          color,
+          size,
+          low_stock_threshold,
+          description,
+        },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
@@ -91,23 +101,21 @@ const Page = () => {
         toast("Product Added Successfully", {
           duration: 1600,
           position: "top-right",
-          
         });
         setloading(false);
         setcode(null);
         setname(null);
         setcolor(null);
         setdescription(null);
-        
       }
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
+
         // Loop through each field in the error object
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
+
           // Show a toast for each error message related to the field
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
@@ -137,10 +145,10 @@ const Page = () => {
             Add your Branch Goods Details
           </h4>
         </div>
-        <div className=" ms-auto space-x-4">
+        {/* <div className=" ms-auto space-x-4">
           <Combobox />
           <Combobox />
-        </div>
+        </div> */}
       </div>
 
       <div>

@@ -61,9 +61,7 @@ const Layout = ({ children }) => {
             <Separator orientation="vertical" />
 
             {/* Main Content Section */}
-            <div className="p-3 w-full dark:bg-accent rounded-lg">
-              {children}
-            </div>
+            <div className=" w-full dark:bg-accent rounded-lg">{children}</div>
           </div>
         </CustomCard>
       </div>

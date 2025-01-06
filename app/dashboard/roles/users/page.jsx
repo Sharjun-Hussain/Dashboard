@@ -56,16 +56,14 @@ const UsersPage = () => {
 
   return (
     <div className="">
-      <div className="md:flex md:space-x-6 -mx-4 md:mx-0 -mt-8 md:-mt-4">
+      <div className="md:flex justify-between md:space-x-6   -mt-8 md:mt-2 md:me-1">
         <div className="flex flex-col mb-3 md:mb-0  md:space-y-0 w-full">
           <h1 className="text-xl font-bold">Users</h1>
           <h4 className="text-sm font-semibold text-opacity-70">
             Manage your users here
           </h4>
         </div>
-        <div className="md:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 md:ms-auto items-center">
-          <RoleCombobox name="Select Office" />
-          <RoleCombobox name="Select Warehouse" />
+        <div className=" space-y-2 md:space-y-0 md:space-x-2  items-center">
           <Button
             onClick={() => setOpenModal(true)}
             variant="outline"
