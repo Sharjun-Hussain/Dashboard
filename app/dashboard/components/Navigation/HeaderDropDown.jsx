@@ -20,15 +20,19 @@ import { useEffect, useState } from "react";
 
 export function HeaderDropDownMenu({ Component }) {
   const { data } = useSession();
-  const [OfficeName, setOfficeName] = useState(data.user.office.office_name);
+  const [OfficeName, setOfficeName] = useState(
+    data.user.office ? data.user.office?.office_name : ""
+  );
   const [WarehouseName, setWarehouseName] = useState(
-    data.user.warehouse.warehouse_name
+    data.user.warehouse ? data.user.warehouse?.warehouse_name : ""
   );
   const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
-    setOfficeName(data.user.office.office_name);
-    setWarehouseName(data.user.warehouse.warehouse_name);
+    setOfficeName(data.user.office ? data.user.office?.office_name : "");
+    setWarehouseName(
+      data.user.warehouse ? data.user.warehouse?.warehouse_name : ""
+    );
   }, []);
 
   console.log(OfficeName, WarehouseName);
