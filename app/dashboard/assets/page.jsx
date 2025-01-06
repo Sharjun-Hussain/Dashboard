@@ -7,12 +7,19 @@ import { ProductTable } from "./Components/DataTable/ProductTable";
 import axios from "axios";
 import Link from "next/link";
 import { GitCommitHorizontal } from "lucide-react";
+import { WarehouseCompoBox } from "./Components/WarehouseCompoBox";
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
   const [OpenModal, setOpenModal] = useState(false);
   const [FetchedProducts, setFetchedProducts] = useState([]);
-  console.log(FetchedProducts);
+  const [fetchedwarehouse, setfetchedwarehouse] = useState([]);
+  const [userofficeid, setuserofficeid] = useState(
+    localStorage.getItem("office_id" ?? null)
+  );
+  const [userwarehouseid, setuserwarehouseid] = useState(
+    localStorage.getItem("warehouse_id" ?? null)
+  );
 
   const handleDelete = (productid) => {
     setFetchedProducts((prev) =>
@@ -21,7 +28,9 @@ const AddStockPage = () => {
   };
 
   useEffect(() => {
-    const fetchGoods = async () => {
+    console.log(userofficeid);
+
+    const fetchProducts = async () => {
       setloading(true);
       try {
         const res = await axios.get(
@@ -44,8 +53,44 @@ const AddStockPage = () => {
         setloading(false);
       }
     };
-    fetchGoods();
+    fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const fetchwarehouse = async () => {
+      setloading(true);
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-warehouse/${userofficeid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            withXSRFToken: true,
+            withCredentials: true,
+          }
+        );
+
+        if (res.status === 200) {
+          setfetchedwarehouse(res.data?.data ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch warehouse:", error);
+      } finally {
+        setloading(false);
+      }
+    };
+    fetchwarehouse();
+  }, [userofficeid]);
+
+  const officeid = (officeid) => {
+    setuserofficeid(officeid);
+    console.log(userofficeid);
+  };
+  const warehouseid = (warehouseid) => {
+    setuserwarehouseid(warehouseid);
+    console.log(userwarehouseid);
+  };
 
   return (
     <div className="">
@@ -57,9 +102,17 @@ const AddStockPage = () => {
           </h4>
         </div>
         <div className="xxl:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 xxl:ms-auto items-center">
-          <Combobox name="Select Office" />
+          <Combobox
+            Officeid={officeid}
+            name="Select Office"
+            officedata={userofficeid}
+          />
           <GitCommitHorizontal scale={2} />
-          <Combobox name="Select Warehouse" />
+          <WarehouseCompoBox
+            warehousedata={fetchedwarehouse}
+            warehouseid={warehouseid}
+            disable={!userofficeid ? true : false}
+          />
           <Link href="/dashboard/assets/add-product">
             {" "}
             <Button variant="outline" className="w-full md:w-auto">

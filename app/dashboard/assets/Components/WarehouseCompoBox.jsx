@@ -18,38 +18,21 @@ import {
 } from "@/components/ui/popover";
 import axios from "axios";
 
-export function Combobox({ Officeid, name, officedata }) {
+export function WarehouseCompoBox({
+  warehousedata,
+  warehouseid,
+  warhouseName,
+  name,
+  disable,
+}) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(officedata);
-  const [fetchedOffices, setFetchedOffices] = React.useState([]);
-
-  React.useEffect(() => {
-    console.log(officedata);
-
-    const fetchOffices = async () => {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/get-office`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withXSRFToken: true,
-          withCredentials: true,
-        }
-      );
-
-      if (res.status == 200) {
-        console.log(res.data);
-        setFetchedOffices(res.data.data);
-      }
-    };
-    fetchOffices();
-  }, []);
+  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disable}
           variant="select"
           role="combobox"
           aria-expanded={open}
@@ -57,41 +40,41 @@ export function Combobox({ Officeid, name, officedata }) {
         >
           {value
             ? `${
-                fetchedOffices.find((office) => office.office_name === value)
-                  ?.code
-              } - ${
-                fetchedOffices.find((office) => office.office_name === value)
-                  ?.office_name
+                warehousedata.find((office) => office.warehouse_name === value)
+                  ?.warehouse_name
               }`
             : name
             ? name
-            : "Select office..."}
+            : "Select Warehouse..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search office..." />
+          <CommandInput placeholder="Search Warehouse..." />
           <CommandList>
-            <CommandEmpty>No Office found.</CommandEmpty>
+            <CommandEmpty>No Warehouse found.</CommandEmpty>
             <CommandGroup>
-              {fetchedOffices.map((office) => (
+              {warehousedata.map((office) => (
                 <CommandItem
                   key={office.id}
-                  value={office.office_name}
+                  value={office.warehouse_name}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
-                    Officeid(office.id);
+                    warehouseid(office.id);
+
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === office.office_name ? "opacity-100" : "opacity-0"
+                      value === office.warehouse_name
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
-                  {office.office_name}
+                  {office.warehouse_name}
                 </CommandItem>
               ))}
             </CommandGroup>
