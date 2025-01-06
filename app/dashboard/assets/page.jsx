@@ -6,6 +6,7 @@ import { Combobox } from "./Components/ComboBox";
 import { ProductTable } from "./Components/DataTable/ProductTable";
 import axios from "axios";
 import Link from "next/link";
+import { GitCommitHorizontal } from "lucide-react";
 
 const AddStockPage = () => {
   const [loading, setloading] = useState(false);
@@ -57,6 +58,7 @@ const AddStockPage = () => {
         </div>
         <div className="xxl:w-full md:flex space-y-2 md:space-y-0 md:space-x-2 xxl:ms-auto items-center">
           <Combobox name="Select Office" />
+          <GitCommitHorizontal scale={2} />
           <Combobox name="Select Warehouse" />
           <Link href="/dashboard/assets/add-product">
             {" "}
