@@ -254,7 +254,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data: data ?? [],
+    data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -316,7 +316,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
                     Loading...
                   </TableCell>
                 </TableRow>
-              ) : (table?.getRowModel()?.rows || []).length > 0 ? (
+              ) : table.getRowModel().rows.length > 0 ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     className="border-white border-opacity-10"

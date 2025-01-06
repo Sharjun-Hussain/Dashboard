@@ -22,20 +22,24 @@ const AddStockPage = () => {
   useEffect(() => {
     const fetchGoods = async () => {
       setloading(true);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withXSRFToken: true,
-          withCredentials: true,
-        }
-      );
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            withXSRFToken: true,
+            withCredentials: true,
+          }
+        );
 
-      if (res.status == 200) {
-        console.log(res.data);
-        setFetchedProducts(res.data.data);
+        if (res.status === 200) {
+          setFetchedProducts(res.data?.data ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
         setloading(false);
       }
     };
