@@ -2,69 +2,89 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { CheckCheck, PenOff, Plus, Send, ToggleRight } from "lucide-react";
+import { Plus } from "lucide-react";
 import CustomCard from "../../components/Custom/Card/card";
 import { MainCategoryTable } from "./components/DataTable/MainCategoryTable";
 import MainCategoryModal from "./components/MainCategoryModal";
+
 axios.defaults.withCredentials = true;
 
 export default function DemoPage() {
-  const [MainCategory, setMainCategory] = useState([]);
-  const [loading, setloading] = useState(false);
-  const [OpenModal, setOpenModal] = useState(false);
+  const [mainCategory, setMainCategory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-  const handleChildData = (maincategory) => {
-    setMainCategory((prevCategory) => {
-      const categoryIndex = prevCategory.findIndex(
-        (o) => o.id === maincategory.id
+  const handleChildData = (mainCategory) => {
+    console.log(mainCategory);
+    if (!mainCategory) {
+      console.log("No data to update or create.");
+      return;
+    }
+
+    if (mainCategory.length === 0) {
+      setMainCategory(mainCategory);
+      return;
+    }
+
+    setMainCategory((prevCategories) => {
+      const categoryIndex = prevCategories.findIndex(
+        (category) => category.id === mainCategory.id
       );
-      if (categoryIndex >= 0) {
-        // Update existing office
-        const updatedCategories = [...prevCategory];
-        updatedCategories[categoryIndex] = maincategory;
+
+      // Changed condition from categoryIndex > 0 to categoryIndex !== -1
+      if (categoryIndex !== -1) {
+        // Update existing category
+        const updatedCategories = [...prevCategories];
+        updatedCategories[categoryIndex] = mainCategory;
         return updatedCategories;
       } else {
-        // Add new office
-        return [...prevCategory, maincategory];
+        // Add new category
+        return [...prevCategories, mainCategory];
       }
     });
   };
 
-  const handleDelete = (categoryid) => {
+  const handleDelete = (categoryId) => {
     setMainCategory((prev) =>
-      prev.filter((category) => category.id !== categoryid)
+      prev.filter((category) => category.id !== categoryId)
     );
   };
 
   useEffect(() => {
     const fetchMainCategory = async () => {
-      setloading(true);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/MainCategory`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withXSRFToken: true,
-          withCredentials: true,
-        }
-      );
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/MainCategory`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            withXSRFToken: true,
+            withCredentials: true,
+          }
+        );
 
-      if (res.status == 200) {
-        console.log(res.data);
-        setMainCategory(res.data.data);
-        setloading(false);
+        if (res.status === 200) {
+          console.log(res.data);
+          setMainCategory(res.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching main categories:", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchMainCategory();
   }, []);
 
   return (
     <div className="">
       <div className="">
-        <div className="flex md:flex-row flex-col  ">
+        <div className="flex md:flex-row flex-col">
           <div className="flex flex-col">
-            <h2 className="text-sm md:text-xl font-bold">Main category</h2>
+            <h2 className="text-sm md:text-xl font-bold">Main Category</h2>
             <h2 className="text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-400">
               Manage your Main Category Here
             </h2>
@@ -75,7 +95,6 @@ export default function DemoPage() {
               onClick={() => setOpenModal(true)}
               variant="outline"
             >
-              {" "}
               <Plus size={15} className="me-1" />
               Add Main Category
             </Button>
@@ -83,16 +102,10 @@ export default function DemoPage() {
         </div>
 
         <div>
-          <div className="flex">
-            <div className="ms-auto">
-              {/* <AddOfficeModal sendDatatoParent={handleChildData} /> */}
-            </div>
-            {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
-          </div>
           <div>
             <MainCategoryTable
               onDelete={handleDelete}
-              data={MainCategory}
+              data={mainCategory}
               loading={loading}
               onUpdate={handleChildData}
             />
@@ -100,11 +113,9 @@ export default function DemoPage() {
         </div>
         <MainCategoryModal
           onUpdate={handleChildData}
-          OpenModal={OpenModal}
+          OpenModal={openModal}
           setOpenModal={setOpenModal}
         />
-
-        {/* <DataTable columns={columns} data={data} /> */}
       </div>
     </div>
   );

@@ -18,6 +18,15 @@ export default function DemoPage() {
   const [OpenModal, setOpenModal] = useState(false);
 
   const handleChildData = (maincategory) => {
+    if (!maincategory) {
+      console.log("No data to update or create.");
+      return;
+    }
+
+    if (mainCategory.length === 0) {
+      setMainCategory(maincategory);
+      return;
+    }
     setMainCategory((prevCategory) => {
       const categoryIndex = prevCategory.findIndex(
         (o) => o.id === maincategory.id

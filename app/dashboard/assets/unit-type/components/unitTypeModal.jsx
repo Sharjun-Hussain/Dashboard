@@ -20,33 +20,31 @@ export default function UnitTypeModal({
   setOpenModal,
   existingUnitType,
 }) {
-  const [abbreviation, setabbreviation] = useState(existingUnitType?.abbreviation || "");
+  const [abbreviation, setAbbreviation] = useState("");
   const [name, setName] = useState(existingUnitType?.name || "");
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const isEditing = !!existingUnitType;
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/unit${
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/unitType${
         isEditing ? `/${existingUnitType.id}` : ""
       }`;
       const method = isEditing ? "put" : "post";
       const res = await axios({
         method,
         url,
-        data: { code, name,main_category_id:selectedMainCategory },
+        data: { abbreviation, name },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (res.status === 200 || res.status === 201) {
         toast(
-          `${
+          `$${
             isEditing
               ? "Unit Type Updated Successfully"
               : "Unit Type Added Successfully"
@@ -62,16 +60,14 @@ export default function UnitTypeModal({
     } catch (err) {
       if (err.response && err.response.data && err.response.data.errors) {
         const errorMessages = err.response.data.errors;
-        
-        // Loop through each field in the error object
+
         Object.keys(errorMessages).forEach((field) => {
           const fieldErrors = errorMessages[field];
-          
-          // Show a toast for each error message related to the field
+
           fieldErrors.forEach((errorMessage) => {
             toast.error(`${field}: ${errorMessage}`, {
-              duration: 4000, // Duration for each toast
-              position: "top-right", // Position of the toast
+              duration: 4000,
+              position: "top-right",
             });
           });
         });
@@ -90,10 +86,10 @@ export default function UnitTypeModal({
 
   useEffect(() => {
     if (existingUnitType) {
-      setabbreviation(existingUnitType.abbreviation);
+      setAbbreviation(existingUnitType.abbreviation);
       setName(existingUnitType.name);
     } else {
-      setabbreviation("");
+      setAbbreviation("");
       setName("");
     }
   }, [existingUnitType]);
@@ -110,13 +106,12 @@ export default function UnitTypeModal({
               {isEditing ? "Edit Unit Type" : "Add Unit Type"}
             </DialogTitle>
             <DialogDescription className="text-gray-600">
-              Make changes to your profile here. Click save when done.
+              Make changes to your unit type here. Click save when done.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex w-full  flex-row gap-4 pt-4">
+          <div className="flex w-full flex-row gap-4 pt-4">
             <div className="flex-row flex-1">
-
-              <div className="items-center  gap-4">
+              <div className="items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
@@ -128,13 +123,13 @@ export default function UnitTypeModal({
                 />
               </div>
               <div className="items-center gap-4 pt-4">
-                <Label htmlFor="branchcode" className="text-right">
-                Abbreviation
+                <Label htmlFor="abbreviation" className="text-right">
+                  Abbreviation
                 </Label>
                 <Input
-                  id="branchcode"
+                  id="abbreviation"
                   value={abbreviation}
-                  onChange={(e) => setabbreviation(e.target.value)}
+                  onChange={(e) => setAbbreviation(e.target.value)}
                   className="col-span-3"
                 />
               </div>

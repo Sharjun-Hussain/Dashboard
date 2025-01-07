@@ -2,13 +2,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { CheckCheck, PenOff, Plus, Send, ToggleRight } from "lucide-react";
-import CustomCard from "../../components/Custom/Card/card";
-import {
-  MainCategoryTable,
-  SubCategoryTable,
-  UnitTypeTable,
-} from "./components/DataTable/UnitTypeTable";
+import { Plus } from "lucide-react";
+
+import { UnitTypeTable } from "./components/DataTable/UnitTypeTable";
 
 import UnitTypeModal from "./components/unitTypeModal";
 axios.defaults.withCredentials = true;
@@ -19,6 +15,15 @@ export default function DemoPage() {
   const [OpenModal, setOpenModal] = useState(false);
 
   const handleChildData = (maincategory) => {
+    if (!maincategory) {
+      console.log("No data to update or create.");
+      return;
+    }
+
+    if (maincategory.length === 0) {
+      setunitType(maincategory);
+      return;
+    }
     setunitType((prevCategory) => {
       const categoryIndex = prevCategory.findIndex(
         (o) => o.id === maincategory.id
@@ -36,6 +41,7 @@ export default function DemoPage() {
   };
 
   const handleDelete = (unitId) => {
+    // alert(unitId);
     setunitType((prev) => prev.filter((category) => category.id !== unitId));
   };
 
@@ -86,12 +92,6 @@ export default function DemoPage() {
         </div>
 
         <div>
-          <div className="flex">
-            <div className="ms-auto">
-              {/* <AddOfficeModal sendDatatoParent={handleChildData} /> */}
-            </div>
-            {/* <Button className=" ms-auto" variant="outline" ><Plus size={14} className='me-[2px]'/> Add Users</Button> */}
-          </div>
           <div>
             <UnitTypeTable
               onDelete={handleDelete}

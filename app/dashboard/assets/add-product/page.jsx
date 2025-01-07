@@ -93,6 +93,8 @@ const Page = () => {
           size,
           low_stock_threshold,
           description,
+          warehouse_id: JSON.parse(localStorage.getItem("warehouse_id")),
+          office_id: JSON.parse(localStorage.getItem("office_id")),
         },
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

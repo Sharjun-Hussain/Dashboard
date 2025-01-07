@@ -203,7 +203,7 @@ export function MainCategoryTable({
   ];
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

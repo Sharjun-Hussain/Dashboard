@@ -134,10 +134,9 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
         };
 
         const handleUpdate = () => {
-          // Pass the entire office object to the modal
           setOpenModal(true);
-          // Set the office data that you want to update
-          setunitypedata(unit); // Create a state variable to hold the office data
+
+          setunitypedata(unit);
         };
 
         return (
@@ -169,7 +168,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
-                    office from the servers.
+                    Unit Type from the servers.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -185,7 +184,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
 
             <UnitTypeModal
               onUpdate={onUpdate}
-              existingCategory={{}}
+              existingUnitType={unitypedata}
               OpenModal={OpenModal}
               setOpenModal={setOpenModal}
             />
@@ -196,7 +195,7 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data: data ?? [],
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -218,12 +217,10 @@ export function UnitTypeTable({ data, width, loading, onUpdate, onDelete }) {
         <div className="flex">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter offices"
-              value={table.getColumn("office_name")?.getFilterValue() ?? ""}
+              placeholder="Filter Unit Types"
+              value={table.getColumn("name")?.getFilterValue() ?? ""}
               onChange={(event) =>
-                table
-                  .getColumn("office_name")
-                  ?.setFilterValue(event.target.value)
+                table.getColumn("name")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
             />

@@ -118,7 +118,7 @@ export function SubCategoryTable({ data, width, loading, onUpdate, onDelete }) {
         const handleDelete = async () => {
           try {
             await axios.delete(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/MainCategory/${category.id}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/admin/Subcategory/${category.id}`,
               {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -196,7 +196,7 @@ export function SubCategoryTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
