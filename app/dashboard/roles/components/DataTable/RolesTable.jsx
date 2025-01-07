@@ -43,7 +43,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
-import RolesAddModal from "../RolesAddModal";
 import { Badge } from "@/components/ui/badge";
 import { RolesAddSheet } from "../RolesAddSheet";
 
@@ -148,7 +147,7 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
         const role = row.original;
         const [open, setOpen] = React.useState(false);
         const [OpenModal, setOpenModal] = React.useState(false);
-        const [RoleData, setRoleData] = React.useState(null);
+        const [RoleData, setRoleData] = React.useState();
 
         const handleDelete = async () => {
           try {
@@ -170,9 +169,9 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
 
         const handleUpdate = () => {
           // Pass the entire office object to the modal
+          setRoleData(role); // Create a state variable to hold the office data
           setOpenModal(true);
           // Set the office data that you want to update
-          setRoleData(role); // Create a state variable to hold the office data
           console.log(role);
         };
 
@@ -232,7 +231,7 @@ export function RolesTable({ data, width, loading, onUpdate, onDelete }) {
   ];
 
   const table = useReactTable({
-    data: data ?? [],
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
