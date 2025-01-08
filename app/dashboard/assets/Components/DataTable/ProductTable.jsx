@@ -77,10 +77,26 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
     },
     {
       accessorKey: "code",
+      cell: ({ row }) => {
+        const product = row.original.product;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{product?.code}</span>
+          </div>
+        );
+      },
       header: "Code",
     },
     {
       accessorKey: "name",
+      cell: ({ row }) => {
+        const product = row.original.product;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{product?.name}</span>
+          </div>
+        );
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -109,16 +125,35 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
       },
       header: "Main Category",
       cell: ({ row }) => {
-        const main_category = row.original.main_category;
+        const product = row.original.product;
         return (
           <div className="flex flex-wrap gap-1">
-            <span>{main_category?.name}</span>
+            <span>{product?.main_category_id}</span>
           </div>
+        );
+      },
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Main Category
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
         );
       },
     },
     {
       accessorKey: "sub_category",
+      cell: ({ row }) => {
+        const product = row.original.product;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{product?.sub_category_id}</span>
+          </div>
+        );
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -131,35 +166,34 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
         );
       },
       header: "Sub Category",
-      cell: ({ row }) => {
-        const sub_category = row.original.sub_category;
-        return (
-          <div className="flex flex-wrap gap-1">
-            <span>{sub_category?.name}</span>
-          </div>
-        );
-      },
     },
     {
       accessorKey: "description",
-      header: "Description",
-    },
-    {
-      accessorKey: "Product Stocks",
       cell: ({ row }) => {
-        const product_stocks = row.original.product_stocks;
-
+        const product = row.original.product;
         return (
           <div className="flex flex-wrap gap-1">
-            {product_stocks.map((product_stocks, index) => (
-              <span key={index}> {product_stocks.quantity.split(".")[0]}</span>
-            ))}
+            <span>{product?.description}</span>
           </div>
         );
       },
+      header: "Description",
     },
     {
+      accessorKey: "quantity",
+      header: "Quantity",
+    },
+
+    {
       accessorKey: "low_stock_threshold",
+      cell: ({ row }) => {
+        const product = row.original.product;
+        return (
+          <div className="flex flex-wrap gap-1">
+            <span>{product?.low_stock_threshold}</span>
+          </div>
+        );
+      },
       header: "Low Stock Threshold",
     },
 

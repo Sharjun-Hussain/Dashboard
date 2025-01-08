@@ -40,7 +40,7 @@ const AddStockPage = () => {
       setloading(true);
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/product-stocks/${userwarehouseid}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -60,7 +60,7 @@ const AddStockPage = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [userwarehouseid]);
 
   useEffect(() => {
     const fetchwarehouse = async () => {
