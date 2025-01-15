@@ -112,23 +112,11 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
     },
     {
       accessorKey: "main_category",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Main Category
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      header: "Main Category",
       cell: ({ row }) => {
-        const product = row.original.product;
+        const main_category = row.original.product.main_category;
         return (
           <div className="flex flex-wrap gap-1">
-            <span>{product?.main_category_id}</span>
+            <span>{main_category?.name}</span>
           </div>
         );
       },
@@ -143,14 +131,15 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
           </Button>
         );
       },
+      header: "Main Category",
     },
     {
       accessorKey: "sub_category",
       cell: ({ row }) => {
-        const product = row.original.product;
+        const sub_category = row.original.product.sub_category;
         return (
           <div className="flex flex-wrap gap-1">
-            <span>{product?.sub_category_id}</span>
+            <span>{sub_category?.name}</span>
           </div>
         );
       },
@@ -194,7 +183,7 @@ export function ProductTable({ data, width, loading, onUpdate, onDelete }) {
           </div>
         );
       },
-      header: "Low Stock Threshold",
+      header: "Threshold",
     },
 
     {
